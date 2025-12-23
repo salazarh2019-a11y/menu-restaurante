@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Menú Gourmet - El Buen Sazón</title>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courgette&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --rojo-brasa: #b71c1c;
+            --naranja-fuego: #e65100;
+            --amarillo-maiz: #ffb300;
+            --madera: #3e2723;
+        }
+
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            margin: 0; 
+            background: #1a0f0d; 
+            color: white;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            transition: background-color 1.2s ease;
+            overflow-x: hidden;
+        }
+
+        /* --- FONDOS DINÁMICOS POR DÍA --- */
+        .bg-lunes { background-color: #1a0f0d; }
+        .bg-martes { background-color: #263238; }
+        .bg-miercoles { background-color: #1b5e20; }
+        .bg-jueves { background-color: #4e342e; }
+        .bg-viernes { background-color: #311b92; }
+        .bg-sabado { background-color: #004d40; }
+        .bg-domingo { background-color: #880e4f; }
+
+        /* --- VISTA CLIENTE RÚSTICA --- */
+        #view-client { 
+            display: flex; flex-direction: column; align-items: center; padding-bottom: 100px;
+        }
+
+        .restaurant-header {
+            width: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            text-align: center; padding: 30px 0;
+            border-bottom: 3px solid var(--naranja-fuego);
+        }
+
+        .restaurant-header h1 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: clamp(2.5rem, 8vw, 3.5rem); margin: 0;
+            color: var(--amarillo-maiz);
+            text-shadow: 3px 3px 0px var(--rojo-brasa);
+        }
+
+        .day-badge {
+            background: var(--rojo-brasa); padding: 5px 20px;
+            border-radius: 50px; font-weight: bold;
+            display: inline-block; margin-top: 10px;
+            border: 2px solid var(--amarillo-maiz);
+            animation: bounce 2s infinite;
+        }
+
+        /* Tarjetas con Animación de Entrada */
+        .menu-container {
+            width: 100%; max-width: 600px;
+            display: flex; flex-direction: column; gap: 40px; padding: 20px;
+        }
+
+        .card-rustica {
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png'), linear-gradient(to bottom, #5d4037, #3e2723);
+            border: 8px solid #2d1b18; border-radius: 20px;
+            padding: 5px; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            transform: rotate(-1deg);
+            animation: slideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        .card-rustica:nth-child(even) { transform: rotate(1deg); }
+
+        .card-label {
+            background: var(--rojo-brasa); color: var(--amarillo-maiz);
+            font-family: 'Permanent Marker', cursive; padding: 12px;
+            text-align: center; font-size: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            display: flex; justify-content: space-around; align-items: center;
+        }
+
+        .pergamino {
+            background: #f4e4bc url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+            color: #2d1b18; padding: 20px; border-radius: 0 0 10px 10px;
+            min-height: 80px; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        .pergamino ul { list-style: none; padding: 0; margin: 0; }
+        .pergamino li {
+            font-family: 'Courgette', cursive; font-size: 1.4rem;
+            padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: bold;
+        }
+
+        .price-text { font-family: 'Permanent Marker'; color: #b71c1c; font-size: 1.4rem; }
+        .agotado-text { text-decoration: line-through; color: #888; font-style: italic; }
+
+        .stamp-agotado {
+            color: #b71c1c; border: 3px solid #b71c1c;
+            padding: 2px 8px; font-size: 0.8rem; transform: rotate(-15deg);
+            font-weight: 900; border-radius: 5px;
+            animation: stampIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- PROMOCIÓN --- */
+        #promo-box {
+            position: fixed; bottom: 25px; left: 25px;
+            background: var(--amarillo-maiz); color: #1a0f0d;
+            padding: 15px; border-radius: 15px; border: 3px solid var(--rojo-brasa);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 220px; font-weight: bold; z-index: 90;
+            display: none; animation: bounce 2s infinite;
+        }
+
+        /* --- BOTÓN AJUSTES --- */
+        .btn-admin-floating {
+            position: fixed; bottom: 20px; right: 20px;
+            background: var(--naranja-fuego); color: white;
+            border: 3px solid white; width: 60px; height: 60px; border-radius: 50%;
+            font-size: 1.5rem; cursor: pointer; z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .btn-admin-floating:hover { transform: rotate(90deg) scale(1.1); }
+
+        /* --- EDITOR --- */
+        #view-admin { display: none; background: #222; min-height: 100vh; padding: 20px; color: white; }
+        .admin-panel { max-width: 600px; margin: 0 auto; background: #333; padding: 20px; border-radius: 15px; }
+        .editor-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        input { padding: 12px; border-radius: 8px; border: none; flex: 1; font-weight: bold; }
+        .btn-stock { width: 50px; height: 50px; border-radius: 10px; border: none; cursor: pointer; font-size: 1.2rem; }
+        .on { background: #2ecc71; color: white; } .off { background: #e74c3c; color: white; }
+
+        /* Animaciones */
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(50px) rotate(-3deg); } to { opacity: 1; transform: translateY(0) rotate(-1deg); } }
+        @keyframes stampIn { from { opacity: 0; transform: scale(3) rotate(20deg); } to { opacity: 1; transform: scale(1) rotate(-15deg); } }
+    </style>
+</head>
+<body id="bg-body">
+
+    <div id="view-client">
+        <header class="restaurant-header">
+            <h1>EL BUEN SAZÓN</h1>
+            <div class="day-badge" id="display-day">LUNES</div>
+        </header>
+
+        <div class="menu-container" id="menu-cards-list">
+            <div class="card-rustica" id="sec-principio" style="animation-delay: 0.1s">
+                <div class="card-label">Principios</div>
+                <div class="pergamino"><ul id="list-principio"></ul></div>
+            </div>
+            <div class="card-rustica" id="sec-proteina" style="animation-delay: 0.3s">
+                <div class="card-label">Proteína <span class="price-text" id="price-v1"></span></div>
+                <div class="pergamino"><ul id="list-proteina"></ul></div>
+            </div>
+            <div class="card-rustica" id="sec-especial" style="animation-delay: 0.5s">
+                <div class="card-label">Especial <span class="price-text" id="price-v2"></span></div>
+                <div class="pergamino"><ul id="list-especial"></ul></div>
+            </div>
+            <div class="card-rustica" id="sec-extras" style="animation-delay: 0.7s">
+                <div class="card-label">Extras</div>
+                <div class="pergamino"><ul id="list-extras"></ul></div>
+            </div>
+        </div>
+
+        <div id="promo-box">🎁 POR CADA 10 ALMUERZOS EL SIGUIENTE ES GRATIS</div>
+        <button class="btn-admin-floating" onclick="accessAdmin()">⚙️</button>
+    </div>
+
+    <div id="view-admin">
+        <div class="admin-panel">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px">
+                <h2 id="edit-title">Editor Lunes</h2>
+                <button onclick="exitAdmin()" style="background:var(--rojo-brasa); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold;">Cerrar y Guardar</button>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px; margin-bottom:20px">
+                <p style="margin-top:0">Configuración del día:</p>
+                <div class="editor-row">Clave: <input type="text" id="admin-pass" onchange="db.pass=this.value; autoSave()"></div>
+                <div class="editor-row">
+                    <input type="text" id="p1" placeholder="Precio Proteína" oninput="db.price1=this.value; autoSave()">
+                    <input type="text" id="p2" placeholder="Precio Especial" oninput="db.price2=this.value; autoSave()">
+                </div>
+                <button onclick="nextDay()" style="width:100%; padding:15px; background:var(--naranja-fuego); color:white; border:none; border-radius:8px; margin-top:10px; font-weight:bold; cursor:pointer;">📅 CAMBIAR DÍA A EDITAR</button>
+            </div>
+
+            <div id="sections-editor"></div>
+        </div>
+    </div>
+
+<script>
+    const DRIVE_URL = "https://script.google.com/macros/s/AKfycbyubjBaIpWbHTjIk3aMBm6Zy3obyEBMtZoACPlQh_t2xxg7NbNVnPDePpkjqIGInag9Dw/exec"; 
+    
+    let db = {
+        currentDay: "LUNES", pass: "3762", price1: "0", price2: "0",
+        menus: { "LUNES": { principio: [], proteina: [], especial: [], acompanamiento: [] }, "MARTES": { principio: [], proteina: [], especial: [], acompanamiento: [] }, "MIERCOLES": { principio: [], proteina: [], especial: [], acompanamiento: [] }, "JUEVES": { principio: [], proteina: [], especial: [], acompanamiento: [] }, "VIERNES": { principio: [], proteina: [], especial: [], acompanamiento: [] }, "SABADO": { principio: [], proteina: [], especial: [], acompanamiento: [] }, "DOMINGO": { principio: [], proteina: [], especial: [], acompanamiento: [] } }
+    };
+
+    let isEditing = false;
+    let saveTimeout;
+    let lastData = "";
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFromCloud();
+        setInterval(() => { if(!isEditing) loadFromCloud(); }, 10000);
+        setTimeout(() => { document.getElementById('promo-box').style.display = 'block'; }, 30000);
+    });
+
+    async function loadFromCloud() {
+        try {
+            const res = await fetch(DRIVE_URL);
+            const data = await res.json();
+            if(data && data.menus && JSON.stringify(data) !== lastData) {
+                db = data;
+                lastData = JSON.stringify(data);
+                renderClient();
+                if(isEditing) buildEditor();
+            }
+        } catch (e) { console.error("Error cargando"); }
+    }
+
+    async function saveToCloud() {
+        try { await fetch(DRIVE_URL, { method: 'POST', body: JSON.stringify(db) }); } catch (e) {}
+    }
+
+    function autoSave() {
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(saveToCloud, 2000);
+        renderClient(); // Feedback instantáneo en el editor
+    }
+
+    function renderClient() {
+        const day = db.currentDay;
+        document.getElementById('display-day').textContent = day;
+        document.getElementById('bg-body').className = 'bg-' + day.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        document.getElementById('price-v1').textContent = db.price1 ? `$${db.price1}` : '';
+        document.getElementById('price-v2').textContent = db.price2 ? `$${db.price2}` : '';
+
+        const mapping = { principio: 'list-principio', proteina: 'list-proteina', especial: 'list-especial', acompanamiento: 'list-extras' };
+        
+        Object.keys(mapping).forEach(key => {
+            const list = document.getElementById(mapping[key]);
+            const items = db.menus[day][key] || [];
+            list.innerHTML = items.map(it => `
+                <li>
+                    <span class="${it.stock === false ? 'agotado-text' : ''}">${it.name || '---'}</span>
+                    ${it.stock === false ? '<span class="stamp-agotado">AGOTADO</span>' : ''}
+                </li>
+            `).join('') || '<li>Cocinando...</li>';
+        });
+    }
+
+    function buildEditor() {
+        document.getElementById('edit-title').textContent = "Editor " + db.currentDay;
+        document.getElementById('admin-pass').value = db.pass;
+        document.getElementById('p1').value = db.price1;
+        document.getElementById('p2').value = db.price2;
+
+        const container = document.getElementById('sections-editor');
+        container.innerHTML = '';
+        const todayMenu = db.menus[db.currentDay];
+
+        Object.keys(todayMenu).forEach(secId => {
+            let html = `<div style="margin-top:20px"><h4 style="color:var(--amarillo-maiz)">${secId.toUpperCase()}</h4>`;
+            todayMenu[secId].forEach((item, i) => {
+                html += `
+                <div class="editor-row">
+                    <input type="text" value="${item.name}" oninput="db.menus['${db.currentDay}']['${secId}'][${i}].name=this.value; autoSave()">
+                    <button class="btn-stock ${item.stock ? 'on' : 'off'}" onclick="toggleStock('${secId}', ${i})">${item.stock ? '✔' : '✘'}</button>
+                    <button onclick="removeItem('${secId}', ${i})" style="color:red; background:none; border:none; font-size:1.5rem; cursor:pointer;">✕</button>
+                </div>`;
+            });
+            html += `<button onclick="addItem('${secId}')" style="width:100%; padding:10px; background:#444; color:white; border:none; border-radius:8px; cursor:pointer;">+ Añadir Plato</button></div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    function toggleStock(sec, i) {
+        db.menus[db.currentDay][sec][i].stock = !db.menus[db.currentDay][sec][i].stock;
+        buildEditor();
+        saveToCloud();
+        renderClient();
+    }
+
+    function addItem(sec) {
+        db.menus[db.currentDay][sec].push({name: "", stock: true});
+        buildEditor();
+    }
+
+    function removeItem(sec, i) {
+        db.menus[db.currentDay][sec].splice(i, 1);
+        buildEditor();
+        autoSave();
+    }
+
+    function nextDay() {
+        const dias = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
+        db.currentDay = dias[(dias.indexOf(db.currentDay) + 1) % 7];
+        buildEditor();
+        saveToCloud();
+        renderClient();
+    }
+
+    function accessAdmin() {
+        const p = prompt("Clave de edición:");
+        if(p === db.pass) {
+            isEditing = true;
+            document.getElementById('view-client').style.display = 'none';
+            document.getElementById('view-admin').style.display = 'block';
+            buildEditor();
+        } else if(p !== null) { alert("Clave incorrecta"); }
+    }
+
+    function exitAdmin() {
+        isEditing = false;
+        document.getElementById('view-admin').style.display = 'none';
+        document.getElementById('view-client').style.display = 'flex';
+        renderClient();
+    }
+</script>
+</body>
+</html>
