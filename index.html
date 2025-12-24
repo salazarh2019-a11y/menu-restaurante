@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Premium</title>
+    <title>El Buen Sazón - Experiencia Gourmet</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
             --gold: #c5a059;
-            --dark-bg: #111;
-            --card-bg: #1a1a1a;
+            --dark-bg: #0a0a0a;
+            --card-bg: #161616;
             --fire-line: #d35400;
+            --fire-glow: linear-gradient(to top, rgba(255, 69, 0, 0.4), rgba(255, 140, 0, 0.1), transparent);
         }
 
         body {
@@ -24,347 +25,282 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- CABECERA --- */
-        .header-visual { text-align: center; margin: 30px 0; width: 100%; }
-        .header-large { font-size: clamp(2.5rem, 10vw, 4rem); color: var(--gold); font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
-        .glow-line { width: 80%; height: 2px; background: var(--fire-line); margin: 0 auto; box-shadow: 0 0 15px rgba(211, 84, 0, 0.8); }
+        /* --- CABECERA CON ILUMINACIÓN --- */
+        .header-visual { text-align: center; margin: 40px 0; width: 100%; position: relative; }
+        .header-large { 
+            font-size: clamp(2.5rem, 10vw, 4rem); 
+            color: var(--gold); 
+            font-family: 'Playfair Display', serif; 
+            cursor: pointer; 
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
+        }
+        .glow-line { 
+            width: 70%; max-width: 500px; height: 2px; 
+            background: var(--fire-line); margin: 15px auto; 
+            position: relative; box-shadow: 0 0 15px var(--fire-line);
+        }
+        .glow-line::after {
+            content: ''; position: absolute; bottom: 2px; left: -10%; right: -10%;
+            height: 100px; background: var(--fire-glow);
+            filter: blur(25px); animation: firePulse 3s infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes firePulse { 0% { opacity: 0.3; transform: scaleX(0.9); } 100% { opacity: 0.7; transform: scaleX(1.1); } }
 
-        /* --- TARJETAS --- */
+        /* --- ANIMACIÓN DE ENTRADA TARJETAS --- */
+        .fade-in { animation: fadeInUp 0.8s ease forwards; opacity: 0; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- CONTENEDOR Y HUMO --- */
         .cards-container {
             display: flex; flex-direction: column; align-items: center; gap: 30px;
-            width: 100%; max-width: 1000px; padding: 0 20px 80px 20px;
+            width: 100%; max-width: 1100px; padding: 0 20px 100px 20px;
         }
         @media (min-width: 768px) {
-            .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); justify-items: center; }
+            .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
         }
 
         .card {
-            background: var(--card-bg); border: 1px solid #333; border-radius: 20px;
-            padding: 25px; width: 100%; max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            transition: transform 0.3s ease; cursor: pointer; position: relative;
+            background: var(--card-bg); border: 1px solid #2a2a2a; border-radius: 20px;
+            padding: 30px; width: 100%; position: relative; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8); transition: all 0.4s ease;
+            cursor: pointer;
         }
-        .card:active { transform: scale(0.98); }
-        .card-title { color: var(--gold); font-size: 1.6rem; text-align: center; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px; font-family: 'Playfair Display', serif; }
-        .price-tag { display: block; font-size: 1.1rem; color: #ff9f43; margin-top: 5px; }
-        
-        .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #2a2a2a; }
-        .item-row.agotado span { color: #555; text-decoration: line-through; }
-        .stamp-agotado { color: #ff4444; border: 1px solid #ff4444; font-size: 0.7rem; padding: 2px 6px; transform: rotate(-10deg); font-weight: bold; }
-        .camera-icon { margin-left: 8px; font-size: 1.1rem; filter: grayscale(0.5); }
-        .card:hover .camera-icon { filter: grayscale(0) drop-shadow(0 0 5px var(--gold)); }
+        .card:hover { border-color: var(--gold); transform: translateY(-10px); }
 
-        /* --- PUBLICIDAD --- */
-        #ad-card {
-            background: linear-gradient(135deg, #d35400, #c0392b);
-            padding: 20px; border-radius: 15px; text-align: center; color: white; font-weight: bold;
-            width: 90%; max-width: 400px; margin: 0 auto 40px auto;
-            display: none; cursor: pointer; animation: pulseAd 2s infinite;
-        }
-        @keyframes pulseAd { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        /* Partículas de Humo */
+        .smoke-wrap { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: 0.5s; }
+        .card:hover .smoke-wrap { opacity: 0.4; }
+        .smoke { position: absolute; bottom: -20px; background: radial-gradient(circle, #fff 0%, transparent 70%); filter: blur(15px); border-radius: 50%; animation: rise 3s infinite ease-out; }
+        @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-150px) scale(3); opacity: 0; } }
 
-        /* --- RULETA / GALERIA --- */
+        /* --- CONTENIDO TARJETA --- */
+        .card-title { color: var(--gold); font-size: 1.7rem; text-align: center; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 20px; font-family: 'Playfair Display', serif; }
+        .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; position: relative; z-index: 5; }
+        .item-row.agotado span { color: #444; text-decoration: line-through; }
+        .stamp-agotado { color: #ff4444; border: 1px solid #ff4444; font-size: 0.6rem; padding: 2px 5px; transform: rotate(-12deg); font-weight: bold; height: fit-content; }
+        .cam-icon { font-size: 1.1rem; filter: drop-shadow(0 0 5px var(--gold)); margin-left: 10px; }
+
+        /* --- GALERÍA / RULETA --- */
         #gallery-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
-            display: none; justify-content: center; align-items: center; z-index: 5000;
+            background: rgba(0,0,0,0.97); backdrop-filter: blur(15px);
+            display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
         }
-        .slider-box { width: 90%; max-width: 500px; text-align: center; }
-        .slide-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 15px; border: 2px solid var(--gold); box-shadow: 0 0 30px rgba(197, 160, 89, 0.4); }
-        .slide-txt { font-size: 1.8rem; color: var(--gold); margin-top: 15px; font-family: 'Playfair Display', serif; }
+        .slider-box { width: 90%; max-width: 500px; text-align: center; position: relative; }
+        .slide-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; border: 2px solid var(--gold); }
+        .slide-txt { font-size: 1.8rem; color: var(--gold); margin: 15px 0; font-family: 'Playfair Display', serif; }
+        
+        /* Botón X Centrado Abajo */
+        .close-btn {
+            margin-top: 30px; width: 60px; height: 60px; background: rgba(255,255,255,0.1);
+            border: 1px solid var(--gold); color: var(--gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; cursor: pointer; transition: 0.3s;
+        }
+        .close-btn:hover { background: var(--gold); color: black; }
 
         /* --- EDITOR --- */
-        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; width: 100%; background: #000; min-height: 100vh; }
-        .edit-panel { width: 100%; max-width: 600px; border: 1px solid var(--gold); padding: 15px; border-radius: 15px; background: #111; }
-        
-        .cat-group { margin-bottom: 25px; border: 1px solid #333; padding: 10px; border-radius: 10px; }
-        .cat-title { color: var(--gold); font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        
-        .edit-item { display: flex; flex-direction: column; gap: 8px; padding: 15px 0; border-bottom: 1px dashed #333; }
-        .edit-row-inputs { display: flex; gap: 5px; }
-        
-        input { background: #222; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; flex: 1; }
-        input:focus { border-color: var(--gold); outline: none; }
-
-        .btn-add { background: #222; color: var(--gold); border: 1px dashed var(--gold); padding: 10px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: bold; }
-        .btn-save { background: var(--gold); color: black; font-weight: bold; border: none; padding: 15px; border-radius: 50px; width: 100%; max-width: 400px; margin-top: 20px; font-size: 1.1rem; cursor: pointer; position: sticky; bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-        
-        .btn-ag { padding: 5px 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; flex: 1; }
-        .is-ag { background: #d35400; color: white; }
-        .is-ok { background: #333; color: #aaa; }
-        .btn-del { color: #ff4444; background: none; border: 1px solid #ff4444; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; background: #000; min-height: 100vh; }
+        .edit-panel { width: 100%; max-width: 700px; background: #111; border: 1px solid var(--gold); border-radius: 20px; padding: 20px; }
+        .btn-add { background: transparent; color: var(--gold); border: 1px dashed var(--gold); padding: 10px; width: 100%; margin-top: 15px; cursor: pointer; border-radius: 8px; }
+        .btn-save-cloud { background: var(--gold); color: #000; width: 100%; max-width: 400px; padding: 20px; border-radius: 50px; font-weight: bold; margin-top: 30px; border: none; cursor: pointer; position: sticky; bottom: 20px; }
 
     </style>
 </head>
 <body>
 
-    <div id="visual-view">
+    <div id="visual-view" style="width:100%;">
         <div class="header-visual">
-            <div class="header-large" id="access-trigger">EL BUEN SAZÓN</div>
-            <div style="color:#888; margin-top:5px;" id="v-day">Cargando menú...</div>
-            <div class="glow-line" style="margin-top:20px;"></div>
+            <div class="header-large" id="admin-trigger">EL BUEN SAZÓN</div>
+            <div id="v-day" style="color:#aaa; font-style:italic; margin-top:5px;">Cargando...</div>
+            <div class="glow-line"></div>
         </div>
 
         <div class="cards-container" id="v-grid"></div>
 
-        <div id="ad-card" onclick="this.style.display='none'"></div>
-        
-        <div style="color:var(--gold); text-align:center; padding:30px;" id="v-contact"></div>
+        <div id="v-contact" style="padding:40px; text-align:center; color:var(--gold); font-size:0.9rem;"></div>
     </div>
 
-    <div id="gallery-overlay" onclick="closeGallery()">
+    <div id="gallery-overlay">
         <div class="slider-box" onclick="event.stopPropagation()">
-            <img id="slide-img" class="slide-img" src="">
+            <img id="slide-img" class="slide-img" src="" ontouchstart="tStart(event)" ontouchend="tEnd(event)">
             <div id="slide-title" class="slide-txt"></div>
-            <p style="color:#666; margin-top:10px; font-size:0.9rem;">Desliza o toca los bordes para ver más</p>
-            <div style="display:flex; justify-content:space-between; margin-top:20px;">
-                <button onclick="prevSlide()" style="padding:15px; background:transparent; border:none; font-size:2rem; color:var(--gold);">❮</button>
-                <button onclick="nextSlide()" style="padding:15px; background:transparent; border:none; font-size:2rem; color:var(--gold);">❯</button>
+            <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                <button onclick="prevS()" style="background:none; border:none; color:white; font-size:2rem; cursor:pointer;">❮</button>
+                <button onclick="nextS()" style="background:none; border:none; color:white; font-size:2rem; cursor:pointer;">❯</button>
             </div>
         </div>
+        <div class="close-btn" onclick="closeGal()">✕</div>
     </div>
 
     <div id="edition-view">
-        <h2 style="color:var(--gold); margin-bottom:15px;">Panel de Control</h2>
-        
+        <h2 style="color:var(--gold); margin-bottom:20px;">Panel de Administración</h2>
         <div class="edit-panel">
-            <div style="margin-bottom:20px;">
-                <label>Día del Menú:</label>
-                <select id="ed-day" onchange="currentData.config.dia_actual=this.value; renderEditor();" style="width:100%; padding:10px; background:#222; color:white; border-radius:5px; margin-top:5px;">
-                    <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
-                </select>
-            </div>
-            
-            <div style="margin-bottom:20px;">
-                <label>Texto Publicidad:</label>
-                <input type="text" id="ed-ad" oninput="currentData.config.publicidad=this.value" style="width:100%; margin-top:5px;">
-            </div>
-
-            <div id="editor-list"></div>
+            <label>Día Actual:</label>
+            <select id="ed-day" onchange="currentData.config.dia_actual=this.value; renderEditor();" style="width:100%; padding:12px; background:#222; color:#fff; border-radius:10px; margin-bottom:20px;">
+                <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
+            </select>
+            <div id="editor-items"></div>
         </div>
-
-        <button class="btn-save" onclick="saveData()">GUARDAR Y PUBLICAR</button>
+        <button class="btn-save-cloud" onclick="saveToCloud()">PUBLICAR CAMBIOS EN LA NUBE</button>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN ---
-        const URL_GAS = "https://script.google.com/macros/s/AKfycbwZVBesr_kEVM_biuRckKGb8qeovbmaNp-fI9b1asDSdd8tkvCw26w2L0xEqC7oI7Y_bA/exec";
-        
+        const URL_GAS = "https://script.google.com/macros/s/AKfycbyEaB9mC88IgYPIS8-qV7iPIHdmS7sQzhBplVFpPVKmqyU6jZoigghcDb9IJml1J0Z4QQ/exec";
         let currentData = { config: {}, menu: [] };
-        let galleryList = [];
-        let slideIndex = 0;
-        let lastJson = ""; // Para detectar cambios
+        let galleryItems = [];
+        let slideIdx = 0;
+        let lastData = "";
 
-        // --- INICIO ---
+        // Inicialización
         window.onload = () => {
-            initApp();
-            // Revisar actualizaciones cada 4 segundos
-            setInterval(checkUpdates, 4000);
+            fetchData();
+            setInterval(fetchData, 5000); // Auto-actualizar cada 5s
         };
 
-        async function initApp() {
-            await checkUpdates(); // Primera carga
-        }
-
-        async function checkUpdates() {
-            // Solo actualiza si NO estamos en modo edición
+        async function fetchData() {
             if(document.getElementById('edition-view').style.display === 'flex') return;
-
             try {
-                const res = await fetch(URL_GAS);
-                const data = await res.json();
-                const jsonStr = JSON.stringify(data);
-                
-                // Si hay datos nuevos, renderizar
-                if (jsonStr !== lastJson) {
-                    currentData = data;
-                    lastJson = jsonStr;
+                const r = await fetch(URL_GAS);
+                const d = await r.json();
+                if(JSON.stringify(d) !== lastData) {
+                    currentData = d;
+                    lastData = JSON.stringify(d);
                     renderVisual();
                 }
-            } catch (e) { console.error("Error conectando", e); }
+            } catch(e) { console.log("Error de conexión"); }
         }
 
-        // --- RENDERIZADO VISUAL ---
         function renderVisual() {
-            const c = currentData.config;
-            const hoy = c.dia_actual;
+            const hoy = currentData.config.dia_actual;
+            document.getElementById('v-day').innerText = "Menú del " + hoy;
+            document.getElementById('v-contact').innerText = currentData.config.info_contacto || "";
             
-            document.getElementById('v-day').innerText = "Menú disponible para: " + hoy;
-            document.getElementById('v-contact').innerText = c.info_contacto || "";
-            
-            // Publicidad
-            const ad = document.getElementById('ad-card');
-            if(c.publicidad && c.publicidad.trim() !== "") {
-                ad.innerText = c.publicidad;
-                ad.style.display = 'block';
-            } else {
-                ad.style.display = 'none';
-            }
-
-            // Grid
             const grid = document.getElementById('v-grid');
             grid.innerHTML = "";
             
-            const cats = [
-                {id:'principio', label:'Principios'},
-                {id:'proteina', label:'Proteínas', price: c.precio_proteina},
-                {id:'especial', label:'Especiales', price: c.precio_especial},
-                {id:'acompanamiento', label:'Acompañamientos'}
-            ];
+            const cats = [{id:'principio', n:'Principios'}, {id:'proteina', n:'Proteínas', p:currentData.config.precio_proteina}, {id:'especial', n:'Especiales', p:currentData.config.precio_especial}, {id:'acompanamiento', n:'Acompañamientos'}];
 
-            cats.forEach(cat => {
+            cats.forEach((cat, index) => {
                 const items = currentData.menu.filter(i => i.dia === hoy && i.cat === cat.id);
                 if(items.length === 0) return;
 
                 const card = document.createElement('div');
-                card.className = 'card';
-                card.onclick = () => openGallery(items);
+                card.className = 'card fade-in';
+                card.style.animationDelay = (index * 0.15) + "s";
+                card.onclick = () => openGal(items);
 
-                let html = `<div class="card-title">${cat.label} ${cat.price ? `<span class="price-tag">$${cat.price}</span>` : ''}</div>`;
+                // Agregar Humo
+                let smoke = '<div class="smoke-wrap">';
+                for(let i=0; i<5; i++) smoke += `<div class="smoke" style="left:${Math.random()*90}%; width:${20+Math.random()*40}px; height:${20+Math.random()*40}px; animation-delay:${Math.random()*3}s"></div>`;
+                smoke += '</div>';
+
+                let html = `<div class="card-title">${cat.n} ${cat.p ? `<span style="display:block; font-size:1rem; color:#ff9f43; margin-top:5px;">$${cat.p}</span>` : ''}</div>`;
                 
                 items.forEach(it => {
-                    const hasImg = (it.img && it.img.length > 5);
-                    html += `
-                    <div class="item-row ${it.agotado ? 'agotado' : ''}">
-                        <span>${it.nombre} ${hasImg ? '<span class="camera-icon">📷</span>' : ''}</span>
+                    const hasImg = it.img && it.img.length > 10;
+                    html += `<div class="item-row ${it.agotado ? 'agotado' : ''}">
+                        <span>${it.nombre} ${hasImg ? '<span class="cam-icon">📷</span>' : ''}</span>
                         ${it.agotado ? '<span class="stamp-agotado">AGOTADO</span>' : ''}
                     </div>`;
                 });
 
-                card.innerHTML = html;
+                card.innerHTML = smoke + html;
                 grid.appendChild(card);
             });
         }
 
-        // --- GALERÍA ---
-        function openGallery(items) {
-            galleryList = items.filter(i => i.img && i.img.length > 5);
-            if(galleryList.length === 0) return; // Si no hay fotos, no abre nada
-            
-            slideIndex = 0;
-            showSlide();
+        // Galería
+        function openGal(items) {
+            galleryItems = items.filter(i => i.img && i.img.length > 10);
+            if(galleryItems.length === 0) return;
+            slideIdx = 0;
+            updateS();
             document.getElementById('gallery-overlay').style.display = 'flex';
         }
-        
-        function closeGallery() { document.getElementById('gallery-overlay').style.display = 'none'; }
-        
-        function showSlide() {
-            const item = galleryList[slideIndex];
-            document.getElementById('slide-img').src = item.img;
-            document.getElementById('slide-title').innerText = item.nombre;
+        function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
+        function updateS() {
+            document.getElementById('slide-img').src = galleryItems[slideIdx].img;
+            document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre;
         }
-        
-        function nextSlide() { slideIndex = (slideIndex + 1) % galleryList.length; showSlide(); }
-        function prevSlide() { slideIndex = (slideIndex - 1 + galleryList.length) % galleryList.length; showSlide(); }
+        function nextS() { slideIdx = (slideIdx + 1) % galleryItems.length; updateS(); }
+        function prevS() { slideIdx = (slideIdx - 1 + galleryItems.length) % galleryItems.length; updateS(); }
 
-        // --- EDITOR LÓGICA ---
-        let clickCount = 0;
-        document.getElementById('access-trigger').onclick = () => {
-            clickCount++;
-            if(clickCount === 3) {
-                const pass = prompt("Contraseña de administrador:");
-                if(pass === currentData.config.password) {
+        // Swipe Táctil
+        let tx = 0;
+        function tStart(e) { tx = e.touches[0].clientX; }
+        function tEnd(e) { 
+            let ex = e.changedTouches[0].clientX;
+            if(tx - ex > 50) nextS();
+            if(ex - tx > 50) prevS();
+        }
+
+        // Editor
+        let cl = 0;
+        document.getElementById('admin-trigger').onclick = () => {
+            cl++; if(cl === 3) {
+                if(prompt("Clave:") === currentData.config.password) {
                     document.getElementById('visual-view').style.display = 'none';
                     document.getElementById('edition-view').style.display = 'flex';
                     renderEditor();
-                } else { alert("Contraseña incorrecta"); }
-                clickCount = 0;
-            }
-            setTimeout(() => clickCount = 0, 1000);
+                } cl = 0;
+            } setTimeout(() => cl = 0, 1000);
         };
 
         function renderEditor() {
             const dia = currentData.config.dia_actual;
-            document.getElementById('ed-day').value = dia;
-            document.getElementById('ed-ad').value = currentData.config.publicidad;
-
-            const container = document.getElementById('editor-list');
+            const container = document.getElementById('editor-items');
             container.innerHTML = "";
 
-            const cats = ['principio', 'proteina', 'especial', 'acompanamiento'];
-            
-            cats.forEach(catId => {
-                const box = document.createElement('div');
-                box.className = 'cat-group';
+            ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(catId => {
+                const group = document.createElement('div');
+                group.style = "margin-bottom:30px; border-bottom:1px solid #333; padding-bottom:10px;";
+                group.innerHTML = `<h3 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px;">${catId.toUpperCase()}</h3>`;
                 
-                // Titulo categoria
-                box.innerHTML = `<div class="cat-title">${catId.toUpperCase()}</div>`;
-                
-                // Items existentes
                 const items = currentData.menu.filter(i => i.dia === dia && i.cat === catId);
                 items.forEach(it => {
-                    const div = document.createElement('div');
-                    div.className = 'edit-item';
-                    div.innerHTML = `
-                        <div class="edit-row-inputs">
-                            <input type="text" placeholder="Nombre" value="${it.nombre}" oninput="updItem('${it.id}', 'nombre', this.value)">
-                            <button class="btn-del" onclick="delItem('${it.id}')">✕</button>
-                        </div>
-                        <div class="edit-row-inputs">
-                            <input type="text" placeholder="URL Imagen" value="${it.img || ''}" oninput="updItem('${it.id}', 'img', this.value)">
-                            <button class="btn-ag ${it.agotado?'is-ag':'is-ok'}" onclick="togAg('${it.id}')">${it.agotado?'AGOTADO':'DISP.'}</button>
+                    const row = document.createElement('div');
+                    row.style = "display:flex; flex-direction:column; gap:8px; margin-bottom:15px; background:#1a1a1a; padding:10px; border-radius:10px;";
+                    row.innerHTML = `
+                        <input type="text" placeholder="Nombre" value="${it.nombre}" oninput="upd('${it.id}','nombre',this.value)">
+                        <input type="text" placeholder="Link Imagen" value="${it.img||''}" oninput="upd('${it.id}','img',this.value)">
+                        <div style="display:flex; gap:10px;">
+                            <button onclick="tog('${it.id}')" style="flex:1; padding:8px; border-radius:5px; border:none; background:${it.agotado?'#d35400':'#444'}; color:#fff;">${it.agotado?'AGOTADO':'DISPONIBLE'}</button>
+                            <button onclick="del('${it.id}')" style="background:none; border:1px solid red; color:red; padding:8px 15px; border-radius:5px;">✕</button>
                         </div>
                     `;
-                    box.appendChild(div);
+                    group.appendChild(row);
                 });
 
-                // Boton Agregar al FINAL
-                const btnAdd = document.createElement('button');
-                btnAdd.className = 'btn-add';
-                btnAdd.innerText = "+ AGREGAR " + catId.toUpperCase();
-                btnAdd.onclick = () => addItem(catId);
-                box.appendChild(btnAdd);
-
-                container.appendChild(box);
+                const add = document.createElement('button');
+                add.className = 'btn-add';
+                add.innerText = "+ AGREGAR PLATO";
+                add.onclick = () => {
+                    currentData.menu.push({id:Date.now().toString(), dia:dia, cat:catId, nombre:"", img:"", agotado:false});
+                    renderEditor();
+                };
+                group.appendChild(add);
+                container.appendChild(group);
             });
         }
 
-        // --- ACCIONES EDITOR ---
-        function updItem(id, field, val) {
-            const it = currentData.menu.find(i => i.id == id);
-            if(it) it[field] = val;
-        }
-        function togAg(id) {
-            const it = currentData.menu.find(i => i.id == id);
-            if(it) { it.agotado = !it.agotado; renderEditor(); }
-        }
-        function delItem(id) {
-            if(confirm("¿Eliminar plato?")) {
-                currentData.menu = currentData.menu.filter(i => i.id != id);
-                renderEditor();
-            }
-        }
-        function addItem(cat) {
-            const newItem = {
-                id: Date.now().toString(),
-                dia: currentData.config.dia_actual,
-                cat: cat,
-                nombre: "",
-                img: "",
-                agotado: false
-            };
-            currentData.menu.push(newItem);
-            renderEditor();
-        }
+        function upd(id, f, v) { const it = currentData.menu.find(i => i.id == id); if(it) it[f] = v; }
+        function tog(id) { const it = currentData.menu.find(i => i.id == id); if(it) it.agotado = !it.agotado; renderEditor(); }
+        function del(id) { currentData.menu = currentData.menu.filter(i => i.id != id); renderEditor(); }
 
-        async function saveData() {
-            const btn = document.querySelector('.btn-save');
-            btn.innerText = "GUARDANDO...";
-            btn.disabled = true;
-
+        async function saveToCloud() {
+            const b = document.querySelector('.btn-save-cloud');
+            b.innerText = "SUBIENDO DATOS..."; b.disabled = true;
             try {
-                await fetch(URL_GAS, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu })
-                });
-                alert("¡Guardado! El menú se actualizará en unos segundos.");
+                await fetch(URL_GAS, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:'saveAll', config:currentData.config, menu:currentData.menu}) });
+                alert("Menú actualizado con éxito");
                 location.reload();
-            } catch (e) {
-                alert("Error al guardar");
-                btn.innerText = "REINTENTAR";
-                btn.disabled = false;
-            }
+            } catch(e) { alert("Error al guardar"); b.innerText = "REINTENTAR"; b.disabled = false; }
         }
     </script>
 </body>
