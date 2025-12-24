@@ -3,62 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Menú Gourmet - El Buen Sazón</title>
+    <title>Menú Premium - El Buen Sazón</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Oswald:wght@700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Oswald:wght@500;700&family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body id="main-body">
 
-    <canvas id="fx-canvas"></canvas>
+    <div id="promo-vertical" onclick="this.style.transform='translateX(110%)'">
+        <span>🎁 PROMO: 10 ALMUERZOS = 1 GRATIS • TOCA PARA CERRAR</span>
+    </div>
 
     <div id="view-client">
         <header class="header-app">
             <div class="logo-box" id="admin-trigger">
                 <h1>EL BUEN SAZÓN</h1>
             </div>
-            <div class="subtitle-menu">MENÚ DEL DÍA</div>
+            <div class="subtitle-box">
+                <span class="line"></span>
+                <span class="subtitle-text">MENÚ DEL DÍA</span>
+                <span class="line"></span>
+            </div>
             <div class="day-banner" id="current-day-label">...</div>
         </header>
 
-        <div class="menu-list" id="client-cards">
-            <div class="card-restaurante" style="--delay: 0.1s">
-                <div class="card-title-box"><h2>Principios</h2></div>
-                <ul class="food-items" id="list-principio"></ul>
+        <div class="menu-list">
+            <div class="card-restaurante" style="--delay: 0.2s">
+                <div class="card-inner">
+                    <div class="card-title-box"><h2>Principios</h2></div>
+                    <ul class="food-items" id="list-principio"></ul>
+                </div>
             </div>
             
-            <div class="card-restaurante" style="--delay: 0.3s">
-                <div class="card-title-box">
-                    <h2>Proteína</h2>
-                    <span class="price-label" id="price-p1">$0</span>
+            <div class="card-restaurante" style="--delay: 0.4s">
+                <div class="card-inner">
+                    <div class="card-title-box">
+                        <h2>Proteína</h2>
+                        <span class="price-label" id="price-p1">$0</span>
+                    </div>
+                    <ul class="food-items" id="list-proteina"></ul>
                 </div>
-                <ul class="food-items" id="list-proteina"></ul>
             </div>
 
-            <div class="card-restaurante" style="--delay: 0.5s">
-                <div class="card-title-box">
-                    <h2>Especial</h2>
-                    <span class="price-label" id="price-p2">$0</span>
+            <div class="card-restaurante" style="--delay: 0.6s">
+                <div class="card-inner">
+                    <div class="card-title-box">
+                        <h2>Especial</h2>
+                        <span class="price-label" id="price-p2">$0</span>
+                    </div>
+                    <ul class="food-items" id="list-especial"></ul>
                 </div>
-                <ul class="food-items" id="list-especial"></ul>
             </div>
 
-            <div class="card-restaurante" style="--delay: 0.7s">
-                <div class="card-title-box"><h2>Acompañamientos</h2></div>
-                <ul class="food-items" id="list-acompanamiento"></ul>
+            <div class="card-restaurante" style="--delay: 0.8s">
+                <div class="card-inner">
+                    <div class="card-title-box"><h2>Acompañamientos</h2></div>
+                    <ul class="food-items" id="list-acompanamiento"></ul>
+                </div>
             </div>
-        </div>
-
-        <div id="promo-notify">
-            <button class="close-promo" onclick="this.parentElement.remove()">×</button>
-            <div class="promo-title">🎁 BENEFICIO EXCLUSIVO</div>
-            <p>Cada 10 almuerzos, el siguiente va por cuenta de la casa.</p>
         </div>
     </div>
 
     <div id="view-admin">
         <div class="editor-container">
-            <h2>Panel Administrativo</h2>
-            <button onclick="exitAdmin()" class="btn-save">Guardar Cambios</button>
+            <h2>Panel de Edición</h2>
+            <button onclick="exitAdmin()" class="btn-save">Cerrar y Guardar</button>
             <div id="editor-sections"></div>
         </div>
     </div>
