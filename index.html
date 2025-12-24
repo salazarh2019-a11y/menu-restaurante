@@ -3,143 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Rústico Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <title>El Buen Sazón - Parrilla Rústica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700;800&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: #000;
-            color: #fff; width: 100vw; overflow-x: hidden;
+            background: #000; color: #fff; 
+            width: 100vw; overflow-x: hidden;
             display: flex; flex-direction: column; align-items: center;
-            position: relative;
         }
 
-        /* --- ATMÓSFERA: BRASAS Y LUZ --- */
+        /* --- FONDO DE CHISPAS ERRÁTICAS --- */
         #embers-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         
         body::before {
             content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 100%, rgba(255, 100, 0, 0.15), transparent 70%);
-            animation: flicker 3s infinite alternate; z-index: 0;
+            background: radial-gradient(circle at 50% 100%, rgba(255, 60, 0, 0.15), transparent 75%);
+            animation: flicker 2s infinite alternate; z-index: 0;
         }
-        @keyframes flicker { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
+        @keyframes flicker { 0% { opacity: 0.2; } 100% { opacity: 0.6; } }
 
         /* --- CABECERA --- */
-        .header-visual { text-align: center; margin: 40px 0; z-index: 10; position: relative; }
-        .header-large { 
-            font-size: clamp(2.5rem, 10vw, 3.8rem); 
-            color: #d4a76a; 
-            font-family: 'Playfair Display', serif; 
-            text-shadow: 3px 3px 5px rgba(0,0,0,0.9);
-        }
-        .day-label { font-family: 'Playfair Display', serif; color: #d4a76a; font-size: 2.2rem; margin-top: -5px; }
+        .header-visual { text-align: center; margin: 40px 0; z-index: 10; width: 100%; position: relative; }
+        .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: #c5a059; font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
+        .day-label { font-size: 1.1rem; color: #888; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        .day-main { font-size: 2.5rem; color: #c5a059; font-family: 'Playfair Display', serif; margin-top: -5px; }
 
         /* --- CONTENEDOR --- */
         .cards-container { 
-            display: flex; flex-direction: column; align-items: center; gap: 45px; 
-            width: 100%; max-width: 1100px; padding: 0 20px 100px 20px; z-index: 10; position: relative;
+            display: flex; flex-direction: column; align-items: center; gap: 35px; 
+            width: 100%; max-width: 1100px; padding: 0 20px 50px 20px; z-index: 10;
         }
-        @media (min-width: 768px) { .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); } }
+        @media (min-width: 768px) { 
+            .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; } 
+        }
 
-        /* --- TARJETA MADERA CLARA (CEDRO/ROBLE) --- */
+        /* --- TARJETA --- */
         .card {
-            background: #7d4e2d; /* Madera más clara */
-            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-            border-radius: 12px;
-            padding: 25px 20px 30px 20px;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.3);
-            border: 3px solid #5d3a21;
-            transition: 0.3s;
-            opacity: 0; transform: translateY(40px) rotate(1deg);
-            animation: entryBounce 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            background: #7d4e2d url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            border-radius: 12px; padding: 25px 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+            border: 3px solid #5d3a21; width: 100%;
+            opacity: 0; transform: translateY(40px);
+            animation: entry 0.7s ease-out forwards;
         }
-        @keyframes entryBounce { to { opacity: 1; transform: translateY(0) rotate(0deg); } }
+        @keyframes entry { to { opacity: 1; transform: translateY(0); } }
 
-        /* Título Estilo Grabado Profundo */
         .card-title {
-            font-family: 'Playfair Display', serif;
-            color: #2a180b; /* Marrón muy oscuro para simular quemado */
-            text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 1px rgba(255,255,255,0.2);
-            font-weight: 800;
-            line-height: 1;
+            font-family: 'Playfair Display', serif; color: #1a0f08;
+            text-align: center; font-size: 1.7rem; margin-bottom: 15px;
+            font-weight: 800; line-height: 1.2;
         }
 
-        /* Papel Pergamino Clavado */
+        /* COLOR AMARILLO SOLO PARA PRECIOS */
+        .price-tag {
+            color: #ffcc00;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            display: block;
+            margin-top: 5px;
+        }
+
         .paper-sheet {
-            background: #f4e4bc;
-            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
-            color: #332211;
-            padding: 25px 20px;
-            box-shadow: 3px 5px 15px rgba(0,0,0,0.5);
-            position: relative;
-            clip-path: polygon(1% 1%, 99% 0%, 100% 98%, 0% 100%);
+            background: #f4e4bc url('https://www.transparenttextures.com/patterns/parchment.png');
+            color: #332211; padding: 20px;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+            clip-path: polygon(0% 1%, 100% 0%, 99% 99%, 1% 100%);
             cursor: pointer;
-        }
-
-        /* Chincheta Metálica */
-        .paper-sheet::after {
-            content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
-            width: 14px; height: 14px; background: radial-gradient(circle, #888, #222);
-            border-radius: 50%; box-shadow: 2px 2px 5px rgba(0,0,0,0.6);
         }
 
         .item-row {
             display: flex; justify-content: space-between;
             font-family: 'Special Elite', cursive;
-            border-bottom: 1px dashed rgba(0,0,0,0.15);
-            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.1); padding: 10px 0;
             font-size: 1.1rem;
         }
-        .item-row b { color: #b33939; font-size: 0.9rem; }
 
-        /* --- RULETA DE IMÁGENES --- */
-        #gallery-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 2000;
+        /* --- PUBLICIDAD Y CONTACTO --- */
+        .ad-card {
+            grid-column: 1 / -1; width: 100%; max-width: 900px;
+            background: rgba(255, 100, 0, 0.15);
+            backdrop-filter: blur(12px); border: 1px solid rgba(255, 150, 0, 0.3);
+            border-radius: 20px; padding: 25px; text-align: center; color: #ffcc00;
+            margin: 20px auto; z-index: 10;
         }
-        .slide-container { position: relative; width: 90%; max-width: 450px; text-align: center; }
-        .slide-img { 
-            width: 100%; aspect-ratio: 1/1; object-fit: cover; 
-            border: 12px solid #fff; box-shadow: 0 10px 30px #000;
-            border-bottom-width: 40px; /* Estilo Polaroid */
-        }
-        .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(0,0,0,0.5); border: 2px solid #fff; color: #fff;
-            width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
-        }
-        .prev { left: -25px; } .next { right: -25px; }
-        .close-gal { margin-top: 30px; font-family: 'Special Elite'; color: #fff; border: 1px solid #fff; padding: 10px 20px; cursor: pointer; }
 
+        .contact-footer {
+            margin: 40px 0 60px 0; text-align: center;
+            color: #ff3300; font-family: 'Special Elite', cursive;
+            font-size: 1.3rem; text-shadow: 0 0 15px rgba(255, 50, 0, 0.7);
+            z-index: 10;
+        }
+
+        /* --- GALERÍA --- */
+        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 3000; }
+        .slide-container { position: relative; width: 85%; max-width: 400px; }
+        .slide-img { width: 100%; border: 10px solid #fff; border-bottom-width: 45px; box-shadow: 0 10px 40px #000; }
+        .nav-btn { position: absolute; top: 50%; width: 50px; height: 50px; background: #fff; border: 2px solid #000; border-radius: 50%; font-size: 1.5rem; cursor: pointer; z-index: 10; transform: translateY(-50%); }
+
+        /* --- PANEL EDITOR --- */
+        #edition-view { display: none; position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh; background: #000; z-index: 5000; padding: 20px; flex-direction: column; align-items: center; }
+        .edit-box { width: 100%; max-width: 600px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #d4a76a; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #222; color: #fff; border: 1px solid #444; }
     </style>
 </head>
 <body>
 
     <canvas id="embers-canvas"></canvas>
 
-    <div class="header-visual">
-        <h1 class="header-large" id="admin-trigger">EL BUEN SAZÓN</h1>
-        <div style="color: #888; text-transform: uppercase; letter-spacing: 4px; font-size: 0.9rem; margin-top: 15px;">Menú del Día</div>
-        <div id="v-day-display" class="day-label">...</div>
-    </div>
+    <div id="visual-view" style="width:100%;">
+        <div class="header-visual">
+            <h1 class="header-large" id="admin-trigger">EL BUEN SAZÓN</h1>
+            <div class="day-label">Menú del</div>
+            <div id="v-day-display" class="day-main">...</div>
+        </div>
 
-    <div class="cards-container" id="v-grid"></div>
+        <div class="cards-container" id="v-grid"></div>
+        
+        <div id="v-ad" class="ad-card" style="display:none;"></div>
+        <div id="v-contact" class="contact-footer"></div>
+    </div>
 
     <div id="gallery-overlay" onclick="closeGal()">
         <div class="slide-container" onclick="event.stopPropagation()">
             <img id="slide-img" class="slide-img" src="">
-            <div id="slide-title" style="position: absolute; bottom: 10px; left: 0; width: 100%; color: #333; font-family: 'Special Elite'; font-weight: bold;"></div>
-            <button class="nav-btn prev" onclick="changeSlide(-1)">❮</button>
-            <button class="nav-btn next" onclick="changeSlide(1)">❯</button>
+            <div id="slide-title" style="position: absolute; bottom: 12px; left: 0; width: 100%; color: #333; font-family: 'Special Elite'; font-weight: bold; text-align: center;"></div>
+            <button class="nav-btn" style="left: -25px;" onclick="changeSlide(-1)">❮</button>
+            <button class="nav-btn" style="right: -25px;" onclick="changeSlide(1)">❯</button>
         </div>
-        <div class="close-gal" onclick="closeGal()">CERRAR [X]</div>
+    </div>
+
+    <div id="edition-view">
+        <h2 style="color:#d4a76a; margin-bottom: 20px;">Panel Administrativo</h2>
+        <div class="edit-box">
+            <select id="ed-day" onchange="currentData.config.dia_actual=this.value; renderEditor();">
+                <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
+            </select>
+            <input type="text" id="ed-ad" placeholder="Texto Publicidad" oninput="currentData.config.publicidad=this.value">
+            <input type="text" id="ed-pass" placeholder="Password" oninput="currentData.config.password=this.value">
+            <div id="editor-items"></div>
+            <button style="width:100%; padding:15px; background:#d4a76a; font-weight:bold; margin-top:20px; border:none; border-radius:5px;" onclick="saveToCloud()">GUARDAR CAMBIOS</button>
+            <button onclick="location.reload()" style="width:100%; background:none; color:white; margin-top:10px; border:none; cursor:pointer;">Cerrar panel</button>
+        </div>
     </div>
 
     <script>
@@ -148,98 +155,138 @@
         let galleryItems = [];
         let slideIdx = 0;
 
-        // --- PARTÍCULAS (BRASAS) ---
+        // --- CHISPAS ERRÁTICAS ---
         const canvas = document.getElementById('embers-canvas');
         const ctx = canvas.getContext('2d');
-        let embers = [];
-        function initEmbers() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            embers = Array.from({length: 40}, () => ({
-                x: Math.random() * canvas.width, y: canvas.height + 20,
-                s: Math.random() * 2 + 1, sp: Math.random() * 0.5 + 0.3, a: Math.random()
-            }));
-        }
-        function drawEmbers() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            embers.forEach(e => {
-                e.y -= e.sp; e.x += Math.sin(e.y/50)*0.5;
-                if(e.y < -10) e.y = canvas.height + 20;
-                ctx.fillStyle = `rgba(255, 120, 0, ${e.a})`;
-                ctx.beginPath(); ctx.arc(e.x, e.y, e.s, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(drawEmbers);
-        }
-        initEmbers(); drawEmbers();
+        let sparks = [];
 
-        // --- CARGA DE DATOS ---
+        function initSparks() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            sparks = Array.from({length: 45}, () => createSpark());
+        }
+
+        function createSpark() {
+            return {
+                x: Math.random() * canvas.width,
+                y: canvas.height + Math.random() * 100,
+                size: Math.random() * 2 + 1,
+                vx: (Math.random() - 0.5) * 2, // Velocidad X errática
+                vy: -Math.random() * 2 - 1,   // Velocidad Y hacia arriba
+                alpha: Math.random(),
+                life: Math.random() * 100
+            };
+        }
+
+        function drawSparks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            sparks.forEach((s, i) => {
+                s.y += s.vy;
+                s.x += s.vx + Math.sin(s.y / 20); // Movimiento en zigzag
+                s.alpha -= 0.005;
+                if (s.alpha <= 0 || s.y < -10) sparks[i] = createSpark();
+
+                ctx.fillStyle = `rgba(255, ${150 + Math.random() * 105}, 0, ${s.alpha})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(drawSparks);
+        }
+        initSparks(); drawSparks();
+
+        // --- CARGA Y RENDER ---
         async function loadMenu() {
             try {
                 const response = await fetch(URL_GAS);
                 currentData = await response.json();
                 renderMenu();
-            } catch (e) { document.getElementById('v-day-display').innerText = "Sin Conexión"; }
+            } catch (e) { document.getElementById('v-day-display').innerText = "..."; }
         }
 
         function renderMenu() {
             const hoy = currentData.config.dia_actual;
             document.getElementById('v-day-display').innerText = hoy;
+            document.getElementById('v-contact').innerText = currentData.config.info_contacto;
+            
+            if(currentData.config.publicidad) {
+                const ad = document.getElementById('v-ad');
+                ad.innerText = currentData.config.publicidad;
+                ad.style.display = 'block';
+            }
+
             const grid = document.getElementById('v-grid');
             grid.innerHTML = "";
-            
             const cats = [
-                {id:'principio', n:'Principios'}, 
-                {id:'proteina', n:'Proteínas', p:currentData.config.precio_proteina}, 
-                {id:'especial', n:'Especiales', p:currentData.config.precio_especial}, 
-                {id:'acompanamiento', n:'Acompañamientos'}
+                {id:'principio', n:'Principios'}, {id:'proteina', n:'Proteínas', p:currentData.config.precio_proteina}, 
+                {id:'especial', n:'Especiales', p:currentData.config.precio_especial}, {id:'acompanamiento', n:'Acompañamientos'}
             ];
 
-            cats.forEach((cat, idx) => {
+            cats.forEach(cat => {
                 const items = currentData.menu.filter(i => i.dia === hoy && i.cat === cat.id);
                 if(items.length === 0) return;
-                
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.style.animationDelay = `${idx * 0.15}s`;
+                card.onclick = () => openGal(items);
                 
-                let html = `
-                    <div class="card-title">${cat.n} ${cat.p ? `<br><small style="font-size:0.9rem; color:rgba(0,0,0,0.5)">$${cat.p}</small>` : ''}</div>
-                    <div class="paper-sheet" onclick="openGal('${cat.id}')">`;
+                // Mostrar precio en amarillo solo si existe
+                let priceHtml = cat.p ? `<span class="price-tag">$${cat.p}</span>` : '';
                 
+                let html = `<div class="card-title">${cat.n} ${priceHtml}</div><div class="paper-sheet">`;
                 items.forEach(it => {
-                    html += `
-                        <div class="item-row">
-                            <span style="${it.agotado ? 'text-decoration:line-through; opacity:0.5' : ''}">${it.nombre}</span>
-                            ${it.agotado ? '<b>X</b>' : ''}
-                        </div>`;
+                    html += `<div class="item-row">
+                        <span style="${it.agotado ? 'text-decoration:line-through;opacity:0.4' : ''}">${it.nombre}</span>
+                        ${it.agotado ? '<b style="color:#d32f2f">X</b>' : ''}
+                    </div>`;
                 });
-
                 html += `</div>`;
                 card.innerHTML = html;
                 grid.appendChild(card);
             });
         }
 
-        // --- GALERÍA / RULETA ---
-        function openGal(catId) {
-            const hoy = currentData.config.dia_actual;
-            galleryItems = currentData.menu.filter(i => i.dia === hoy && i.cat === catId && i.img && i.img.length > 10);
+        function openGal(items) {
+            galleryItems = items.filter(i => i.img && i.img.length > 10);
             if(galleryItems.length === 0) return;
-            slideIdx = 0;
-            showSlide();
+            slideIdx = 0; showSlide();
             document.getElementById('gallery-overlay').style.display = 'flex';
         }
-
         function showSlide() {
             document.getElementById('slide-img').src = galleryItems[slideIdx].img;
             document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre;
         }
-
-        function changeSlide(n) {
-            slideIdx = (slideIdx + n + galleryItems.length) % galleryItems.length;
-            showSlide();
-        }
-
+        function changeSlide(n) { slideIdx = (slideIdx + n + galleryItems.length) % galleryItems.length; showSlide(); }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
+
+        // ADMIN
+        let cl = 0;
+        document.getElementById('admin-trigger').onclick = () => {
+            cl++; if(cl === 3) {
+                if(prompt("Clave:") === currentData.config.password) {
+                    document.getElementById('visual-view').style.display = 'none';
+                    document.getElementById('edition-view').style.display = 'flex';
+                    renderEditor();
+                } cl = 0;
+            } setTimeout(() => cl = 0, 1000);
+        };
+
+        function renderEditor() {
+            const cont = document.getElementById('editor-items');
+            cont.innerHTML = "";
+            currentData.menu.filter(i => i.dia === currentData.config.dia_actual).forEach(it => {
+                const div = document.createElement('div');
+                div.innerHTML = `<input type="text" value="${it.nombre}" oninput="upd('${it.id}','nombre',this.value)">
+                                 <button onclick="tog('${it.id}')" style="background:${it.agotado?'red':'green'}; color:white; border:none; padding:5px; cursor:pointer;">${it.agotado?'AGOTADO':'OK'}</button>`;
+                cont.appendChild(div);
+            });
+        }
+        function upd(id, f, v) { const it = currentData.menu.find(i => i.id == id); if(it) it[f] = v; }
+        function tog(id) { const it = currentData.menu.find(i => i.id == id); if(it) it.agotado = !it.agotado; renderEditor(); }
+        async function saveToCloud() {
+            try {
+                await fetch(URL_GAS, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:'saveAll', config:currentData.config, menu:currentData.menu}) });
+                alert("Menú actualizado en la nube"); location.reload();
+            } catch(e) { alert("Error al guardar"); }
+        }
 
         loadMenu();
     </script>
