@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Menú Pro</title>
+    <title>El Buen Sazón - Versión Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #c5a059;
-            --fire-glow: linear-gradient(to top, rgba(255, 69, 0, 0.6), rgba(255, 0, 0, 0.2), transparent);
-            --fire-line: #ff4500;
-            --dark: #0a0a0a;
+            --fire-glow: linear-gradient(to top, rgba(255, 100, 0, 0.3), rgba(255, 50, 0, 0.1), transparent);
+            --fire-line: #d35400;
         }
 
         body {
@@ -29,43 +28,37 @@
         .header-subtitle { color: #aaa; font-style: italic; font-size: 1.1rem; margin-bottom: 15px; }
 
         .glow-line {
-            width: 80%; max-width: 450px; height: 3px; background: var(--fire-line);
+            width: 80%; max-width: 450px; height: 2px; background: var(--fire-line);
             margin: 0 auto; position: relative; border-radius: 5px;
-            box-shadow: 0 0 15px #ff4500;
+            box-shadow: 0 0 10px rgba(211, 84, 0, 0.5);
         }
 
-        /* LUZ NARANJA-ROJA QUE ILUMINA EL TITULO */
+        /* LUZ AMBAR SUAVE */
         .glow-line::after {
-            content: ''; position: absolute; bottom: 3px; left: -10%; right: -10%;
-            height: 140px; background: var(--fire-glow);
-            filter: blur(25px); animation: fireLight 2.5s infinite alternate;
+            content: ''; position: absolute; bottom: 2px; left: -15%; right: -15%;
+            height: 120px; background: var(--fire-glow);
+            filter: blur(20px); animation: fireLight 3s infinite alternate;
             pointer-events: none;
         }
 
         @keyframes fireLight {
-            0% { opacity: 0.4; height: 90px; filter: blur(20px); }
-            50% { opacity: 1; height: 150px; filter: blur(30px); }
-            100% { opacity: 0.6; height: 110px; filter: blur(25px); }
+            0% { opacity: 0.2; height: 80px; }
+            50% { opacity: 0.6; height: 130px; }
+            100% { opacity: 0.3; height: 100px; }
         }
 
-        /* --- TARJETAS RESPONSIVAS --- */
+        /* --- CONTENEDOR TARJETAS --- */
         .cards-container {
-            display: flex;
-            flex-direction: column; /* Apiladas por defecto (Móvil) */
-            align-items: center;
-            gap: 25px; 
-            width: 100%; 
-            max-width: 1200px; 
-            padding: 0 15px 100px 15px;
-            box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 25px; width: 100%; max-width: 1200px;
+            padding: 0 15px 50px 15px; box-sizing: border-box;
         }
 
-        /* En PC se ponen en cuadrícula */
         @media (min-width: 768px) {
             .cards-container {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-                flex-direction: row;
+                align-items: start; /* ALINEA TODAS AL MISMO NIVEL ARRIBA */
                 justify-content: center;
             }
         }
@@ -75,54 +68,41 @@
             padding: 25px; position: relative; overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.9);
             animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
-            transition: all 0.4s ease;
-            width: 100%; /* Ocupa todo el ancho en móvil */
-            max-width: 400px; /* Pero no se estira infinito */
-            box-sizing: border-box;
+            transition: all 0.4s ease; width: 100%; max-width: 400px; box-sizing: border-box;
         }
 
-        @keyframes floatUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes floatUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card:hover {
-            border-color: #ff4500;
-            background: linear-gradient(145deg, #161616, #2a0a00);
-            transform: translateY(-8px);
-        }
+        .card:hover { border-color: #e67e22; background: linear-gradient(145deg, #161616, #1e0f00); transform: translateY(-8px); }
 
-        /* --- HUMO VISIBLE --- */
-        .smoke-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; opacity: 0; transition: opacity 0.5s;
-        }
+        /* --- HUMO --- */
+        .smoke-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
         .card:hover .smoke-container { opacity: 1; }
+        .smoke { position: absolute; bottom: -30px; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); filter: blur(15px); border-radius: 50%; animation: riseSmoke 2.5s infinite ease-out; }
+        @keyframes riseSmoke { 0% { transform: translateY(0) scale(1); opacity: 0; } 30% { opacity: 0.6; } 100% { transform: translateY(-180px) scale(3.5) translateX(30px); opacity: 0; } }
 
-        .smoke {
-            position: absolute; bottom: -30px; width: 70px; height: 70px;
-            background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
-            filter: blur(15px); border-radius: 50%;
-            animation: riseSmoke 2.2s infinite ease-out;
-        }
-
-        @keyframes riseSmoke {
-            0% { transform: translateY(0) scale(1) translateX(0); opacity: 0; }
-            30% { opacity: 0.7; }
-            100% { transform: translateY(-200px) scale(4) translateX(40px); opacity: 0; }
-        }
-
-        /* --- CONTENIDO TARJETA --- */
-        .card-content { position: relative; z-index: 2; }
+        /* --- PRECIOS Y CONTENIDO --- */
         .card-title { color: var(--gold); font-size: 1.5rem; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Playfair Display', serif; }
-        .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 0.95rem; }
-        .stamp-agotado { border: 1.5px solid #ff4444; color: #ff4444; font-size: 0.6rem; padding: 2px 6px; transform: rotate(-12deg); background: rgba(0,0,0,0.9); font-weight: bold; border-radius: 4px; }
-        .item-row.agotado span { color: #555; text-decoration: line-through; }
-        
-        .footer-contact { padding: 40px; text-align: center; color: var(--gold); font-size: 0.85rem; width: 100%; box-sizing: border-box; }
+        .price-tag { font-size: 1.1rem; color: #ff9f43; font-weight: 600; display: block; margin-top: 5px; letter-spacing: 1px; }
+        .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 1rem; position: relative; }
+        .stamp-agotado { border: 1.5px solid #ff4444; color: #ff4444; font-size: 0.65rem; padding: 2px 6px; transform: rotate(-12deg); background: rgba(0,0,0,0.9); font-weight: bold; border-radius: 4px; position: absolute; right: 0; top: 10px; }
+        .item-row.agotado span { color: #444; text-decoration: line-through; }
 
-        /* --- PANEL EDICION --- */
+        /* --- PUBLICIDAD AL FINAL --- */
+        #ad-card {
+            background: linear-gradient(135deg, #e67e22, #c0392b);
+            padding: 20px; border-radius: 15px; text-align: center; font-weight: bold;
+            color: white; margin-top: 20px; display: none; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.4);
+        }
+        #ad-card.vibrate { animation: hotVibration 0.3s 4; }
+        @keyframes hotVibration { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-1deg); } 75% { transform: rotate(1deg); } }
+
+        .footer-contact { padding: 40px; text-align: center; color: var(--gold); font-size: 0.9rem; }
         #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; width: 100%; box-sizing: border-box; }
-        .edit-panel { background: #111; width: 100%; max-width: 500px; padding: 20px; border-radius: 20px; border: 1px solid var(--gold); box-sizing: border-box; }
-        input, select { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; font-size: 16px; /* Evita zoom en iPhone */ }
-        .btn-save { background: var(--gold); color: #000; padding: 18px; border-radius: 40px; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; width: 100%; }
+        .edit-panel { background: #111; width: 100%; max-width: 500px; padding: 25px; border-radius: 20px; border: 1px solid var(--gold); }
+        input, select { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; font-size: 16px; }
+        .btn-save { background: var(--gold); color: #000; padding: 18px; border-radius: 40px; border: none; font-weight: bold; cursor: pointer; width: 100%; }
     </style>
 </head>
 <body>
@@ -135,11 +115,14 @@
         </div>
         
         <div class="cards-container" id="v-grid"></div>
+        
+        <div id="ad-card" onclick="this.style.display='none'"></div>
+
         <div class="footer-contact" id="v-contact"></div>
     </div>
 
     <div id="edition-view">
-        <h2 style="color:var(--gold)">Administrar Menú</h2>
+        <h2 style="color:var(--gold)">Configurar Menú</h2>
         <div class="edit-panel">
             <label>Día</label><select id="ed-day-select" onchange="renderEditor()"></select>
             <label>Precio Proteína</label><input id="ed-price-p" type="text">
@@ -157,24 +140,47 @@
         let currentData = { config: {}, menu: [] };
 
         async function init() {
+            await updateDataSilently();
+            const sel = document.getElementById('ed-day-select');
+            ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].forEach(d => {
+                sel.innerHTML += `<option value="${d}">${d}</option>`;
+            });
+            sel.value = currentData.config.dia_actual;
+            setInterval(updateDataSilently, 5000); // Revisa cambios cada 5 segundos
+        }
+
+        async function updateDataSilently() {
             try {
                 const r = await fetch(URL);
-                currentData = await r.json();
-                const sel = document.getElementById('ed-day-select');
-                ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].forEach(d => {
-                    sel.innerHTML += `<option value="${d}">${d}</option>`;
-                });
-                sel.value = currentData.config.dia_actual;
-                renderVisual();
-            } catch (e) { console.log("Error"); }
+                const newData = await r.json();
+                if (JSON.stringify(newData) !== JSON.stringify(currentData)) {
+                    currentData = newData;
+                    if (document.getElementById('visual-view').style.display !== 'none') {
+                        renderVisual();
+                    }
+                }
+            } catch (e) { console.error("Error cargando datos"); }
         }
 
         function renderVisual() {
             const hoy = currentData.config.dia_actual;
             document.getElementById('v-day').innerText = "Menú del " + hoy;
             document.getElementById('v-contact').innerText = currentData.config.info_contacto || "";
+            
+            const ad = document.getElementById('ad-card');
+            if(currentData.config.publicidad) {
+                ad.innerText = currentData.config.publicidad;
+                ad.style.display = 'block';
+                setTimeout(() => ad.classList.add('vibrate'), 8000);
+            } else { ad.style.display = 'none'; }
+
             const grid = document.getElementById('v-grid');
-            const cats = [{k:'principio', t:'Principios'}, {k:'proteina', t:'Proteínas', p: currentData.config.precio_proteina}, {k:'especial', t:'Especiales', p: currentData.config.precio_especial}, {k:'acompanamiento', t:'Acompañamientos'}];
+            const cats = [
+                {k:'principio', t:'Principios'},
+                {k:'proteina', t:'Proteínas', p: currentData.config.precio_proteina},
+                {k:'especial', t:'Especiales', p: currentData.config.precio_especial},
+                {k:'acompanamiento', t:'Acompañamientos'}
+            ];
             
             grid.innerHTML = '';
             cats.forEach(c => {
@@ -182,19 +188,19 @@
                 if(items.length === 0) return;
                 const card = document.createElement('div');
                 card.className = 'card';
-                const smokeCont = document.createElement('div');
-                smokeCont.className = 'smoke-container';
-                for(let i=0; i<5; i++) {
-                    const s = document.createElement('div');
-                    s.className = 'smoke';
-                    s.style.left = (Math.random() * 80) + '%';
-                    s.style.animationDelay = (Math.random() * 3) + 's';
-                    smokeCont.appendChild(s);
-                }
-                card.appendChild(smokeCont);
-                let inner = `<div class="card-content"><div class="card-title">${c.t} ${c.p ? `<br><small style="font-size:0.7rem">$${c.p}</small>` : ''}</div>`;
-                items.forEach(it => { inner += `<div class="item-row ${it.agotado?'agotado':''}"><span>${it.nombre}</span>${it.agotado ? '<div class="stamp-agotado">AGOTADO</div>' : ''}</div>`; });
-                card.innerHTML += inner + `</div>`;
+                
+                let smokeHTML = '<div class="smoke-container">';
+                for(let i=0; i<4; i++) smokeHTML += `<div class="smoke" style="left:${Math.random()*80}%; animation-delay:${Math.random()*2}s"></div>`;
+                smokeHTML += '</div>';
+
+                let content = `<div class="card-title">${c.t} ${c.p ? `<span class="price-tag">$${c.p}</span>` : ''}</div>`;
+                items.forEach(it => {
+                    content += `<div class="item-row ${it.agotado?'agotado':''}">
+                        <span>${it.nombre}</span>
+                        ${it.agotado ? '<div class="stamp-agotado">AGOTADO</div>' : ''}
+                    </div>`;
+                });
+                card.innerHTML = smokeHTML + content;
                 grid.appendChild(card);
             });
         }
@@ -207,7 +213,7 @@
             currentData.config.info_contacto = document.getElementById('ed-contact').value;
             currentData.config.password = document.getElementById('ed-pass').value;
             await fetch(URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu }) });
-            setTimeout(() => location.reload(), 800);
+            setTimeout(() => location.reload(), 1000);
         }
 
         function renderEditor() {
@@ -240,10 +246,8 @@
                     document.getElementById('visual-view').style.display='none';
                     document.getElementById('edition-view').style.display='flex';
                     renderEditor();
-                }
-                cl = 0;
-            }
-            setTimeout(() => cl=0, 1000);
+                } cl = 0;
+            } setTimeout(() => cl=0, 1000);
         };
 
         window.onload = init;
