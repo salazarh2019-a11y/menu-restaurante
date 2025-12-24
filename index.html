@@ -2,50 +2,63 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Menú Gourmet - El Buen Sazón</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Courgette&family=Poppins:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Oswald:wght@700&family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body id="main-body">
 
     <canvas id="fx-canvas"></canvas>
-    <div id="kitchen-fx" class="kitchen-flash"></div>
 
     <div id="view-client">
         <header class="header-app">
-            <h1>EL BUEN SAZÓN</h1>
-            <div class="day-banner" id="current-day-label">CARGANDO...</div>
+            <div class="logo-box" id="admin-trigger">
+                <h1>EL BUEN SAZÓN</h1>
+            </div>
+            <div class="subtitle-menu">MENÚ DEL DÍA</div>
+            <div class="day-banner" id="current-day-label">...</div>
         </header>
 
         <div class="menu-list" id="client-cards">
-            <div class="card-restaurante" id="card-principio">
+            <div class="card-restaurante" style="--delay: 0.1s">
                 <div class="card-title-box"><h2>Principios</h2></div>
                 <ul class="food-items" id="list-principio"></ul>
             </div>
-            <div class="card-restaurante" id="card-proteina">
-                <div class="card-title-box"><h2>Proteína</h2><span class="price-label" id="price-p1">$0</span></div>
+            
+            <div class="card-restaurante" style="--delay: 0.3s">
+                <div class="card-title-box">
+                    <h2>Proteína</h2>
+                    <span class="price-label" id="price-p1">$0</span>
+                </div>
                 <ul class="food-items" id="list-proteina"></ul>
             </div>
-            <div class="card-restaurante" id="card-especial">
-                <div class="card-title-box"><h2>Especial</h2><span class="price-label" id="price-p2">$0</span></div>
+
+            <div class="card-restaurante" style="--delay: 0.5s">
+                <div class="card-title-box">
+                    <h2>Especial</h2>
+                    <span class="price-label" id="price-p2">$0</span>
+                </div>
                 <ul class="food-items" id="list-especial"></ul>
+            </div>
+
+            <div class="card-restaurante" style="--delay: 0.7s">
+                <div class="card-title-box"><h2>Acompañamientos</h2></div>
+                <ul class="food-items" id="list-acompanamiento"></ul>
             </div>
         </div>
 
         <div id="promo-notify">
-            <button class="close-promo" onclick="this.parentElement.remove()">X</button>
-            <div style="font-weight: 900;">🎁 ¡PROMO!</div>
-            <div style="font-size: 0.85rem;">Por cada 10 almuerzos, el siguiente es <b>GRATIS</b>.</div>
+            <button class="close-promo" onclick="this.parentElement.remove()">×</button>
+            <div class="promo-title">🎁 BENEFICIO EXCLUSIVO</div>
+            <p>Cada 10 almuerzos, el siguiente va por cuenta de la casa.</p>
         </div>
-
-        <button class="btn-admin-access" onclick="accessAdmin()">⚙️</button>
     </div>
 
     <div id="view-admin">
         <div class="editor-container">
-            <h2>Panel de Control</h2>
-            <button onclick="exitAdmin()" class="btn-save">Guardar y Volver</button>
+            <h2>Panel Administrativo</h2>
+            <button onclick="exitAdmin()" class="btn-save">Guardar Cambios</button>
             <div id="editor-sections"></div>
         </div>
     </div>
