@@ -1,40 +1,48 @@
-const DRIVE_URL = "SU_URL_DE_APPS_SCRIPT"; 
+const DRIVE_URL = "TU_URL_DE_APPS_SCRIPT"; 
 
 let db = { currentDay: "LUNES", menus: {} };
-let pressTimer;
+let clickCount = 0;
 
-// Función para activar Administrador con presión larga
+// LÓGICA: Triple toque para entrar a admin
 const adminTrigger = document.getElementById('admin-trigger');
-
-adminTrigger.addEventListener('mousedown', startPress);
-adminTrigger.addEventListener('touchstart', startPress);
-adminTrigger.addEventListener('mouseup', cancelPress);
-adminTrigger.addEventListener('mouseleave', cancelPress);
-adminTrigger.addEventListener('touchend', cancelPress);
-
-function startPress() {
-    pressTimer = window.setTimeout(() => {
+adminTrigger.addEventListener('click', () => {
+    clickCount++;
+    if (clickCount === 3) {
         accessAdmin();
-    }, 5000); // 5 segundos exactos
-}
+        clickCount = 0;
+    }
+    setTimeout(() => { clickCount = 0; }, 1000); // Reiniciar contador tras 1s
+});
 
-function cancelPress() {
-    clearTimeout(pressTimer);
-}
+// LÓGICA: Movimiento 3D al tocar
+document.querySelectorAll('.card-restaurante').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateX = ((y / rect.height) - 0.5) * 10; // Inclinación suave
+        const rotateY = ((x / rect.width) - 0.5) * -10;
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+});
 
 async function load() {
     try {
         const r = await fetch(DRIVE_URL);
         db = await r.json();
         render();
-    } catch(e) { console.error("Error conectando con la base de datos"); }
+    } catch(e) { console.error("Error cargando datos"); }
 }
 
 function render() {
     const day = db.currentDay;
     document.getElementById('current-day-label').textContent = day;
     
-    // Cambiar fondo según el día
+    // Cambiar fondo rústico según el día
     const body = document.getElementById('main-body');
     body.className = 'bg-' + day.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
@@ -48,33 +56,17 @@ function render() {
     Object.entries(sections).forEach(([key, id]) => {
         const list = document.getElementById(id);
         const items = db.menus[day][key] || [];
-        list.innerHTML = items.map((it, idx) => `
-            <li style="animation-delay: ${idx * 0.1}s">
+        list.innerHTML = items.map(it => `
+            <li>
                 <span class="${it.stock === false ? 'strike' : ''}">${it.name}</span>
                 ${it.stock === false ? '<span class="stamp-agotado">AGOTADO</span>' : ''}
             </li>
-        `).join('') || '<li>Preparando delicias...</li>';
+        `).join('') || '<li>Cocinando...</li>';
     });
 }
 
-// Efecto de Scroll Dinámico
-window.addEventListener('scroll', () => {
-    const cards = document.querySelectorAll('.card-restaurante');
-    cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        if (rect.top < 100) {
-            const opacity = rect.top / 100;
-            card.style.opacity = opacity;
-            card.style.transform = `scale(${0.9 + (opacity * 0.1)}) rotate(-3deg)`;
-        } else {
-            card.style.opacity = 1;
-            card.style.transform = `scale(1) rotate(-1deg)`;
-        }
-    });
-});
-
 function accessAdmin() {
-    if(prompt("Clave de Seguridad:") === db.pass) {
+    if(prompt("Clave:") === db.pass) {
         document.getElementById('view-client').style.display='none';
         document.getElementById('view-admin').style.display='block';
     }
