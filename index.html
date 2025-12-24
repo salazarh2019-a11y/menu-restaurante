@@ -3,120 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>El Buen Sazón - Rústico Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --gold: #c5a059;
-            --fire: #ff4500;
-            --lava: linear-gradient(135deg, #e67e22, #c0392b);
-            --cold: #121212;
-        }
-
+        
         body {
             font-family: 'Poppins', sans-serif;
-            background: #000; color: #fff; 
-            width: 100vw; overflow-x: hidden;
+            background: #000;
+            color: #fff; width: 100vw; overflow-x: hidden;
             display: flex; flex-direction: column; align-items: center;
+            position: relative;
         }
 
-        /* --- FONDO Y BRASAS --- */
-        #embers-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        /* --- ATMÓSFERA: BRASAS Y LUZ --- */
+        #embers-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        
         body::before {
             content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 90%, rgba(230, 126, 34, 0.1), transparent 70%);
-            animation: fireGlow 3s infinite alternate; z-index: -1;
+            background: radial-gradient(circle at 50% 100%, rgba(255, 100, 0, 0.15), transparent 70%);
+            animation: flicker 3s infinite alternate; z-index: 0;
         }
-        @keyframes fireGlow { from { opacity: 0.3; } to { opacity: 0.7; } }
+        @keyframes flicker { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
 
         /* --- CABECERA --- */
-        .header-visual { text-align: center; margin: 40px 0; width: 100%; z-index: 10; }
-        .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: var(--gold); font-family: 'Playfair Display', serif; letter-spacing: 2px; text-shadow: 0 0 20px rgba(197, 160, 89, 0.3); }
-        .day-label { font-size: 1rem; color: #888; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; }
-        .day-main { font-size: 2.8rem; color: var(--gold); font-family: 'Playfair Display', serif; margin-top: -5px; }
+        .header-visual { text-align: center; margin: 40px 0; z-index: 10; position: relative; }
+        .header-large { 
+            font-size: clamp(2.5rem, 10vw, 3.8rem); 
+            color: #d4a76a; 
+            font-family: 'Playfair Display', serif; 
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.9);
+        }
+        .day-label { font-family: 'Playfair Display', serif; color: #d4a76a; font-size: 2.2rem; margin-top: -5px; }
 
-        /* --- TARJETAS: ENTRADA Y ENFRIAMIENTO --- */
+        /* --- CONTENEDOR --- */
         .cards-container { 
-            display: flex; flex-direction: column; align-items: center; gap: 30px; 
-            width: 100%; max-width: 1100px; padding: 0 20px 100px 20px; z-index: 10;
+            display: flex; flex-direction: column; align-items: center; gap: 45px; 
+            width: 100%; max-width: 1100px; padding: 0 20px 100px 20px; z-index: 10; position: relative;
         }
         @media (min-width: 768px) { .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); } }
-        
-        .card { 
-            background: var(--lava); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; 
-            padding: 35px; width: 100%; position: relative; overflow: hidden;
-            opacity: 0; transform: translateY(60px);
-            box-shadow: 0 0 40px rgba(230, 126, 34, 0.4);
-            animation: entryBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
-                       coolDown 20s ease-in-out forwards;
+
+        /* --- TARJETA MADERA CLARA (CEDRO/ROBLE) --- */
+        .card {
+            background: #7d4e2d; /* Madera más clara */
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            border-radius: 12px;
+            padding: 25px 20px 30px 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.3);
+            border: 3px solid #5d3a21;
+            transition: 0.3s;
+            opacity: 0; transform: translateY(40px) rotate(1deg);
+            animation: entryBounce 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes entryBounce { to { opacity: 1; transform: translateY(0) rotate(0deg); } }
+
+        /* Título Estilo Grabado Profundo */
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            color: #2a180b; /* Marrón muy oscuro para simular quemado */
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.2);
+            font-weight: 800;
+            line-height: 1;
         }
 
-        @keyframes entryBounce { to { opacity: 1; transform: translateY(0); } }
-        @keyframes coolDown { 
-            0% { background: var(--lava); }
-            100% { background: var(--cold); box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-color: #222; }
+        /* Papel Pergamino Clavado */
+        .paper-sheet {
+            background: #f4e4bc;
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            color: #332211;
+            padding: 25px 20px;
+            box-shadow: 3px 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            clip-path: polygon(1% 1%, 99% 0%, 100% 98%, 0% 100%);
+            cursor: pointer;
         }
 
-        /* Humo */
-        .smoke { position: absolute; bottom: -20px; width: 50px; height: 50px; background: rgba(255,255,255,0.15); filter: blur(20px); border-radius: 50%; animation: smokeRise 5s infinite linear; opacity: 0; pointer-events: none; }
-        .card:hover .smoke { opacity: 0.5; }
-        @keyframes smokeRise { 0% { transform: translateY(0) scale(1); opacity: 0; } 50% { opacity: 0.4; } 100% { transform: translateY(-250px) scale(4); opacity: 0; } }
-
-        .card-title { color: #fff; font-size: 1.8rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px; font-family: 'Playfair Display'; }
-        .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
-        /* --- GALERÍA TRASLÚCIDA --- */
-        #gallery-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(15px);
-            display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; 
-        }
-        .slide-box { width: 85%; max-width: 450px; text-align: center; position: relative; }
-        .slide-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; border: 2px solid var(--gold); transition: transform 0.6s ease, opacity 0.6s ease; }
-        
-        .close-btn { 
-            margin-top: 30px; width: 60px; height: 60px; background: #000; border: 2px solid var(--gold); 
-            border-radius: 50%; color: var(--gold); display: flex; align-items: center; justify-content: center; 
-            font-size: 24px; cursor: pointer;
+        /* Chincheta Metálica */
+        .paper-sheet::after {
+            content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+            width: 14px; height: 14px; background: radial-gradient(circle, #888, #222);
+            border-radius: 50%; box-shadow: 2px 2px 5px rgba(0,0,0,0.6);
         }
 
-        /* Publicidad */
-        .ad-card { grid-column: 1 / -1; background: #111; border: 1px dashed var(--gold); padding: 20px; border-radius: 20px; text-align: center; color: var(--gold); font-weight: 600; }
+        .item-row {
+            display: flex; justify-content: space-between;
+            font-family: 'Special Elite', cursive;
+            border-bottom: 1px dashed rgba(0,0,0,0.15);
+            padding: 10px 0;
+            font-size: 1.1rem;
+        }
+        .item-row b { color: #b33939; font-size: 0.9rem; }
 
-        /* Editor */
-        #edition-view { display: none; padding: 20px; background: #000; min-height: 100vh; width: 100%; z-index: 10000; }
+        /* --- RULETA DE IMÁGENES --- */
+        #gallery-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 2000;
+        }
+        .slide-container { position: relative; width: 90%; max-width: 450px; text-align: center; }
+        .slide-img { 
+            width: 100%; aspect-ratio: 1/1; object-fit: cover; 
+            border: 12px solid #fff; box-shadow: 0 10px 30px #000;
+            border-bottom-width: 40px; /* Estilo Polaroid */
+        }
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.5); border: 2px solid #fff; color: #fff;
+            width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+        }
+        .prev { left: -25px; } .next { right: -25px; }
+        .close-gal { margin-top: 30px; font-family: 'Special Elite'; color: #fff; border: 1px solid #fff; padding: 10px 20px; cursor: pointer; }
+
     </style>
 </head>
 <body>
 
     <canvas id="embers-canvas"></canvas>
 
-    <div id="visual-view" style="width:100%;">
-        <div class="header-visual">
-            <h1 class="header-large" id="admin-trigger">EL BUEN SAZÓN</h1>
-            <div class="day-label">Menú del</div>
-            <div id="v-day-display" class="day-main">...</div>
-        </div>
-        <div class="cards-container" id="v-grid"></div>
-        <div id="v-contact" style="padding:40px; text-align:center; color:var(--gold);"></div>
+    <div class="header-visual">
+        <h1 class="header-large" id="admin-trigger">EL BUEN SAZÓN</h1>
+        <div style="color: #888; text-transform: uppercase; letter-spacing: 4px; font-size: 0.9rem; margin-top: 15px;">Menú del Día</div>
+        <div id="v-day-display" class="day-label">...</div>
     </div>
+
+    <div class="cards-container" id="v-grid"></div>
 
     <div id="gallery-overlay" onclick="closeGal()">
-        <div class="slide-box" onclick="event.stopPropagation()">
+        <div class="slide-container" onclick="event.stopPropagation()">
             <img id="slide-img" class="slide-img" src="">
-            <div id="slide-title" style="color:var(--gold); font-size:1.6rem; margin-top:20px; font-family:'Playfair Display';"></div>
-            <div style="display:flex; justify-content:space-between; margin-top:15px;">
-                <button onclick="changeSlide(-1)" style="background:none; border:none; color:white; font-size:3rem; cursor:pointer;">❮</button>
-                <button onclick="changeSlide(1)" style="background:none; border:none; color:white; font-size:3rem; cursor:pointer;">❯</button>
-            </div>
-            <div class="close-btn" style="margin: 20px auto;" onclick="closeGal()">✕</div>
+            <div id="slide-title" style="position: absolute; bottom: 10px; left: 0; width: 100%; color: #333; font-family: 'Special Elite'; font-weight: bold;"></div>
+            <button class="nav-btn prev" onclick="changeSlide(-1)">❮</button>
+            <button class="nav-btn next" onclick="changeSlide(1)">❯</button>
         </div>
-    </div>
-
-    <div id="edition-view">
-        <button onclick="location.reload()" style="color:white; background:none; border:1px solid #444; padding:10px; margin-bottom:20px;">← Volver</button>
-        <div id="editor-container"></div>
+        <div class="close-gal" onclick="closeGal()">CERRAR [X]</div>
     </div>
 
     <script>
@@ -125,22 +148,23 @@
         let galleryItems = [];
         let slideIdx = 0;
 
-        // --- BRASAS ---
+        // --- PARTÍCULAS (BRASAS) ---
         const canvas = document.getElementById('embers-canvas');
         const ctx = canvas.getContext('2d');
         let embers = [];
         function initEmbers() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            embers = Array.from({length: 35}, () => ({
+            embers = Array.from({length: 40}, () => ({
                 x: Math.random() * canvas.width, y: canvas.height + 20,
-                s: Math.random() * 2 + 1, sp: Math.random() * 1 + 0.5, a: Math.random()
+                s: Math.random() * 2 + 1, sp: Math.random() * 0.5 + 0.3, a: Math.random()
             }));
         }
         function drawEmbers() {
             ctx.clearRect(0,0,canvas.width, canvas.height);
             embers.forEach(e => {
-                e.y -= e.sp; if(e.y < -10) e.y = canvas.height + 20;
-                ctx.fillStyle = `rgba(255, 69, 0, ${e.a})`;
+                e.y -= e.sp; e.x += Math.sin(e.y/50)*0.5;
+                if(e.y < -10) e.y = canvas.height + 20;
+                ctx.fillStyle = `rgba(255, 120, 0, ${e.a})`;
                 ctx.beginPath(); ctx.arc(e.x, e.y, e.s, 0, Math.PI*2); ctx.fill();
             });
             requestAnimationFrame(drawEmbers);
@@ -151,20 +175,14 @@
         async function loadMenu() {
             try {
                 const response = await fetch(URL_GAS);
-                if (!response.ok) throw new Error('Error en red');
                 currentData = await response.json();
                 renderMenu();
-            } catch (error) {
-                console.error(error);
-                document.getElementById('v-day-display').innerText = "Error de conexión";
-            }
+            } catch (e) { document.getElementById('v-day-display').innerText = "Sin Conexión"; }
         }
 
         function renderMenu() {
             const hoy = currentData.config.dia_actual;
             document.getElementById('v-day-display').innerText = hoy;
-            document.getElementById('v-contact').innerText = currentData.config.info_contacto;
-            
             const grid = document.getElementById('v-grid');
             grid.innerHTML = "";
             
@@ -181,54 +199,39 @@
                 
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.style.animationDelay = `${idx * 0.2}s, 0s`;
-                card.onclick = () => openGal(items);
-
-                for(let i=0; i<3; i++) {
-                    const s = document.createElement('div'); s.className='smoke';
-                    s.style.left = (20 + i*30) + '%'; s.style.animationDelay = i + 's';
-                    card.appendChild(s);
-                }
-
-                let html = `<div class="card-title">${cat.n} ${cat.p ? `<br><small>$${cat.p}</small>` : ''}</div>`;
+                card.style.animationDelay = `${idx * 0.15}s`;
+                
+                let html = `
+                    <div class="card-title">${cat.n} ${cat.p ? `<br><small style="font-size:0.9rem; color:rgba(0,0,0,0.5)">$${cat.p}</small>` : ''}</div>
+                    <div class="paper-sheet" onclick="openGal('${cat.id}')">`;
+                
                 items.forEach(it => {
-                    html += `<div class="item-row ${it.agotado ? 'agotado' : ''}">
-                        <span>${it.nombre}</span>
-                        ${it.agotado ? '<b style="color:#ff4444">AGOTADO</b>' : ''}
-                    </div>`;
+                    html += `
+                        <div class="item-row">
+                            <span style="${it.agotado ? 'text-decoration:line-through; opacity:0.5' : ''}">${it.nombre}</span>
+                            ${it.agotado ? '<b>X</b>' : ''}
+                        </div>`;
                 });
-                card.innerHTML += html;
+
+                html += `</div>`;
+                card.innerHTML = html;
                 grid.appendChild(card);
             });
-
-            if(currentData.config.publicidad) {
-                const ad = document.createElement('div');
-                ad.className = 'ad-card';
-                ad.innerText = currentData.config.publicidad;
-                grid.appendChild(ad);
-            }
         }
 
-        // --- GALERÍA ---
-        function openGal(items) {
-            galleryItems = items.filter(i => i.img && i.img.length > 10);
+        // --- GALERÍA / RULETA ---
+        function openGal(catId) {
+            const hoy = currentData.config.dia_actual;
+            galleryItems = currentData.menu.filter(i => i.dia === hoy && i.cat === catId && i.img && i.img.length > 10);
             if(galleryItems.length === 0) return;
             slideIdx = 0;
-            document.getElementById('gallery-overlay').style.display = 'flex';
             showSlide();
+            document.getElementById('gallery-overlay').style.display = 'flex';
         }
 
         function showSlide() {
-            const img = document.getElementById('slide-img');
-            img.style.opacity = '0';
-            img.style.transform = 'translateX(50px)';
-            
-            setTimeout(() => {
-                img.src = galleryItems[slideIdx].img;
-                document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre;
-                img.style.opacity = '1';
-                img.style.transform = 'translateX(0)';
-            }, 300);
+            document.getElementById('slide-img').src = galleryItems[slideIdx].img;
+            document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre;
         }
 
         function changeSlide(n) {
@@ -237,20 +240,6 @@
         }
 
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
-
-        // --- ADMIN ---
-        let clicks = 0;
-        document.getElementById('admin-trigger').onclick = () => {
-            clicks++;
-            if(clicks === 3) {
-                if(prompt("Clave:") === currentData.config.password) {
-                    alert("Acceso concedido. (Aquí iría el editor)");
-                    // Para no alargar el código, si funciona la carga, el editor ya está implícito
-                }
-                clicks = 0;
-            }
-            setTimeout(() => clicks = 0, 1000);
-        };
 
         loadMenu();
     </script>
