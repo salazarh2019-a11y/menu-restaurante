@@ -3,113 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Menú Pro</title>
+    <title>El Buen Sazón - Menú Interactivo</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* --- REINICIO TOTAL PARA EVITAR DESALINEACIÓN --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
             --gold: #c5a059;
-            --fire-glow: linear-gradient(to top, rgba(255, 100, 0, 0.3), rgba(255, 50, 0, 0.1), transparent);
+            --fire-glow: linear-gradient(to top, rgba(255, 100, 0, 0.4), rgba(255, 50, 0, 0.1), transparent);
             --fire-line: #d35400;
         }
 
         body {
-            margin: 0; font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: #000 url('https://www.transparenttextures.com/patterns/dark-wood.png');
-            color: #fff; overflow-x: hidden;
-            display: flex; flex-direction: column; align-items: center;
+            color: #fff;
+            overflow-x: hidden;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* ESTO CENTRA TODO HORIZONTALMENTE */
         }
 
         /* --- CABECERA --- */
-        .header-visual { text-align: center; margin-bottom: 50px; padding: 20px; width: 100%; box-sizing: border-box; }
-        .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: var(--gold); font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; position: relative; z-index: 10; }
-        .header-subtitle { color: #aaa; font-style: italic; font-size: 1.1rem; margin-bottom: 15px; }
-        .glow-line { width: 80%; max-width: 450px; height: 2px; background: var(--fire-line); margin: 0 auto; position: relative; box-shadow: 0 0 10px rgba(211, 84, 0, 0.5); }
-        .glow-line::after { content: ''; position: absolute; bottom: 2px; left: -15%; right: -15%; height: 100px; background: var(--fire-glow); filter: blur(20px); animation: fireLight 3s infinite alternate; }
-        @keyframes fireLight { 0% { opacity: 0.2; } 100% { opacity: 0.6; } }
+        .header-visual { 
+            text-align: center; 
+            margin: 0 auto 50px auto; 
+            padding: 20px; 
+            width: 100%; 
+            max-width: 600px;
+        }
+        .header-large { 
+            font-size: clamp(2.2rem, 10vw, 3.8rem); 
+            color: var(--gold); 
+            font-family: 'Playfair Display', serif; 
+            cursor: pointer; 
+            letter-spacing: 2px; 
+            position: relative; 
+            z-index: 10; 
+        }
+        .glow-line { 
+            width: 80%; 
+            height: 2px; 
+            background: var(--fire-line); 
+            margin: 0 auto; 
+            position: relative; 
+            box-shadow: 0 0 15px rgba(211, 84, 0, 0.6); 
+        }
+        .glow-line::after { 
+            content: ''; position: absolute; bottom: 2px; left: -10%; right: -10%; 
+            height: 120px; background: var(--fire-glow); 
+            filter: blur(25px); animation: fireLight 3s infinite alternate; 
+            pointer-events: none;
+        }
+        @keyframes fireLight { 0% { opacity: 0.3; } 100% { opacity: 0.7; } }
 
-        /* --- TARJETAS --- */
-        .cards-container { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; max-width: 1200px; padding: 0 15px; box-sizing: border-box; }
-        @media (min-width: 768px) { .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; justify-content: center; } }
+        /* --- CONTENEDOR DE TARJETAS (CENTRADOS) --- */
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra las tarjetas en columna */
+            gap: 30px;
+            width: 100%;
+            padding: 0 20px 80px 20px;
+        }
+
+        /* EN PC: GRILLA CENTRADA */
+        @media (min-width: 768px) {
+            .cards-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                justify-items: center; /* Centra cada tarjeta en su celda */
+                max-width: 1200px;
+            }
+        }
 
         .card {
-            background: #161616; border: 1px solid #2a2a2a; border-radius: 20px; padding: 25px; 
-            position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.9);
-            transition: all 0.4s ease; width: 100%; box-sizing: border-box; cursor: pointer;
+            background: #161616; border: 1px solid #2a2a2a; border-radius: 20px; 
+            padding: 25px; position: relative; overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+            transition: all 0.4s ease; 
+            width: 100%; max-width: 450px; /* Ancho máximo controlado */
+            cursor: pointer;
+            z-index: 5;
         }
         .card:hover { border-color: #e67e22; transform: translateY(-8px); }
+
+        /* --- HUMO (SIN BLOQUEAR CLICKS) --- */
+        .smoke-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s; z-index: 1; }
+        .card:hover .smoke-container { opacity: 1; }
+        .smoke { position: absolute; bottom: -30px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); filter: blur(15px); border-radius: 50%; animation: riseSmoke 2.5s infinite ease-out; }
+        @keyframes riseSmoke { 0% { transform: translateY(0) scale(1); opacity: 0; } 100% { transform: translateY(-200px) scale(3.5) translateX(30px); opacity: 0; } }
+
+        /* --- CONTENIDO TARJETA --- */
+        .card-content { position: relative; z-index: 2; /* Encima del humo */ }
         .card-title { color: var(--gold); font-size: 1.5rem; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Playfair Display', serif; }
         .price-tag { font-size: 1.1rem; color: #ff9f43; font-weight: 600; display: block; margin-top: 5px; }
         .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; font-size: 1rem; position: relative; }
         .stamp-agotado { border: 1.5px solid #ff4444; color: #ff4444; font-size: 0.65rem; padding: 2px 6px; transform: rotate(-12deg); background: rgba(0,0,0,0.9); font-weight: bold; border-radius: 4px; }
         .item-row.agotado span { color: #444; text-decoration: line-through; }
+        .camara-icon { font-size: 1.2rem; margin-left: 5px; filter: drop-shadow(0 0 5px var(--gold)); }
 
         /* --- PUBLICIDAD --- */
         #ad-card {
             background: linear-gradient(135deg, #e67e22, #c0392b);
             padding: 20px; border-radius: 15px; text-align: center; font-weight: bold;
-            color: white; margin: 30px auto; width: 90%; max-width: 400px; display: none; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.4);
+            color: white; margin: 20px auto; width: 90%; max-width: 400px; display: none; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.4); z-index: 20;
         }
         .vibrate-anim { animation: hotVibration 0.3s 4; }
         @keyframes hotVibration { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-1deg); } 75% { transform: rotate(1deg); } }
 
-        /* --- GALERÍA --- */
-        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .slider-container { width: 90%; max-width: 500px; text-align: center; }
-        .slide-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; border: 2px solid var(--gold); }
-        .slide-name { margin-top: 15px; font-size: 1.5rem; color: var(--gold); font-family: 'Playfair Display', serif; }
+        .footer-contact { 
+            padding: 40px 20px; 
+            text-align: center; /* FORZAR CENTRADO */
+            color: var(--gold); 
+            font-size: 0.9rem; 
+            width: 100%; 
+            margin: 0 auto;
+        }
 
-        .footer-contact { padding: 40px; text-align: center; color: var(--gold); font-size: 0.9rem; width: 100%; }
+        /* --- RULETA DE IMÁGENES (SWIPE) --- */
+        #gallery-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); 
+            display: none; justify-content: center; align-items: center; 
+            z-index: 9999; /* SIEMPRE ENCIMA DE TODO */
+        }
+        .slider-container { width: 90%; max-width: 500px; text-align: center; position: relative; }
+        .slide-img { 
+            width: 100%; aspect-ratio: 1/1; object-fit: cover; 
+            border-radius: 20px; border: 3px solid var(--gold); 
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.3);
+            user-select: none;
+        }
+        .slide-name { margin-top: 20px; font-size: 1.6rem; color: var(--gold); font-family: 'Playfair Display', serif; }
+        .swipe-hint { color: #666; font-size: 0.8rem; margin-top: 10px; animation: blink 2s infinite; }
+        @keyframes blink { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
 
         /* --- EDITOR --- */
-        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; width: 100%; box-sizing: border-box; }
-        .edit-panel { background: #111; width: 100%; max-width: 700px; padding: 20px; border-radius: 20px; border: 1px solid var(--gold); box-sizing: border-box; }
+        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; width: 100%; }
+        .edit-panel { background: #111; width: 100%; max-width: 700px; padding: 20px; border-radius: 20px; border: 1px solid var(--gold); }
         .edit-group { background: #1a1a1a; padding: 15px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid var(--gold); }
         .edit-item-box { display: flex; flex-direction: column; gap: 8px; padding: 15px 0; border-bottom: 1px solid #333; }
-        @media (min-width: 600px) { .edit-item-box { flex-direction: row; align-items: center; } }
-        
-        input { padding: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; flex: 1; }
-        .btn-final { background: var(--gold); color: #000; width: 100%; max-width: 400px; padding: 18px; border-radius: 40px; border: none; font-weight: bold; cursor: pointer; margin: 20px 0; }
+        input { padding: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; }
+        .btn-final { background: var(--gold); color: #000; width: 100%; max-width: 400px; padding: 18px; border-radius: 40px; border: none; font-weight: bold; cursor: pointer; margin: 30px 0; }
     </style>
 </head>
 <body>
 
-    <div id="visual-view">
+    <div id="visual-view" style="width:100%;">
         <div class="header-visual">
             <div class="header-large" id="title-trigger">EL BUEN SAZÓN</div>
-            <div class="header-subtitle" id="v-day">...</div>
+            <div class="header-subtitle" id="v-day">Cargando...</div>
             <div class="glow-line"></div>
         </div>
+        
         <div class="cards-container" id="v-grid"></div>
+        
         <div id="ad-card" onclick="this.style.display='none'"></div>
+        
         <div class="footer-contact" id="v-contact"></div>
     </div>
 
-    <div id="gallery-overlay" onclick="this.style.display='none'">
+    <div id="gallery-overlay" onclick="closeGallery()">
         <div class="slider-container" onclick="event.stopPropagation()">
             <div id="slide-title" class="slide-name"></div>
-            <img id="slide-img" class="slide-img" src="">
+            <img id="slide-img" class="slide-img" src="" ontouchstart="touchStart(event)" ontouchend="touchEnd(event)" onmousedown="touchStart(event)" onmouseup="touchEnd(event)">
+            <div class="swipe-hint">↔ Desliza para ver más platos ↔</div>
             <div style="margin-top:20px; display:flex; justify-content:space-between;">
-                <button onclick="prevSlide()" style="padding:10px 20px; background:var(--gold); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">❮</button>
-                <button onclick="nextSlide()" style="padding:10px 20px; background:var(--gold); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">❯</button>
+                <button onclick="prevSlide()" style="padding:10px 25px; background:#222; color:var(--gold); border:1px solid var(--gold); border-radius:10px; font-weight:bold;">❮ Anterior</button>
+                <button onclick="nextSlide()" style="padding:10px 25px; background:var(--gold); color:black; border:none; border-radius:10px; font-weight:bold;">Siguiente ❯</button>
             </div>
-            <p style="color:#888; margin-top:15px;">Toca cualquier parte para cerrar</p>
         </div>
     </div>
 
     <div id="edition-view">
-        <h2 style="color:var(--gold)">Panel de Administración</h2>
+        <h2 style="color:var(--gold); text-align:center;">Gestión de Menú</h2>
         <div class="edit-panel">
-            <label>Publicidad Texto:</label>
-            <input type="text" id="ed-ad-text" style="margin-bottom:15px;" oninput="currentData.config.publicidad = this.value">
-            
-            <label>Día Actual:</label>
-            <select id="ed-day-select" onchange="currentData.config.dia_actual = this.value; renderEditor();" style="width:100%; padding:10px; background:#000; color:white; border-radius:10px; margin-bottom:20px;">
+            <label>Publicidad:</label><input type="text" id="ed-ad-text" style="width:100%; margin-bottom:15px;" oninput="currentData.config.publicidad = this.value">
+            <label>Día:</label><select id="ed-day-select" onchange="currentData.config.dia_actual = this.value; renderEditor();" style="width:100%; padding:10px; background:#000; color:white; border-radius:10px; margin-bottom:20px;">
                 <option value="Lunes">Lunes</option><option value="Martes">Martes</option><option value="Miércoles">Miércoles</option><option value="Jueves">Jueves</option><option value="Viernes">Viernes</option><option value="Sábado">Sábado</option><option value="Domingo">Domingo</option>
             </select>
             <div id="ed-items-container"></div>
         </div>
-        <button class="btn-final" onclick="saveAll()">GUARDAR CAMBIOS EN LA NUBE</button>
+        <button class="btn-final" onclick="saveAll()">GUARDAR CAMBIOS</button>
     </div>
 
     <script>
@@ -118,13 +197,17 @@
         let galleryItems = [];
         let slideIdx = 0;
 
+        // Variables para el Swipe (Deslizar dedo)
+        let touchStartX = 0;
+        let touchEndX = 0;
+
         async function init() {
             try {
                 const r = await fetch(URL);
                 currentData = await r.json();
                 renderVisual();
                 setupAd();
-            } catch (e) { console.error("Error al cargar."); }
+            } catch (e) { console.error("Error loading"); }
         }
 
         function renderVisual() {
@@ -139,21 +222,71 @@
             cats.forEach(c => {
                 const items = currentData.menu.filter(i => i.dia === hoy && i.cat === c.k);
                 if(items.length === 0) return;
+                
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.onclick = () => openGallery(items);
-                let content = `<div class="card-title">${c.t} ${c.p ? `<span class="price-tag">$${c.p}</span>` : ''}</div>`;
+                // Añadimos el evento Click directo
+                card.onclick = function() { checkAndOpenGallery(items); };
+
+                let smokeHTML = '<div class="smoke-container">';
+                for(let i=0; i<4; i++) smokeHTML += `<div class="smoke" style="left:${Math.random()*80}%; animation-delay:${Math.random()*2}s"></div>`;
+                smokeHTML += '</div>';
+
+                let content = `<div class="card-content">
+                    <div class="card-title">${c.t} ${c.p ? `<span class="price-tag">$${c.p}</span>` : ''}</div>`;
+                
                 items.forEach(it => {
+                    const hasImg = (it.img && it.img.length > 10);
                     content += `<div class="item-row ${it.agotado?'agotado':''}">
-                        <span>${it.nombre} ${it.img ? '📷' : ''}</span>
+                        <span>${it.nombre} ${hasImg ? '<span class="camara-icon">📷</span>' : ''}</span>
                         ${it.agotado ? '<div class="stamp-agotado">AGOTADO</div>' : ''}
                     </div>`;
                 });
-                card.innerHTML = content;
+                content += `</div>`;
+                
+                card.innerHTML = smokeHTML + content;
                 grid.appendChild(card);
             });
         }
 
+        // --- LÓGICA DE GALERÍA Y SWIPE ---
+        function checkAndOpenGallery(items) {
+            // Filtramos solo items que tengan una URL válida (más de 5 caracteres y sin espacios vacíos)
+            galleryItems = items.filter(i => i.img && i.img.trim().length > 5);
+            
+            if(galleryItems.length > 0) {
+                slideIdx = 0;
+                updateSlide();
+                document.getElementById('gallery-overlay').style.display = 'flex';
+            } else {
+                // Feedback visual si no hay fotos
+                alert("Aún no hay fotos cargadas para esta sección.");
+            }
+        }
+
+        function closeGallery() { document.getElementById('gallery-overlay').style.display = 'none'; }
+        
+        function updateSlide() {
+            const item = galleryItems[slideIdx];
+            document.getElementById('slide-img').src = item.img;
+            document.getElementById('slide-title').innerText = item.nombre;
+        }
+
+        function nextSlide() { slideIdx = (slideIdx + 1) % galleryItems.length; updateSlide(); }
+        function prevSlide() { slideIdx = (slideIdx - 1 + galleryItems.length) % galleryItems.length; updateSlide(); }
+
+        // Funciones para detectar deslizar (Swipe)
+        function touchStart(e) { touchStartX = e.changedTouches ? e.changedTouches[0].screenX : e.screenX; }
+        function touchEnd(e) {
+            touchEndX = e.changedTouches ? e.changedTouches[0].screenX : e.screenX;
+            handleSwipe();
+        }
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide(); // Deslizó a izquierda -> Siguiente
+            if (touchEndX > touchStartX + 50) prevSlide(); // Deslizó a derecha -> Anterior
+        }
+
+        // --- PUBLICIDAD ---
         function setupAd() {
             const ad = document.getElementById('ad-card');
             if(currentData.config.publicidad) {
@@ -161,28 +294,33 @@
                     ad.innerText = currentData.config.publicidad;
                     ad.style.display = 'block';
                     setTimeout(() => ad.classList.add('vibrate-anim'), 3000);
-                }, 5000);
+                }, 4000);
             }
         }
 
+        // --- EDITOR (LÓGICA PERSISTENTE) ---
         function renderEditor() {
             const dia = currentData.config.dia_actual;
             document.getElementById('ed-ad-text').value = currentData.config.publicidad || "";
             const container = document.getElementById('ed-items-container');
             container.innerHTML = '';
+            
             ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(cat => {
                 const group = document.createElement('div');
                 group.className = 'edit-group';
-                group.innerHTML = `<div style="display:flex; justify-content:space-between;"><strong>${cat.toUpperCase()}</strong><button onclick="addItem('${cat}')">+ Añadir</button></div>`;
+                group.innerHTML = `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><strong>${cat.toUpperCase()}</strong><button onclick="addItem('${cat}')" style="background:var(--gold); border:none; border-radius:5px; padding:5px 10px;">+ Agregar</button></div>`;
+                
                 const items = currentData.menu.filter(i => i.dia === dia && i.cat === cat);
                 items.forEach(it => {
                     const box = document.createElement('div');
                     box.className = 'edit-item-box';
                     box.innerHTML = `
-                        <input type="text" placeholder="Plato" value="${it.nombre}" oninput="updateVal('${it.id}','nombre',this.value)">
-                        <input type="text" placeholder="URL Foto" value="${it.img||''}" oninput="updateVal('${it.id}','img',this.value)">
-                        <button onclick="toggleAg('${it.id}')" style="background:${it.agotado?'red':'#444'}; color:white; border-radius:5px; border:none; padding:8px;">${it.agotado?'Agotado':'Dispon'}</button>
-                        <button onclick="deleteItem('${it.id}')" style="color:red; background:none; border:none; font-weight:bold;">✕</button>
+                        <input type="text" placeholder="Nombre Plato" value="${it.nombre}" oninput="uVal('${it.id}','nombre',this.value)">
+                        <input type="text" placeholder="URL Imagen" value="${it.img||''}" oninput="uVal('${it.id}','img',this.value)">
+                        <div style="display:flex; gap:5px; margin-top:5px;">
+                            <button onclick="tAg('${it.id}')" style="flex:1; background:${it.agotado?'red':'#333'}; color:white; border:none; border-radius:5px; padding:10px;">${it.agotado?'AGOTADO':'DISPONIBLE'}</button>
+                            <button onclick="dItem('${it.id}')" style="background:none; border:1px solid red; color:red; border-radius:5px; padding:0 15px;">Eliminar</button>
+                        </div>
                     `;
                     group.appendChild(box);
                 });
@@ -190,43 +328,27 @@
             });
         }
 
-        function updateVal(id,f,v) { const it = currentData.menu.find(i=>i.id==id); if(it) it[f]=v; }
-        function toggleAg(id) { const it = currentData.menu.find(i=>i.id==id); if(it) it.agotado=!it.agotado; renderEditor(); }
-        function deleteItem(id) { currentData.menu = currentData.menu.filter(i=>i.id!=id); renderEditor(); }
+        function uVal(id,f,v) { const i = currentData.menu.find(x=>x.id==id); if(i) i[f]=v; }
+        function tAg(id) { const i = currentData.menu.find(x=>x.id==id); if(i) i.agotado=!i.agotado; renderEditor(); }
+        function dItem(id) { if(confirm('¿Borrar plato?')) { currentData.menu = currentData.menu.filter(x=>x.id!=id); renderEditor(); } }
         function addItem(cat) { currentData.menu.push({id:Date.now().toString(), dia:currentData.config.dia_actual, cat:cat, nombre:"", img:"", agotado:false}); renderEditor(); }
 
         async function saveAll() {
-            const btn = document.querySelector('.btn-final');
-            btn.innerText = "GUARDANDO...";
+            const btn = document.querySelector('.btn-final'); btn.innerText = "GUARDANDO...";
             await fetch(URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu }) });
-            alert("Cambios guardados.");
             location.reload();
         }
 
-        function openGallery(items) {
-            galleryItems = items.filter(i => i.img && i.img.includes('http'));
-            if(galleryItems.length === 0) return;
-            slideIdx = 0; updateSlide();
-            document.getElementById('gallery-overlay').style.display = 'flex';
-        }
-        function updateSlide() {
-            document.getElementById('slide-img').src = galleryItems[slideIdx].img;
-            document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre;
-        }
-        function nextSlide() { slideIdx = (slideIdx + 1) % galleryItems.length; updateSlide(); }
-        function prevSlide() { slideIdx = (slideIdx - 1 + galleryItems.length) % galleryItems.length; updateSlide(); }
-
         let cl = 0;
         document.getElementById('title-trigger').addEventListener('click', () => {
-            cl++;
-            if(cl === 3) {
-                if(prompt("Clave:") === currentData.config.password) {
+            cl++; if(cl===3) {
+                if(prompt("Clave:")===currentData.config.password) {
                     document.getElementById('visual-view').style.display='none';
                     document.getElementById('edition-view').style.display='flex';
                     document.getElementById('ed-day-select').value = currentData.config.dia_actual;
                     renderEditor();
-                } cl = 0;
-            } setTimeout(() => cl=0, 1000);
+                } cl=0;
+            } setTimeout(()=>cl=0, 800);
         });
 
         window.onload = init;
