@@ -1,0 +1,61 @@
+/* Corrección de Inputs en Móvil (Problemas 1 y 4) */
+.editor-row {
+    display: flex;
+    flex-direction: column; /* Apilados uno sobre otro */
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    color: var(--amarillo-maiz);
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+input[type="text"], 
+input[type="number"] {
+    width: 100% !important;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #444;
+    background: #fff;
+    color: #000;
+    font-size: 1rem;
+}
+
+/* Centrado del título de edición (Problema 2) */
+#edit-title {
+    background: var(--rojo-brasa);
+    color: white;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid var(--amarillo-maiz);
+    font-family: 'Permanent Marker', cursive;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* Ajuste de Precios en el Menú (Problema 1) */
+.card-label {
+    display: flex;
+    justify-content: space-between; /* Alinea Nombre Izquierda y Precio Derecha */
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.price-tag {
+    background: #000;
+    color: var(--amarillo-maiz);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    border: 1px solid var(--amarillo-maiz);
+}
