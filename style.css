@@ -1,61 +1,99 @@
-/* Corrección de Inputs en Móvil (Problemas 1 y 4) */
-.editor-row {
-    display: flex;
-    flex-direction: column; /* Apilados uno sobre otro */
-    gap: 12px;
-    margin-bottom: 15px;
+:root {
+    --rojo-brasa: #b71c1c;
+    --naranja-fuego: #e65100;
+    --amarillo-maiz: #ffb300;
+    --madera: #3e2723;
 }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+* { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body { 
+    margin: 0; background: #1a0f0d url('https://www.transparenttextures.com/patterns/dark-wood.png');
+    color: white; overflow-x: hidden; transition: background-color 1s;
 }
 
-.input-group label {
-    font-size: 0.85rem;
-    color: var(--amarillo-maiz);
-    margin-bottom: 4px;
-    font-weight: bold;
+/* FONDOS DÍAS */
+.bg-lunes { background-color: #1a0f0d; }
+.bg-martes { background-color: #263238; }
+.bg-miercoles { background-color: #1b5e20; }
+.bg-jueves { background-color: #4e342e; }
+.bg-viernes { background-color: #311b92; }
+.bg-sabado { background-color: #004d40; }
+.bg-domingo { background-color: #880e4f; }
+
+/* HEADER */
+.restaurant-header {
+    width: 100%; text-align: center; padding: 30px 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    border-bottom: 3px solid var(--naranja-fuego);
+}
+.restaurant-header h1 {
+    font-family: 'Permanent Marker', cursive; font-size: 3rem; margin: 0;
+    color: var(--amarillo-maiz); text-shadow: 3px 3px 0 var(--rojo-brasa);
+}
+.day-badge {
+    background: var(--rojo-brasa); padding: 5px 20px; border-radius: 50px;
+    font-weight: bold; border: 2px solid var(--amarillo-maiz); display: inline-block;
 }
 
-input[type="text"], 
-input[type="number"] {
-    width: 100% !important;
-    padding: 12px;
-    border-radius: 8px;
-    border: 2px solid #444;
-    background: #fff;
-    color: #000;
-    font-size: 1rem;
+/* TARJETAS CON ANIMACIÓN DE SCROLL */
+.menu-container { width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; }
+.card-rustica {
+    background: #5d4037 url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    border: 6px solid #2d1b18; border-radius: 20px; margin-bottom: 40px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.7); transform: rotate(-1deg);
+    transition: transform 0.4s;
 }
+.card-rustica:nth-child(even) { transform: rotate(1deg); }
 
-/* Centrado del título de edición (Problema 2) */
-#edit-title {
-    background: var(--rojo-brasa);
-    color: white;
-    text-align: center;
-    padding: 12px;
-    border-radius: 10px;
-    border: 2px solid var(--amarillo-maiz);
-    font-family: 'Permanent Marker', cursive;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-
-/* Ajuste de Precios en el Menú (Problema 1) */
 .card-label {
-    display: flex;
-    justify-content: space-between; /* Alinea Nombre Izquierda y Precio Derecha */
-    align-items: center;
-    padding: 10px 15px;
+    background: var(--rojo-brasa); color: var(--amarillo-maiz); padding: 12px;
+    font-family: 'Permanent Marker', cursive; font-size: 1.4rem;
+    display: flex; justify-content: space-between; align-items: center; border-radius: 12px 12px 0 0;
+}
+.price-tag { background: #000; padding: 2px 10px; border-radius: 8px; font-size: 1.1rem; }
+
+.pergamino {
+    background: #f4e4bc url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+    color: #2d1b18; padding: 20px; border-radius: 0 0 10px 10px;
+}
+.pergamino ul { list-style: none; padding: 0; margin: 0; }
+.pergamino li {
+    font-family: 'Courgette', cursive; font-size: 1.3rem; padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between;
+}
+.agotado-text { text-decoration: line-through; color: #888; }
+.stamp-agotado { color: var(--rojo-brasa); border: 2px solid var(--rojo-brasa); padding: 0 5px; transform: rotate(-10deg); font-weight: 900; }
+
+/* RECOMENDACIÓN Y PROMO */
+#promo-box, #recomienda-box {
+    position: fixed; bottom: 85px; left: 20px; background: var(--amarillo-maiz);
+    color: #000; padding: 15px; border-radius: 15px; border: 3px solid var(--rojo-brasa);
+    max-width: 250px; font-weight: bold; z-index: 99; display: none;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5); cursor: pointer;
+}
+#recomienda-box { bottom: 180px; background: #fff; border-color: var(--naranja-fuego); }
+
+/* EXPLOSIÓN */
+.explode { animation: explosion 0.5s forwards; pointer-events: none; }
+@keyframes explosion {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); filter: brightness(3) sepia(1) hue-rotate(-50deg); }
+    100% { transform: scale(0); opacity: 0; }
 }
 
-.price-tag {
-    background: #000;
-    color: var(--amarillo-maiz);
-    padding: 2px 8px;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    border: 1px solid var(--amarillo-maiz);
-}
+/* ADMIN PANEL (MOBILE FIRST) */
+#view-admin { display: none; padding: 15px; }
+.admin-panel { background: #333; padding: 20px; border-radius: 20px; max-width: 500px; margin: 0 auto; }
+#edit-title { text-align: center; font-family: 'Permanent Marker'; font-size: 1.5rem; color: var(--amarillo-maiz); margin-bottom: 20px; }
+.editor-row { display: flex; flex-direction: column; gap: 15px; }
+.input-group { display: flex; flex-direction: column; }
+.input-group label { font-size: 0.8rem; color: #ccc; margin-bottom: 5px; }
+input { padding: 12px; border-radius: 8px; border: none; font-size: 1rem; width: 100%; }
+.btn-day { width: 100%; padding: 15px; background: var(--naranja-fuego); color: white; border: none; border-radius: 10px; margin: 20px 0; font-weight: bold; }
+.btn-exit { width: 100%; padding: 10px; background: #555; color: white; border: none; border-radius: 8px; margin-top: 10px; }
+.item-editor { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; }
+.btn-stock { width: 45px; height: 45px; border-radius: 8px; border: none; color: white; }
+.on { background: #2ecc71; } .off { background: #e74c3c; }
+.btn-admin-floating { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: var(--rojo-brasa); border: 3px solid white; color: white; font-size: 1.5rem; cursor: pointer; }
+.delete-zone { width: 100%; padding: 20px; border: 2px dashed #ff1744; border-radius: 15px; text-align: center; margin-top: 20px; color: #ff1744; font-weight: bold; }
