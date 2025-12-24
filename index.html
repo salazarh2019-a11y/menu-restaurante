@@ -3,96 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Buen Sazón - Edición Premium</title>
+    <title>El Buen Sazón - Premium Live</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #c5a059;
-            --dark: #0f0f0f;
-            --card-bg: #1a1a1a;
+            --orange-glow: linear-gradient(145deg, #2a1f0d 0%, #442a08 100%);
+            --orange-hover: rgba(197, 100, 20, 0.2);
+            --dark: #0a0a0a;
             --text: #ffffff;
         }
 
         body {
             margin: 0; font-family: 'Poppins', sans-serif;
             background: #000 url('https://www.transparenttextures.com/patterns/dark-wood.png');
-            color: var(--text); overflow-x: hidden;
+            color: var(--text); overflow-x: hidden; scroll-behavior: smooth;
         }
 
         /* --- VISUAL --- */
         #visual-view { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; min-height: 100vh; }
         
-        .header-visual { text-align: center; margin-bottom: 40px; }
+        .header-visual { text-align: center; margin-bottom: 50px; }
         .header-large { 
             font-size: 3.5rem; color: var(--gold); font-family: 'Playfair Display', serif; 
-            cursor: pointer; transition: 0.3s;
+            cursor: pointer; text-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .header-subtitle { color: #888; font-style: italic; font-size: 1.2rem; }
+        .header-subtitle { color: #888; font-style: italic; font-size: 1.2rem; margin-top: 10px; }
 
         .cards-container {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; width: 100%; max-width: 1200px;
+            gap: 30px; width: 100%; max-width: 1200px; padding-bottom: 60px;
+        }
+
+        /* Animación de entrada mejorada */
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(60px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .card {
-            background: var(--card-bg); border: 1px solid #333; border-radius: 15px;
-            padding: 25px; position: relative; opacity: 0;
-            transform: translateY(50px); animation: appear 0.8s forwards;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.1s ease;
+            background: #161616; border: 1px solid #2a2a2a; border-radius: 20px;
+            padding: 30px; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: floatUp 0.8s backwards;
         }
 
-        @keyframes appear { to { opacity: 1; transform: translateY(0); } }
+        /* Efecto naranja al pasar el mouse/dedo */
+        .card:hover {
+            border-color: #ff8c00;
+            background: var(--orange-glow);
+            box-shadow: 0 15px 45px rgba(255, 140, 0, 0.2);
+            transform: translateY(-10px);
+        }
 
         .card-title { 
-            color: var(--gold); font-size: 1.5rem; text-align: center; 
-            border-bottom: 1px solid var(--gold); margin-bottom: 15px; padding-bottom: 10px;
+            color: var(--gold); font-size: 1.6rem; text-align: center; 
+            border-bottom: 2px solid #222; margin-bottom: 20px; padding-bottom: 10px;
         }
 
         .item-row { 
-            display: flex; justify-content: space-between; padding: 8px 0;
-            border-bottom: 1px solid #222; position: relative;
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-bottom: 1px solid #222; position: relative; font-weight: 300;
         }
 
         .stamp-agotado {
-            position: absolute; right: 0; top: 5px; border: 2px solid #ff4444;
-            color: #ff4444; font-size: 0.6rem; padding: 2px 4px;
-            transform: rotate(-15deg); background: rgba(0,0,0,0.8); font-weight: bold;
+            position: absolute; right: -5px; top: 10px; border: 1.5px solid #ff4444;
+            color: #ff4444; font-size: 0.6rem; padding: 2px 6px;
+            transform: rotate(-12deg); background: rgba(0,0,0,0.9); border-radius: 4px;
+            box-shadow: 0 0 10px rgba(255,68,68,0.3);
         }
 
         .item-row.agotado span { color: #444; text-decoration: line-through; }
 
-        #ad-banner {
-            margin-top: 50px; padding: 20px; border: 1px dashed var(--gold);
-            border-radius: 10px; color: var(--gold); text-align: center; max-width: 600px;
+        .footer-contact {
+            margin-top: auto; padding: 40px; text-align: center;
+            border-top: 1px solid rgba(197, 160, 89, 0.2);
+            width: 80%; max-width: 600px; color: var(--gold);
+            font-size: 0.9rem; letter-spacing: 1px;
         }
 
         /* --- EDICION --- */
-        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; background: #050505; }
-        .edit-panel { background: #111; width: 100%; max-width: 500px; padding: 25px; border-radius: 20px; border: 1px solid #222; }
-
-        .config-grid { display: grid; gap: 10px; margin-bottom: 20px; }
-        label { color: var(--gold); font-size: 0.8rem; margin-bottom: 5px; display: block; }
+        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; background: #000; }
+        .edit-panel { background: #111; width: 100%; max-width: 500px; padding: 30px; border-radius: 25px; border: 1px solid var(--gold); }
+        .config-grid { display: grid; gap: 12px; margin-bottom: 25px; }
         input, select { 
-            width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #333; 
-            color: white; border-radius: 5px; box-sizing: border-box;
+            width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; 
+            color: white; border-radius: 10px; box-sizing: border-box;
         }
-
-        .cat-section { margin-top: 25px; border-top: 1px solid #222; padding-top: 15px; }
-        .edit-item-row { 
-            display: flex; gap: 8px; margin-bottom: 10px; align-items: center;
-            background: #1a1a1a; padding: 8px; border-radius: 8px;
-        }
-
-        .btn-status { width: 30px; height: 30px; border-radius: 5px; border: none; cursor: pointer; background: #333; }
-        .btn-status.active { background: #ff4444; }
-        .btn-del { background: transparent; border: none; color: #ff4444; cursor: pointer; font-size: 1.2rem; }
-        .btn-add { background: var(--gold); border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; }
-
-        .footer-save { margin: 40px 0; }
-        .btn-save { 
-            background: var(--gold); color: #000; padding: 15px 50px; 
-            border-radius: 30px; border: none; font-weight: bold; cursor: pointer;
-        }
+        .edit-item-row { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 10px; }
+        .btn-status { width: 35px; height: 35px; border-radius: 8px; border: none; cursor: pointer; background: #333; }
+        .btn-status.active { background: #ff4444; box-shadow: 0 0 15px #ff4444; }
+        .btn-save { background: var(--gold); color: #000; padding: 20px 60px; border-radius: 40px; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin: 40px 0; }
     </style>
 </head>
 <body>
@@ -100,156 +102,151 @@
     <div id="visual-view">
         <div class="header-visual">
             <div class="header-large" id="title-trigger">EL BUEN SAZÓN</div>
-            <div class="header-subtitle" id="v-day">Menú</div>
+            <div class="header-subtitle" id="v-day">...</div>
         </div>
-        <div class="cards-container" id="v-grid"></div>
-        <div id="ad-banner" style="display:none"></div>
+        
+        <div class="cards-container" id="v-grid">
+            </div>
+
+        <div id="ad-banner" style="display:none; margin-bottom: 20px;"></div>
+        
+        <div class="footer-contact" id="v-contact"></div>
     </div>
 
     <div id="edition-view">
-        <h2 style="color:var(--gold)">Panel de Control</h2>
+        <h2 style="color:var(--gold)">Configuración del Menú</h2>
         <div class="edit-panel">
             <div class="config-grid">
-                <div><label>Día de atención</label>
-                <select id="ed-day-select" onchange="renderEditor()"></select></div>
+                <div><label>Día de atención</label><select id="ed-day-select" onchange="renderEditor()"></select></div>
                 <div><label>Precio Proteína</label><input id="ed-price-p" type="text"></div>
                 <div><label>Precio Especial</label><input id="ed-price-e" type="text"></div>
-                <div><label>Publicidad (Opcional)</label><input id="ed-ad" type="text"></div>
-                <div><label>Contacto</label><input id="ed-contact" type="text"></div>
-                <div><label>Nueva Contraseña</label><input id="ed-pass" type="text"></div>
+                <div><label>Publicidad en Pantalla</label><input id="ed-ad" type="text"></div>
+                <div><label>Info de Contacto (Pie de página)</label><input id="ed-contact" type="text"></div>
+                <div><label>Clave de Acceso</label><input id="ed-pass" type="text"></div>
             </div>
-            
             <div id="ed-items"></div>
         </div>
-        <div class="footer-save">
-            <button class="btn-save" onclick="saveAll()">GUARDAR Y FINALIZAR</button>
-        </div>
+        <button class="btn-save" onclick="saveAll()">GUARDAR CAMBIOS</button>
     </div>
 
     <script>
-        const URL = "https://script.google.com/macros/s/AKfycbyXwS0diMtYxMpMQ-HAxIU6_V0MpN8qqiJOxodIRZVqMnqaXTQHZkm_tfWPwY17VgMDWw/exec";
-        let data = { config: {}, menu: [] };
+        const URL = "https://script.google.com/macros/s/AKfycbyXwS0diMtYxMpMQ-HAxIU6_V0MpN8qqiJOxodIRZVqMnqaXTQHZkm_tfWPwY17VgMDWw/exec"; // REEMPLAZA ESTO
+        let currentData = { config: {}, menu: [] };
         const dias = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
 
+        // Iniciar App
         async function init() {
-            const r = await fetch(URL);
-            data = await r.json();
-            // Llenar selector de días
+            await updateDataSilently();
             const sel = document.getElementById('ed-day-select');
             dias.forEach(d => sel.innerHTML += `<option value="${d}">${d}</option>`);
-            sel.value = data.config.dia_actual || "Lunes";
-            renderVisual();
+            sel.value = currentData.config.dia_actual || "Lunes";
+            
+            // Loop de revisión cada 5 segundos
+            setInterval(updateDataSilently, 5000);
+        }
+
+        async function updateDataSilently() {
+            try {
+                const r = await fetch(URL);
+                const newData = await r.json();
+                
+                // Solo renderizar si algo cambió realmente
+                if (JSON.stringify(newData) !== JSON.stringify(currentData)) {
+                    currentData = newData;
+                    if (document.getElementById('visual-view').style.display !== 'none') {
+                        renderVisual();
+                    }
+                }
+            } catch (e) { console.log("Error de conexión"); }
         }
 
         function renderVisual() {
-            const hoy = data.config.dia_actual;
-            document.getElementById('v-day').innerText = "Menú del día " + hoy;
+            const hoy = currentData.config.dia_actual;
+            document.getElementById('v-day').innerText = "Menú del " + hoy;
+            document.getElementById('v-contact').innerText = currentData.config.info_contacto || "";
+            
             const grid = document.getElementById('v-grid');
-            grid.innerHTML = '';
-
             const cats = [
                 {k:'principio', t:'Principios'},
-                {k:'proteina', t:'Proteínas', p: data.config.precio_proteina},
-                {k:'especial', t:'Especiales', p: data.config.precio_especial},
+                {k:'proteina', t:'Proteínas', p: currentData.config.precio_proteina},
+                {k:'especial', t:'Especiales', p: currentData.config.precio_especial},
                 {k:'acompanamiento', t:'Acompañamientos'}
             ];
 
+            grid.innerHTML = '';
             cats.forEach((c, idx) => {
-                const items = data.menu.filter(i => i.dia === hoy && i.cat === c.k);
+                const items = currentData.menu.filter(i => i.dia === hoy && i.cat === c.k);
                 if(items.length === 0) return;
 
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.style.animationDelay = (idx * 0.1) + "s";
-                card.innerHTML = `<div class="card-title">${c.t} ${c.p ? `<br><small style="font-size:0.7rem; color:#888">$${c.p}</small>` : ''}</div>`;
+                card.style.animationDelay = (idx * 0.15) + "s";
+                
+                let content = `<div class="card-title">${c.t} ${c.p ? `<br><small style="font-size:0.75rem; color:var(--gold); opacity:0.8">$${c.p}</small>` : ''}</div>`;
                 
                 items.forEach(it => {
-                    card.innerHTML += `<div class="item-row ${it.agotado?'agotado':''}">
+                    content += `<div class="item-row ${it.agotado?'agotado':''}">
                         <span>${it.nombre}</span>
                         ${it.agotado ? '<div class="stamp-agotado">AGOTADO</div>' : ''}
                     </div>`;
                 });
                 
-                // Efecto inclinación
-                card.onmousemove = (e) => {
-                    const r = card.getBoundingClientRect();
-                    card.style.transform = `rotateY(${(e.clientX - r.left - r.width/2)/10}deg) rotateX(${(e.clientY - r.top - r.height/2)/-10}deg)`;
-                };
-                card.onmouseleave = () => card.style.transform = `rotate(0)`;
+                card.innerHTML = content;
                 grid.appendChild(card);
             });
-
-            const ad = document.getElementById('ad-banner');
-            if(data.config.publicidad) { ad.innerText = data.config.publicidad; ad.style.display = 'block'; }
         }
 
+        // --- FUNCIONES DE EDICIÓN (SIN CAMBIOS) ---
         function renderEditor() {
             const dia = document.getElementById('ed-day-select').value;
-            // Cargar configs en inputs
-            document.getElementById('ed-price-p').value = data.config.precio_proteina;
-            document.getElementById('ed-price-e').value = data.config.precio_especial;
-            document.getElementById('ed-ad').value = data.config.publicidad;
-            document.getElementById('ed-contact').value = data.config.info_contacto;
-            document.getElementById('ed-pass').value = data.config.password;
+            document.getElementById('ed-price-p').value = currentData.config.precio_proteina;
+            document.getElementById('ed-price-e').value = currentData.config.precio_especial;
+            document.getElementById('ed-ad').value = currentData.config.publicidad;
+            document.getElementById('ed-contact').value = currentData.config.info_contacto;
+            document.getElementById('ed-pass').value = currentData.config.password;
 
             const container = document.getElementById('ed-items');
             container.innerHTML = '';
-
             ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(cat => {
-                const items = data.menu.filter(i => i.dia === dia && i.cat === cat);
-                let html = `<div class="cat-section"><strong>${cat.toUpperCase()}</strong> <button class="btn-add" onclick="addItem('${cat}')">+</button></div>`;
+                const items = currentData.menu.filter(i => i.dia === dia && i.cat === cat);
+                let html = `<div style="margin-top:20px; color:var(--gold); font-weight:bold;">${cat.toUpperCase()} <button onclick="addItem('${cat}')" style="border-radius:50%; border:none; background:var(--gold); cursor:pointer;">+</button></div>`;
                 items.forEach(it => {
                     html += `<div class="edit-item-row">
                         <button class="btn-status ${it.agotado?'active':''}" onclick="toggleAgotado('${it.id}')"></button>
                         <input type="text" value="${it.nombre}" oninput="updateItemText('${it.id}', this.value)">
-                        <button class="btn-del" onclick="removeItem('${it.id}')">✕</button>
+                        <button onclick="removeItem('${it.id}')" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
                     </div>`;
                 });
                 container.innerHTML += html;
             });
         }
 
-        function updateItemText(id, val) {
-            const it = data.menu.find(i => i.id == id);
-            if(it) it.nombre = val;
-        }
-
-        function toggleAgotado(id) {
-            const it = data.menu.find(i => i.id == id);
-            if(it) it.agotado = !it.agotado;
-            renderEditor();
-        }
-
-        function removeItem(id) {
-            data.menu = data.menu.filter(i => i.id != id);
-            renderEditor();
-        }
-
-        function addItem(cat) {
+        function updateItemText(id, val) { const it = currentData.menu.find(i => i.id == id); if(it) it.nombre = val; }
+        function toggleAgotado(id) { const it = currentData.menu.find(i => i.id == id); if(it) it.agotado = !it.agotado; renderEditor(); }
+        function removeItem(id) { currentData.menu = currentData.menu.filter(i => i.id != id); renderEditor(); }
+        function addItem(cat) { 
             const dia = document.getElementById('ed-day-select').value;
-            data.menu.push({ dia, cat, nombre: "", agotado: false, id: Date.now().toString() });
-            renderEditor();
+            currentData.menu.push({ dia, cat, nombre: "", agotado: false, id: Date.now().toString() });
+            renderEditor(); 
         }
 
         async function saveAll() {
-            // Capturar configs finales
-            data.config.dia_actual = document.getElementById('ed-day-select').value;
-            data.config.precio_proteina = document.getElementById('ed-price-p').value;
-            data.config.precio_especial = document.getElementById('ed-price-e').value;
-            data.config.publicidad = document.getElementById('ed-ad').value;
-            data.config.info_contacto = document.getElementById('ed-contact').value;
-            data.config.password = document.getElementById('ed-pass').value;
+            currentData.config.dia_actual = document.getElementById('ed-day-select').value;
+            currentData.config.precio_proteina = document.getElementById('ed-price-p').value;
+            currentData.config.precio_especial = document.getElementById('ed-price-e').value;
+            currentData.config.publicidad = document.getElementById('ed-ad').value;
+            currentData.config.info_contacto = document.getElementById('ed-contact').value;
+            currentData.config.password = document.getElementById('ed-pass').value;
 
-            await fetch(URL, { method: 'POST', body: JSON.stringify({ action: 'saveAll', config: data.config, menu: data.menu }) });
+            await fetch(URL, { method: 'POST', body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu }) });
             location.reload();
         }
 
-        // Triple click
         let count = 0;
         document.getElementById('title-trigger').onclick = () => {
             count++;
             if(count === 3) {
-                if(prompt("Clave:") === data.config.password) {
+                if(prompt("Clave de seguridad:") === currentData.config.password) {
                     document.getElementById('visual-view').style.display = 'none';
                     document.getElementById('edition-view').style.display = 'flex';
                     renderEditor();
