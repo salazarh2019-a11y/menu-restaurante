@@ -1,74 +1,129 @@
 :root {
-    --rojo: #960000;
-    --naranja: #e65100;
-    --amarillo: #ffb300;
-    --negro: #1a1a1a;
-    --shadow: rgba(0,0,0,0.6);
+    --rojo-pasion: #b71c1c;
+    --naranja-hambre: #e65100;
+    --amarillo-dorado: #ffb300;
+    --madera-oscura: #26140a;
 }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body { 
     margin: 0; 
-    color: #212121;
-    overflow-x: hidden;
+    color: #1a1a1a;
     min-height: 100vh;
+    background-color: var(--madera-oscura);
     background-size: cover;
+    background-position: center;
     background-attachment: fixed;
-    transition: background 1s ease-in-out;
-    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    font-family: 'Lora', serif;
+    transition: background-image 1.2s ease-in-out;
 }
 
-/* FONDOS RÚSTICOS */
-.bg-lunes { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://img.freepik.com/foto-gratis/textura-madera-oscura-fondo-viejo-tablon-marron_1253-1555.jpg'); }
-.bg-martes { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://img.freepik.com/foto-gratis/fondo-madera-negra-veteada_23-2148152917.jpg'); }
-.bg-miercoles { background-image: linear-gradient(rgba(139,0,0,0.3), rgba(0,0,0,0.6)), url('https://img.freepik.com/foto-gratis/fondo-textura-madera-marron-oscuro_1253-15.jpg'); }
-.bg-jueves { background-image: linear-gradient(rgba(0,0,40,0.6), rgba(0,0,0,0.8)), url('https://img.freepik.com/foto-gratis/superficie-madera-carbonizada-textura-shou-sugi-ban_23-2148814041.jpg'); }
-.bg-viernes { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://img.freepik.com/foto-gratis/fondo-madera-rustico-marron_23-2148152914.jpg'); }
+/* Texturas de Madera Rústica */
+.bg-lunes { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://www.transparenttextures.com/patterns/dark-wood.png'), url('https://images.unsplash.com/photo-1541123356219-284ebe98ae3b?q=80&w=1470&auto=format&fit=crop'); }
+.bg-martes { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1517089152318-42ec560349c0?q=80&w=1374&auto=format&fit=crop'); }
+/* ... (Se aplican dinámicamente en JS para cada día) */
 
-#fx-canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index: 10; }
+.header-app { text-align: center; padding: 40px 20px; perspective: 1000px; }
 
-.kitchen-flash {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, rgba(255,100,0,0.4) 0%, rgba(0,0,0,0.9) 100%);
-    z-index: 100; display: none; pointer-events: none;
+.logo-box {
+    display: inline-block;
+    border: 4px double var(--amarillo-dorado);
+    padding: 10px 30px;
+    background: rgba(0,0,0,0.4);
+    cursor: pointer;
+    user-select: none;
 }
 
-.header-app { text-align: center; padding-top: 20px; }
-.header-app h1 { font-family: 'Permanent Marker'; font-size: clamp(2.5rem, 8vw, 4rem); color: white; text-shadow: 4px 4px 0px var(--rojo); margin: 0; }
-.day-banner { display: inline-block; background: var(--amarillo); padding: 5px 20px; border-radius: 5px; font-weight: 800; transform: rotate(2deg); border: 2px solid #000; margin-top: 10px; }
+h1 { 
+    font-family: 'Oswald', sans-serif; 
+    font-size: 3rem; 
+    color: white; 
+    margin: 0; 
+    letter-spacing: 4px;
+    text-shadow: 3px 3px 0px var(--rojo-pasion);
+}
 
-.menu-list { width: 92%; max-width: 500px; display: flex; flex-direction: column; gap: 40px; margin: 30px auto; position: relative; z-index: 5; }
+.subtitle-menu {
+    font-family: 'Permanent Marker', cursive;
+    color: var(--amarillo-dorado);
+    font-size: 1.5rem;
+    margin-top: 10px;
+    letter-spacing: 5px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0.7; transform: scale(1); }
+}
+
+.day-banner {
+    display: inline-block;
+    background: var(--rojo-pasion);
+    color: white;
+    padding: 5px 25px;
+    font-weight: bold;
+    margin-top: 15px;
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+}
+
+/* Lista y Tarjetas */
+.menu-list { 
+    width: 95%; 
+    max-width: 450px; 
+    margin: 20px auto 100px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 50px; 
+}
 
 .card-restaurante {
-    background: #fdf5e6 url('https://www.transparenttextures.com/patterns/handmade-paper.png');
-    padding: 35px 20px 20px;
-    box-shadow: 10px 10px 30px rgba(0,0,0,0.8);
-    position: relative;
-    transform: rotate(-1deg);
+    background: #f4ece4;
+    background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+    padding: 40px 25px 25px;
+    box-shadow: 15px 15px 40px rgba(0,0,0,0.7);
+    position: sticky;
+    top: 20px; /* Efecto de apilamiento */
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+    animation: entrySlide 0.8s var(--delay) both;
 }
 
-.card-restaurante::before {
-    content: "";
-    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+@keyframes entrySlide {
+    from { opacity: 0; transform: translateX(100px) rotate(10deg); }
+    to { opacity: 1; transform: translateX(0) rotate(-1deg); }
+}
+
+/* Efecto chincheta realista */
+.card-restaurante::after {
+    content: '';
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
     width: 25px; height: 25px;
-    background: radial-gradient(circle at 30% 30%, #ff5252, #880000);
-    border-radius: 50%; box-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+    background: radial-gradient(circle at 30% 30%, #ff4444, #800);
+    border-radius: 50%;
+    box-shadow: 2px 4px 6px rgba(0,0,0,0.5);
 }
 
-.card-title-box { border-bottom: 2px dashed #bcaaa4; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-.card-title-box h2 { font-family: 'Permanent Marker'; margin: 0; color: #3e2723; }
-.price-label { font-family: 'Permanent Marker'; font-size: 1.4rem; color: var(--rojo); }
+.card-title-box { border-bottom: 2px solid #d4c4b5; padding-bottom: 10px; }
+.card-title-box h2 { font-family: 'Oswald'; text-transform: uppercase; margin: 0; color: #4e342e; }
 
-.food-items { list-style: none; padding: 0; margin-top: 15px; }
-.food-items li { font-family: 'Courgette'; font-size: 1.4rem; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; }
-
-#promo-notify {
-    position: fixed; bottom: 20px; right: 20px;
-    background: var(--amarillo); border: 3px solid var(--negro);
-    padding: 15px; border-radius: 10px; z-index: 1000;
-    max-width: 250px; box-shadow: 8px 8px 0px var(--negro);
+.food-items li {
+    font-size: 1.2rem;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    animation: fadeInProduct 0.5s ease forwards;
 }
 
-.close-promo { position: absolute; top: -10px; right: -10px; background: var(--rojo); color: white; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+@keyframes fadeInProduct {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-#view-admin { display: none; padding: 20px; background: #1a1a1a; min-height: 100vh; color: white; }
-.btn-admin-access { position: fixed; bottom: 10px; left: 10px; opacity: 0.2; border: none; background: none; font-size: 24px; cursor: pointer; }
+.price-label { color: var(--rojo-pasion); font-weight: bold; font-size: 1.5rem; }
+
+/* Admin View */
+#view-admin { display: none; background: #1a1a1a; color: white; padding: 20px; min-height: 100vh; }
