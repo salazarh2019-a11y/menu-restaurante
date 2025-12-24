@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Galería Gourmet</title>
+    <title>El Buen Sazón - Control Total</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,8 +21,8 @@
 
         /* --- CABECERA --- */
         .header-visual { text-align: center; margin-bottom: 50px; padding: 20px; width: 100%; box-sizing: border-box; }
-        .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: var(--gold); font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
-        .glow-line { width: 80%; max-width: 450px; height: 2px; background: var(--fire-line); margin: 0 auto; position: relative; box-shadow: 0 0 10px rgba(211, 84, 0, 0.5); }
+        .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: var(--gold); font-family: 'Playfair Display', serif; cursor: pointer; }
+        .glow-line { width: 80%; max-width: 450px; height: 2px; background: var(--fire-line); margin: 0 auto; position: relative; }
         .glow-line::after { content: ''; position: absolute; bottom: 2px; left: -15%; right: -15%; height: 100px; background: var(--fire-glow); filter: blur(20px); animation: fireLight 3s infinite alternate; }
         @keyframes fireLight { 0% { opacity: 0.2; } 100% { opacity: 0.6; } }
 
@@ -31,19 +31,11 @@
         @media (min-width: 768px) { .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; } }
 
         .card {
-            background: #161616; border: 1px solid #2a2a2a; border-radius: 20px;
-            padding: 25px; position: relative; overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
-            transition: all 0.4s ease; width: 100%; max-width: 400px; box-sizing: border-box;
-            cursor: pointer;
+            background: #161616; border: 1px solid #2a2a2a; border-radius: 20px; padding: 25px; 
+            position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+            transition: all 0.4s ease; width: 100%; box-sizing: border-box; cursor: pointer;
         }
         .card:hover { border-color: #e67e22; transform: translateY(-8px); }
-
-        /* --- HUMO --- */
-        .smoke-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
-        .card:hover .smoke-container { opacity: 1; }
-        .smoke { position: absolute; bottom: -30px; width: 70px; height: 70px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); filter: blur(15px); border-radius: 50%; animation: riseSmoke 2.5s infinite ease-out; }
-        @keyframes riseSmoke { 0% { transform: translateY(0) scale(1); opacity: 0; } 100% { transform: translateY(-180px) scale(3.5) translateX(30px); opacity: 0; } }
 
         .card-title { color: var(--gold); font-size: 1.5rem; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .price-tag { font-size: 1.1rem; color: #ff9f43; font-weight: 600; display: block; }
@@ -51,29 +43,31 @@
         .stamp-agotado { border: 1.5px solid #ff4444; color: #ff4444; font-size: 0.65rem; padding: 2px 6px; transform: rotate(-12deg); background: rgba(0,0,0,0.9); font-weight: bold; border-radius: 4px; position: absolute; right: 0; top: 10px; }
         .item-row.agotado span { color: #444; text-decoration: line-through; }
 
-        /* --- RULETA DE IMÁGENES (MODAL) --- */
-        #gallery-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 2000;
-        }
-        .slider-container { width: 90%; max-width: 500px; text-align: center; position: relative; }
-        .slide-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 0 30px rgba(0,0,0,0.5); cursor: pointer; }
+        /* --- GALERÍA --- */
+        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .slider-container { width: 90%; max-width: 500px; text-align: center; }
+        .slide-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; border: 2px solid var(--gold); }
         .slide-name { margin-top: 15px; font-size: 1.5rem; color: var(--gold); font-family: 'Playfair Display', serif; }
-        .slider-nav { display: flex; justify-content: space-between; margin-top: 20px; }
-        .nav-btn { background: var(--gold); border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-        /* --- PUBLICIDAD --- */
-        #ad-card { background: linear-gradient(135deg, #e67e22, #c0392b); padding: 20px; border-radius: 15px; text-align: center; color: white; margin-top: 20px; display: none; cursor: pointer; animation: hotVibration 0.3s 4 infinite; }
-        @keyframes hotVibration { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-1deg); } 75% { transform: rotate(1deg); } }
-
-        .footer-contact { padding: 40px; text-align: center; color: var(--gold); font-size: 0.9rem; }
-
-        /* --- EDICION --- */
+        /* --- EDITOR MEJORADO --- */
         #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; width: 100%; box-sizing: border-box; }
-        .edit-panel { background: #111; width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; border: 1px solid var(--gold); }
-        .edit-row { display: flex; gap: 5px; margin-top: 5px; align-items: center; }
-        input, select { padding: 10px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; font-size: 14px; }
+        .edit-panel { background: #111; width: 100%; max-width: 700px; padding: 25px; border-radius: 20px; border: 1px solid var(--gold); box-sizing: border-box; }
+        
+        .edit-group { background: #1a1a1a; padding: 15px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid var(--gold); }
+        .edit-item-box { 
+            display: grid; grid-template-columns: 1fr; gap: 10px; 
+            padding: 15px; border-bottom: 1px solid #333; margin-bottom: 10px;
+        }
+        @media (min-width: 500px) { .edit-item-box { grid-template-columns: 2fr 2fr 60px 40px; } }
+
+        input { padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
+        input:focus { border-color: var(--gold); outline: none; }
+        
+        .btn-agotado { border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-del { background: none; border: none; color: #ff4444; font-size: 1.5rem; cursor: pointer; }
+
+        .save-bar { position: sticky; bottom: 20px; width: 100%; max-width: 400px; z-index: 100; }
+        .btn-final { background: var(--gold); color: #000; width: 100%; padding: 20px; border-radius: 40px; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
@@ -85,28 +79,36 @@
             <div class="glow-line"></div>
         </div>
         <div class="cards-container" id="v-grid"></div>
-        <div id="ad-card" onclick="this.style.display='none'"></div>
         <div class="footer-contact" id="v-contact"></div>
     </div>
 
-    <div id="gallery-overlay" onclick="closeGallery(event)">
+    <div id="gallery-overlay" onclick="this.style.display='none'">
         <div class="slider-container" onclick="event.stopPropagation()">
-            <div id="slide-title" class="slide-name">Nombre del Plato</div>
-            <img id="slide-img" class="slide-img" src="" alt="Comida" onclick="closeGallery(null)">
-            <div class="slider-nav">
-                <button class="nav-btn" onclick="prevSlide()">❮ Ant.</button>
-                <button class="nav-btn" onclick="nextSlide()">Sig. ❯</button>
+            <div id="slide-title" class="slide-name"></div>
+            <img id="slide-img" class="slide-img" src="">
+            <div style="margin-top:20px; display:flex; justify-content:space-between;">
+                <button onclick="prevSlide()" style="padding:10px 20px; border-radius:10px; background:var(--gold); border:none; font-weight:bold;">❮</button>
+                <button onclick="this.closest('#gallery-overlay').style.display='none'" style="color:white; background:none; border:none;">Cerrar</button>
+                <button onclick="nextSlide()" style="padding:10px 20px; border-radius:10px; background:var(--gold); border:none; font-weight:bold;">❯</button>
             </div>
-            <p style="color: #666; margin-top: 10px;">Toca la imagen para volver</p>
         </div>
     </div>
 
     <div id="edition-view">
-        <h2 style="color:var(--gold)">Configuración</h2>
+        <h2 style="color:var(--gold); margin-bottom:10px;">Panel de Control</h2>
+        <p style="color:#888; margin-bottom:20px; font-size:0.9rem;">Los cambios se guardan localmente mientras editas.</p>
+        
         <div class="edit-panel">
-            <label>Día</label><select id="ed-day-select" onchange="renderEditor()"></select>
-            <div id="ed-items"></div>
-            <button style="background:var(--gold); width:100%; padding:15px; margin-top:20px; border-radius:30px; border:none; font-weight:bold; cursor:pointer;" onclick="saveAll()">GUARDAR TODO</button>
+            <label>Día Actual</label>
+            <select id="ed-day-select" onchange="changeDay(this.value)" style="width:100%; padding:12px; margin-bottom:20px; background:#000; color:#fff; border-radius:10px;">
+                <option value="Lunes">Lunes</option><option value="Martes">Martes</option><option value="Miércoles">Miércoles</option><option value="Jueves">Jueves</option><option value="Viernes">Viernes</option><option value="Sábado">Sábado</option><option value="Domingo">Domingo</option>
+            </select>
+
+            <div id="ed-items-container"></div>
+        </div>
+
+        <div class="save-bar">
+            <button class="btn-final" onclick="saveAll()">SUBIR CAMBIOS A LA NUBE</button>
         </div>
     </div>
 
@@ -114,27 +116,15 @@
         const URL = "https://script.google.com/macros/s/AKfycbzPaGMh14gyyQXNWaYw71-DKmv6bhwlP3KAAl1c-qIwGlH1LiI79nQYL-jco9ftrfpA2Q/exec";
         let currentData = { config: {}, menu: [] };
         let galleryItems = [];
-        let currentSlideIdx = 0;
+        let slideIdx = 0;
 
         async function init() {
-            await updateDataSilently();
-            const sel = document.getElementById('ed-day-select');
-            ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].forEach(d => {
-                sel.innerHTML += `<option value="${d}">${d}</option>`;
-            });
-            sel.value = currentData.config.dia_actual;
-            setInterval(updateDataSilently, 5000);
-        }
-
-        async function updateDataSilently() {
             try {
                 const r = await fetch(URL);
-                const newData = await r.json();
-                if (JSON.stringify(newData) !== JSON.stringify(currentData)) {
-                    currentData = newData;
-                    if (document.getElementById('visual-view').style.display !== 'none') renderVisual();
-                }
-            } catch (e) {}
+                currentData = await r.json();
+                document.getElementById('ed-day-select').value = currentData.config.dia_actual;
+                renderVisual();
+            } catch (e) { alert("Error al cargar datos iniciales."); }
         }
 
         function renderVisual() {
@@ -142,7 +132,7 @@
             document.getElementById('v-day').innerText = "Menú del " + hoy;
             document.getElementById('v-contact').innerText = currentData.config.info_contacto || "";
             const grid = document.getElementById('v-grid');
-            const cats = [{k:'principio', t:'Principios'},{k:'proteina', t:'Proteínas', p: currentData.config.precio_proteina},{k:'especial', t:'Especiales', p: currentData.config.precio_especial},{k:'acompanamiento', t:'Acompañamientos'}];
+            const cats = [{k:'principio', t:'Principios'}, {k:'proteina', t:'Proteínas', p:currentData.config.precio_proteina}, {k:'especial', t:'Especiales', p:currentData.config.precio_especial}, {k:'acompanamiento', t:'Acompañamientos'}];
             
             grid.innerHTML = '';
             cats.forEach(c => {
@@ -152,9 +142,7 @@
                 card.className = 'card';
                 card.onclick = () => openGallery(items);
                 
-                let html = '<div class="smoke-container">';
-                for(let i=0; i<3; i++) html += `<div class="smoke" style="left:${Math.random()*80}%; animation-delay:${Math.random()*2}s"></div>`;
-                html += `</div><div class="card-title">${c.t} ${c.p ? `<span class="price-tag">$${c.p}</span>` : ''}</div>`;
+                let html = `<div class="card-title">${c.t} ${c.p ? `<span class="price-tag">$${c.p}</span>` : ''}</div>`;
                 items.forEach(it => {
                     html += `<div class="item-row ${it.agotado?'agotado':''}">
                         <span>${it.nombre} ${it.img ? '📷' : ''}</span>
@@ -166,62 +154,128 @@
             });
         }
 
-        // --- GALERÍA ---
+        /* --- FUNCIONES EDITOR (PERSISTENTES) --- */
+        function changeDay(val) {
+            currentData.config.dia_actual = val;
+            renderEditor();
+        }
+
+        function renderEditor() {
+            const dia = currentData.config.dia_actual;
+            const container = document.getElementById('ed-items-container');
+            container.innerHTML = '';
+
+            ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(cat => {
+                const group = document.createElement('div');
+                group.className = 'edit-group';
+                group.innerHTML = `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <strong style="color:var(--gold)">${cat.toUpperCase()}</strong>
+                    <button onclick="addItem('${cat}')" style="background:var(--gold); border:none; border-radius:5px; padding:2px 10px; cursor:pointer;">+ Agregar</button>
+                </div>`;
+
+                const items = currentData.menu.filter(i => i.dia === dia && i.cat === cat);
+                items.forEach(it => {
+                    const itemBox = document.createElement('div');
+                    itemBox.className = 'edit-item-box';
+                    itemBox.innerHTML = `
+                        <input type="text" placeholder="Nombre del plato" value="${it.nombre}" oninput="updateVal('${it.id}', 'nombre', this.value)">
+                        <input type="text" placeholder="Link de imagen (URL)" value="${it.img || ''}" oninput="updateVal('${it.id}', 'img', this.value)">
+                        <button class="btn-agotado" style="background:${it.agotado ? '#ff4444' : '#444'}; color:white;" onclick="toggleAgotado('${it.id}')">
+                            ${it.agotado ? 'Agotado' : 'Disponible'}
+                        </button>
+                        <button class="btn-del" onclick="deleteItem('${it.id}')">✕</button>
+                    `;
+                    group.appendChild(itemBox);
+                });
+                container.appendChild(group);
+            });
+        }
+
+        function updateVal(id, field, value) {
+            const index = currentData.menu.findIndex(i => i.id == id);
+            if (index !== -1) {
+                currentData.menu[index][field] = value;
+            }
+        }
+
+        function toggleAgotado(id) {
+            const index = currentData.menu.findIndex(i => i.id == id);
+            if (index !== -1) {
+                currentData.menu[index].agotado = !currentData.menu[index].agotado;
+                renderEditor(); // Refresca la vista para ver el cambio de color de botón
+            }
+        }
+
+        function deleteItem(id) {
+            currentData.menu = currentData.menu.filter(i => i.id != id);
+            renderEditor();
+        }
+
+        function addItem(cat) {
+            const newItem = {
+                id: Date.now().toString(),
+                dia: currentData.config.dia_actual,
+                cat: cat,
+                nombre: "",
+                img: "",
+                agotado: false
+            };
+            currentData.menu.push(newItem);
+            renderEditor();
+        }
+
+        /* --- GUARDADO FINAL --- */
+        async function saveAll() {
+            const btn = document.querySelector('.btn-final');
+            btn.innerText = "SUBIENDO...";
+            btn.disabled = true;
+
+            try {
+                await fetch(URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu })
+                });
+                alert("¡Guardado con éxito!");
+                location.reload();
+            } catch (e) {
+                alert("Error al guardar.");
+                btn.innerText = "SUBIR CAMBIOS A LA NUBE";
+                btn.disabled = false;
+            }
+        }
+
+        /* --- GALERIA --- */
         function openGallery(items) {
-            galleryItems = items.filter(i => i.img && i.img.trim() !== "");
+            galleryItems = items.filter(i => i.img && i.img.includes('http'));
             if(galleryItems.length === 0) return;
-            currentSlideIdx = 0;
+            slideIdx = 0;
             updateSlide();
             document.getElementById('gallery-overlay').style.display = 'flex';
         }
-        function closeGallery(e) { document.getElementById('gallery-overlay').style.display = 'none'; }
         function updateSlide() {
-            const item = galleryItems[currentSlideIdx];
-            document.getElementById('slide-img').src = item.img;
-            document.getElementById('slide-title').innerText = item.nombre;
+            const it = galleryItems[slideIdx];
+            document.getElementById('slide-img').src = it.img;
+            document.getElementById('slide-title').innerText = it.nombre;
         }
-        function nextSlide() { currentSlideIdx = (currentSlideIdx + 1) % galleryItems.length; updateSlide(); }
-        function prevSlide() { currentSlideIdx = (currentSlideIdx - 1 + galleryItems.length) % galleryItems.length; updateSlide(); }
+        function nextSlide() { slideIdx = (slideIdx + 1) % galleryItems.length; updateSlide(); }
+        function prevSlide() { slideIdx = (slideIdx - 1 + galleryItems.length) % galleryItems.length; updateSlide(); }
 
-        // --- EDICIÓN ---
-        function renderEditor() {
-            const dia = document.getElementById('ed-day-select').value;
-            const cont = document.getElementById('ed-items');
-            cont.innerHTML = '';
-            ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(cat => {
-                const items = currentData.menu.filter(i => i.dia === dia && i.cat === cat);
-                let h = `<div style="margin-top:15px; color:var(--gold); border-bottom:1px solid #333">${cat.toUpperCase()} <button onclick="addItem('${cat}')">+</button></div>`;
-                items.forEach(it => {
-                    h += `<div class="edit-row">
-                        <input type="text" placeholder="Plato" value="${it.nombre}" oninput="uText('${it.id}', this.value)" style="flex:2">
-                        <input type="text" placeholder="URL Imagen" value="${it.img||''}" oninput="uImg('${it.id}', this.value)" style="flex:2">
-                        <button onclick="tAg('${it.id}')" style="background:${it.agotado?'red':'#444'}; color:white; border:none; padding:5px 10px; border-radius:5px;">A</button>
-                    </div>`;
-                });
-                cont.innerHTML += h;
-            });
-        }
-        function uText(id, v) { const it = currentData.menu.find(i => i.id == id); if(it) it.nombre = v; }
-        function uImg(id, v) { const it = currentData.menu.find(i => i.id == id); if(it) it.img = v; }
-        function tAg(id) { const it = currentData.menu.find(i => i.id == id); if(it) it.agotado = !it.agotado; renderEditor(); }
-        function addItem(cat) { currentData.menu.push({dia: document.getElementById('ed-day-select').value, cat, nombre:"", img:"", agotado:false, id: Date.now().toString()}); renderEditor(); }
-
-        async function saveAll() {
-            currentData.config.dia_actual = document.getElementById('ed-day-select').value;
-            await fetch(URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu }) });
-            location.reload();
-        }
-
+        /* --- TRIPLE CLICK ACCESO --- */
         let cl = 0;
         document.getElementById('title-trigger').onclick = () => {
-            cl++; if(cl === 3) {
+            cl++;
+            if(cl === 3) {
                 if(prompt("Clave:") === currentData.config.password) {
                     document.getElementById('visual-view').style.display='none';
                     document.getElementById('edition-view').style.display='flex';
                     renderEditor();
-                } cl = 0;
-            } setTimeout(() => cl=0, 1000);
+                }
+                cl = 0;
+            }
+            setTimeout(() => cl=0, 1000);
         };
+
         window.onload = init;
     </script>
 </body>
