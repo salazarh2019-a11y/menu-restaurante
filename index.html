@@ -3,110 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Parrilla Rústica</title>
+    <title>El Buen Sazón - Versión Final Profesional</title>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700;800&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
+        /* --- ESTILOS VISUALES --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #000; color: #fff; 
-            width: 100vw; overflow-x: hidden;
-            display: flex; flex-direction: column; align-items: center;
-        }
-
-        /* --- FONDO DE CHISPAS ERRÁTICAS --- */
+        body { font-family: 'Poppins', sans-serif; background: #000; color: #fff; width: 100vw; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
         #embers-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 100%, rgba(255, 60, 0, 0.15), transparent 75%); z-index: 0; }
         
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 100%, rgba(255, 60, 0, 0.15), transparent 75%);
-            animation: flicker 2s infinite alternate; z-index: 0;
-        }
-        @keyframes flicker { 0% { opacity: 0.2; } 100% { opacity: 0.6; } }
-
-        /* --- CABECERA --- */
         .header-visual { text-align: center; margin: 40px 0; z-index: 10; width: 100%; position: relative; }
         .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: #c5a059; font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
         .day-label { font-size: 1.1rem; color: #888; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
         .day-main { font-size: 2.5rem; color: #c5a059; font-family: 'Playfair Display', serif; margin-top: -5px; }
+        
+        .cards-container { display: flex; flex-direction: column; align-items: center; gap: 35px; width: 100%; max-width: 1100px; padding: 0 20px 50px 20px; z-index: 10; }
+        @media (min-width: 768px) { .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; } }
 
-        /* --- CONTENEDOR --- */
-        .cards-container { 
-            display: flex; flex-direction: column; align-items: center; gap: 35px; 
-            width: 100%; max-width: 1100px; padding: 0 20px 50px 20px; z-index: 10;
-        }
-        @media (min-width: 768px) { 
-            .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; } 
-        }
-
-        /* --- TARJETA --- */
-        .card {
-            background: #7d4e2d url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-            border-radius: 12px; padding: 25px 15px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
-            border: 3px solid #5d3a21; width: 100%;
-            opacity: 0; transform: translateY(40px);
-            animation: entry 0.7s ease-out forwards;
-        }
-        @keyframes entry { to { opacity: 1; transform: translateY(0); } }
-
-        .card-title {
-            font-family: 'Playfair Display', serif; color: #1a0f08;
-            text-align: center; font-size: 1.7rem; margin-bottom: 15px;
-            font-weight: 800; line-height: 1.2;
+        /* --- ANIMACIÓN DE ENTRADA CON REBOTE --- */
+        .card { 
+            background: #7d4e2d url('https://www.transparenttextures.com/patterns/wood-pattern.png'); 
+            border-radius: 12px; padding: 25px 15px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9); border: 3px solid #5d3a21; width: 100%; 
+            opacity: 0; 
+            transform: translateY(50px);
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* COLOR AMARILLO SOLO PARA PRECIOS */
-        .price-tag {
-            color: #ffcc00;
-            font-size: 1.2rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            display: block;
-            margin-top: 5px;
+        @keyframes bounceIn {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .paper-sheet {
-            background: #f4e4bc url('https://www.transparenttextures.com/patterns/parchment.png');
-            color: #332211; padding: 20px;
-            box-shadow: 2px 4px 10px rgba(0,0,0,0.3);
-            clip-path: polygon(0% 1%, 100% 0%, 99% 99%, 1% 100%);
-            cursor: pointer;
-        }
-
-        .item-row {
-            display: flex; justify-content: space-between;
-            font-family: 'Special Elite', cursive;
-            border-bottom: 1px dashed rgba(0,0,0,0.1); padding: 10px 0;
-            font-size: 1.1rem;
-        }
-
-        /* --- PUBLICIDAD Y CONTACTO --- */
-        .ad-card {
-            grid-column: 1 / -1; width: 100%; max-width: 900px;
-            background: rgba(255, 100, 0, 0.15);
-            backdrop-filter: blur(12px); border: 1px solid rgba(255, 150, 0, 0.3);
-            border-radius: 20px; padding: 25px; text-align: center; color: #ffcc00;
-            margin: 20px auto; z-index: 10;
-        }
-
-        .contact-footer {
-            margin: 40px 0 60px 0; text-align: center;
-            color: #ff3300; font-family: 'Special Elite', cursive;
-            font-size: 1.3rem; text-shadow: 0 0 15px rgba(255, 50, 0, 0.7);
-            z-index: 10;
-        }
-
-        /* --- GALERÍA --- */
-        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 3000; }
-        .slide-container { position: relative; width: 85%; max-width: 400px; }
-        .slide-img { width: 100%; border: 10px solid #fff; border-bottom-width: 45px; box-shadow: 0 10px 40px #000; }
-        .nav-btn { position: absolute; top: 50%; width: 50px; height: 50px; background: #fff; border: 2px solid #000; border-radius: 50%; font-size: 1.5rem; cursor: pointer; z-index: 10; transform: translateY(-50%); }
-
-        /* --- PANEL EDITOR --- */
-        #edition-view { display: none; position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh; background: #000; z-index: 5000; padding: 20px; flex-direction: column; align-items: center; }
-        .edit-box { width: 100%; max-width: 600px; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #d4a76a; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #222; color: #fff; border: 1px solid #444; }
+        .card-title { font-family: 'Playfair Display', serif; color: #1a0f08; text-align: center; font-size: 1.7rem; margin-bottom: 15px; font-weight: 800; }
+        .price-tag { color: #ffcc00; font-size: 1.2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); display: block; margin-top: 5px; }
+        .paper-sheet { background: #f4e4bc url('https://www.transparenttextures.com/patterns/parchment.png'); color: #332211; padding: 20px; box-shadow: 2px 4px 10px rgba(0,0,0,0.3); clip-path: polygon(0% 1%, 100% 0%, 99% 99%, 1% 100%); cursor: pointer; }
+        .item-row { display: flex; justify-content: space-between; font-family: 'Special Elite', cursive; border-bottom: 1px dashed rgba(0,0,0,0.1); padding: 10px 0; font-size: 1.1rem; }
+        
+        .ad-card { grid-column: 1 / -1; width: 100%; max-width: 900px; background: rgba(255, 100, 0, 0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255, 150, 0, 0.3); border-radius: 20px; padding: 25px; text-align: center; color: #ffcc00; margin: 20px auto; z-index: 10; }
+        .contact-footer { margin: 40px 0 60px 0; text-align: center; color: #ff3300; font-family: 'Special Elite', cursive; font-size: 1.3rem; text-shadow: 0 0 15px rgba(255, 50, 0, 0.7); z-index: 10; }
+        
+        /* --- PANEL EDICIÓN --- */
+        #edition-view { display: none; position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh; background: #1a1a1a; z-index: 5000; padding: 20px; flex-direction: column; align-items: center; }
+        .edit-container { width: 100%; max-width: 800px; background: #222; border-radius: 20px; border: 2px solid #c5a059; padding: 25px; margin-bottom: 100px; }
+        .edit-section { background: #2d2d2d; padding: 15px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #c5a059; }
+        .section-title { font-family: 'Playfair Display'; color: #c5a059; font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        .auto-btn { padding: 12px 20px; border-radius: 30px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 15px; width: 100%; font-size: 1rem; }
+        .auto-on { background: #27ae60; color: white; box-shadow: 0 0 15px rgba(39, 174, 96, 0.5); }
+        .auto-off { background: #c0392b; color: white; }
+        .edit-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px; align-items: center; margin-bottom: 8px; background: #333; padding: 10px; border-radius: 8px; }
+        input, select { background: #111; color: white; border: 1px solid #444; padding: 12px; border-radius: 5px; font-size: 1rem; }
+        .btn-add { background: #c5a059; color: #000; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .btn-save-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 20px 40px; border-radius: 50px; font-weight: 800; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer; z-index: 6000; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -119,33 +66,45 @@
             <div class="day-label">Menú del</div>
             <div id="v-day-display" class="day-main">...</div>
         </div>
-
         <div class="cards-container" id="v-grid"></div>
-        
         <div id="v-ad" class="ad-card" style="display:none;"></div>
         <div id="v-contact" class="contact-footer"></div>
     </div>
 
-    <div id="gallery-overlay" onclick="closeGal()">
-        <div class="slide-container" onclick="event.stopPropagation()">
-            <img id="slide-img" class="slide-img" src="">
-            <div id="slide-title" style="position: absolute; bottom: 12px; left: 0; width: 100%; color: #333; font-family: 'Special Elite'; font-weight: bold; text-align: center;"></div>
-            <button class="nav-btn" style="left: -25px;" onclick="changeSlide(-1)">❮</button>
-            <button class="nav-btn" style="right: -25px;" onclick="changeSlide(1)">❯</button>
+    <div id="edition-view">
+        <h1 style="color:#c5a059; margin-bottom: 25px; font-family: 'Playfair Display';">Administración</h1>
+        <div class="edit-container">
+            <div class="edit-section">
+                <div class="section-title">Automatización</div>
+                <button id="auto-toggle" class="auto-btn" onclick="toggleAuto()">Cargando...</button>
+                <label>Día de Edición/Manual:</label>
+                <select id="ed-day-manual" style="width: 100%;" onchange="updateConfig('dia_actual', this.value); renderEditor();">
+                    <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
+                </select>
+            </div>
+            <div class="edit-section">
+                <div class="section-title">Configuración</div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div><label>Precio Proteína</label><input type="text" id="ed-p-prot" oninput="updateConfig('precio_proteina', this.value)"></div>
+                    <div><label>Precio Especial</label><input type="text" id="ed-p-esp" oninput="updateConfig('precio_especial', this.value)"></div>
+                </div>
+                <label style="display:block; margin-top:10px;">Publicidad:</label>
+                <input type="text" id="ed-ad" style="width:100%" oninput="updateConfig('publicidad', this.value)">
+                <label style="display:block; margin-top:10px;">Clave de Acceso (Visible):</label>
+                <input type="text" id="ed-pass" style="width:100%; border: 1px solid #c5a059;" oninput="updateConfig('password', this.value)">
+            </div>
+            <div id="editor-categories"></div>
         </div>
+        <button class="btn-save-float" onclick="saveToCloud()">GUARDAR CAMBIOS</button>
+        <button onclick="location.reload()" style="margin-bottom: 150px; background:none; border:none; color:#888; cursor:pointer;">Regresar</button>
     </div>
 
-    <div id="edition-view">
-        <h2 style="color:#d4a76a; margin-bottom: 20px;">Panel Administrativo</h2>
-        <div class="edit-box">
-            <select id="ed-day" onchange="currentData.config.dia_actual=this.value; renderEditor();">
-                <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
-            </select>
-            <input type="text" id="ed-ad" placeholder="Texto Publicidad" oninput="currentData.config.publicidad=this.value">
-            <input type="text" id="ed-pass" placeholder="Password" oninput="currentData.config.password=this.value">
-            <div id="editor-items"></div>
-            <button style="width:100%; padding:15px; background:#d4a76a; font-weight:bold; margin-top:20px; border:none; border-radius:5px;" onclick="saveToCloud()">GUARDAR CAMBIOS</button>
-            <button onclick="location.reload()" style="width:100%; background:none; color:white; margin-top:10px; border:none; cursor:pointer;">Cerrar panel</button>
+    <div id="gallery-overlay" onclick="closeGal()" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 3000;">
+        <div class="slide-container" style="position: relative; width: 85%; max-width: 400px;" onclick="event.stopPropagation()">
+            <img id="slide-img" style="width: 100%; border: 10px solid #fff; border-bottom-width: 45px; box-shadow: 0 10px 40px #000;">
+            <div id="slide-title" style="position: absolute; bottom: 12px; left: 0; width: 100%; color: #333; font-family: 'Special Elite'; font-weight: bold; text-align: center;"></div>
+            <button onclick="changeSlide(-1)" style="position: absolute; left: -25px; top: 50%; width: 45px; height: 45px; background: white; border-radius: 50%;">❮</button>
+            <button onclick="changeSlide(1)" style="position: absolute; right: -25px; top: 50%; width: 45px; height: 45px; background: white; border-radius: 50%;">❯</button>
         </div>
     </div>
 
@@ -155,109 +114,93 @@
         let galleryItems = [];
         let slideIdx = 0;
 
-        // --- CHISPAS ERRÁTICAS ---
+        // --- CHISPAS ---
         const canvas = document.getElementById('embers-canvas');
         const ctx = canvas.getContext('2d');
         let sparks = [];
-
-        function initSparks() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            sparks = Array.from({length: 45}, () => createSpark());
-        }
-
-        function createSpark() {
-            return {
-                x: Math.random() * canvas.width,
-                y: canvas.height + Math.random() * 100,
-                size: Math.random() * 2 + 1,
-                vx: (Math.random() - 0.5) * 2, // Velocidad X errática
-                vy: -Math.random() * 2 - 1,   // Velocidad Y hacia arriba
-                alpha: Math.random(),
-                life: Math.random() * 100
-            };
-        }
-
-        function drawSparks() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            sparks.forEach((s, i) => {
-                s.y += s.vy;
-                s.x += s.vx + Math.sin(s.y / 20); // Movimiento en zigzag
-                s.alpha -= 0.005;
-                if (s.alpha <= 0 || s.y < -10) sparks[i] = createSpark();
-
-                ctx.fillStyle = `rgba(255, ${150 + Math.random() * 105}, 0, ${s.alpha})`;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            requestAnimationFrame(drawSparks);
-        }
+        function initSparks() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; sparks = Array.from({length: 45}, () => createSpark()); }
+        function createSpark() { return { x: Math.random() * canvas.width, y: canvas.height + 20, size: Math.random() * 2 + 1, vx: (Math.random() - 0.5) * 2, vy: -Math.random() * 2 - 1, alpha: Math.random() }; }
+        function drawSparks() { ctx.clearRect(0,0,canvas.width,canvas.height); sparks.forEach((s,i) => { s.y += s.vy; s.x += s.vx + Math.sin(s.y/20); s.alpha -= 0.005; if(s.alpha<=0 || s.y<-10) sparks[i]=createSpark(); ctx.fillStyle=`rgba(255, ${150+Math.random()*105}, 0, ${s.alpha})`; ctx.beginPath(); ctx.arc(s.x,s.y,s.size,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(drawSparks); }
         initSparks(); drawSparks();
 
-        // --- CARGA Y RENDER ---
+        // --- DATOS ---
         async function loadMenu() {
             try {
                 const response = await fetch(URL_GAS);
-                currentData = await response.json();
-                renderMenu();
-            } catch (e) { document.getElementById('v-day-display').innerText = "..."; }
+                const newData = await response.json();
+                if(JSON.stringify(currentData) !== JSON.stringify(newData)) {
+                    currentData = newData;
+                    renderMenu();
+                    if(document.getElementById('edition-view').style.display === 'flex') renderEditor();
+                }
+            } catch (e) { console.error("Error"); }
         }
+        setInterval(loadMenu, 5000);
 
         function renderMenu() {
-            const hoy = currentData.config.dia_actual;
+            let hoy;
+            if(currentData.config.automatico) {
+                const dias = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+                hoy = dias[new Date().getDay()];
+            } else { hoy = currentData.config.dia_actual; }
             document.getElementById('v-day-display').innerText = hoy;
             document.getElementById('v-contact').innerText = currentData.config.info_contacto;
-            
-            if(currentData.config.publicidad) {
-                const ad = document.getElementById('v-ad');
-                ad.innerText = currentData.config.publicidad;
-                ad.style.display = 'block';
-            }
-
-            const grid = document.getElementById('v-grid');
-            grid.innerHTML = "";
-            const cats = [
-                {id:'principio', n:'Principios'}, {id:'proteina', n:'Proteínas', p:currentData.config.precio_proteina}, 
-                {id:'especial', n:'Especiales', p:currentData.config.precio_especial}, {id:'acompanamiento', n:'Acompañamientos'}
-            ];
-
-            cats.forEach(cat => {
+            const ad = document.getElementById('v-ad');
+            if(currentData.config.publicidad) { ad.innerText = currentData.config.publicidad; ad.style.display = 'block'; } else { ad.style.display = 'none'; }
+            const grid = document.getElementById('v-grid'); grid.innerHTML = "";
+            const cats = [{id:'principio', n:'Principios'}, {id:'proteina', n:'Proteínas', p:currentData.config.precio_proteina}, {id:'especial', n:'Especiales', p:currentData.config.precio_especial}, {id:'acompanamiento', n:'Acompañamientos'}];
+            cats.forEach((cat, index) => {
                 const items = currentData.menu.filter(i => i.dia === hoy && i.cat === cat.id);
                 if(items.length === 0) return;
-                const card = document.createElement('div');
-                card.className = 'card';
+                const card = document.createElement('div'); card.className = 'card';
+                card.style.animationDelay = (index * 0.15) + 's'; // Escalonado
                 card.onclick = () => openGal(items);
-                
-                // Mostrar precio en amarillo solo si existe
-                let priceHtml = cat.p ? `<span class="price-tag">$${cat.p}</span>` : '';
-                
-                let html = `<div class="card-title">${cat.n} ${priceHtml}</div><div class="paper-sheet">`;
-                items.forEach(it => {
-                    html += `<div class="item-row">
-                        <span style="${it.agotado ? 'text-decoration:line-through;opacity:0.4' : ''}">${it.nombre}</span>
-                        ${it.agotado ? '<b style="color:#d32f2f">X</b>' : ''}
-                    </div>`;
-                });
-                html += `</div>`;
-                card.innerHTML = html;
+                let price = cat.p ? `<span class="price-tag">$${cat.p}</span>` : '';
+                card.innerHTML = `<div class="card-title">${cat.n} ${price}</div><div class="paper-sheet">${items.map(it => `<div class="item-row"><span style="${it.agotado ? 'text-decoration:line-through;opacity:0.4' : ''}">${it.nombre}</span>${it.agotado ? '<b style="color:#d32f2f">X</b>' : ''}</div>`).join('')}</div>`;
                 grid.appendChild(card);
             });
         }
 
-        function openGal(items) {
-            galleryItems = items.filter(i => i.img && i.img.length > 10);
-            if(galleryItems.length === 0) return;
-            slideIdx = 0; showSlide();
-            document.getElementById('gallery-overlay').style.display = 'flex';
+        function toggleAuto() { currentData.config.automatico = !currentData.config.automatico; renderEditor(); }
+        function updateConfig(key, val) { currentData.config[key] = val; }
+        function renderEditor() {
+            const btn = document.getElementById('auto-toggle');
+            if(currentData.config.automatico) { btn.innerText = "AUTOMÁTICO: ENCENDIDO"; btn.className = "auto-btn auto-on"; document.getElementById('ed-day-manual').disabled = true; } 
+            else { btn.innerText = "AUTOMÁTICO: APAGADO"; btn.className = "auto-btn auto-off"; document.getElementById('ed-day-manual').disabled = false; }
+            document.getElementById('ed-day-manual').value = currentData.config.dia_actual;
+            document.getElementById('ed-p-prot').value = currentData.config.precio_proteina;
+            document.getElementById('ed-p-esp').value = currentData.config.precio_especial;
+            document.getElementById('ed-ad').value = currentData.config.publicidad;
+            document.getElementById('ed-pass').value = currentData.config.password;
+            const cats = [{id:'principio', n:'Principios'}, {id:'proteina', n:'Proteínas'}, {id:'especial', n:'Especiales'}, {id:'acompanamiento', n:'Acompañamientos'}];
+            const cont = document.getElementById('editor-categories'); cont.innerHTML = "";
+            cats.forEach(cat => {
+                const section = document.createElement('div'); section.className = 'edit-section';
+                section.innerHTML = `<div class="section-title">${cat.n}</div>`;
+                currentData.menu.filter(i => i.dia === currentData.config.dia_actual && i.cat === cat.id).forEach(it => {
+                    const row = document.createElement('div'); row.className = 'edit-row';
+                    row.innerHTML = `<input type="text" value="${it.nombre}" oninput="updItem('${it.id}', 'nombre', this.value)">
+                                     <input type="text" placeholder="URL Img" value="${it.img || ''}" oninput="updItem('${it.id}', 'img', this.value)" style="width:80px;">
+                                     <button onclick="togAgotado('${it.id}')" style="background:${it.agotado?'#c0392b':'#27ae60'}; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">${it.agotado?'AGOTADO':'OK'}</button>
+                                     <button onclick="delItem('${it.id}')" style="background:none; border:none; color:red; cursor:pointer; font-size:1.2rem;">🗑️</button>`;
+                    section.appendChild(row);
+                });
+                const addBtn = document.createElement('button'); addBtn.className = 'btn-add'; addBtn.innerText = "+ Agregar";
+                addBtn.onclick = () => { currentData.menu.push({ id: Date.now(), dia: currentData.config.dia_actual, cat: cat.id, nombre: "Nuevo Plato", agotado: false, img: "" }); renderEditor(); };
+                section.appendChild(addBtn); cont.appendChild(section);
+            });
         }
-        function showSlide() {
-            document.getElementById('slide-img').src = galleryItems[slideIdx].img;
-            document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre;
+        function updItem(id, f, v) { const i = currentData.menu.find(x => x.id == id); if(i) i[f] = v; }
+        function togAgotado(id) { const i = currentData.menu.find(x => x.id == id); if(i) i.agotado = !i.agotado; renderEditor(); }
+        function delItem(id) { currentData.menu = currentData.menu.filter(x => x.id != id); renderEditor(); }
+        async function saveToCloud() {
+            const btn = document.querySelector('.btn-save-float'); btn.innerText = "GUARDANDO...";
+            try {
+                await fetch(URL_GAS, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:'saveAll', config:currentData.config, menu:currentData.menu}) });
+                alert("Guardado."); location.reload();
+            } catch(e) { alert("Error"); btn.innerText = "REINTENTAR"; }
         }
-        function changeSlide(n) { slideIdx = (slideIdx + n + galleryItems.length) % galleryItems.length; showSlide(); }
-        function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
 
-        // ADMIN
         let cl = 0;
         document.getElementById('admin-trigger').onclick = () => {
             cl++; if(cl === 3) {
@@ -269,24 +212,10 @@
             } setTimeout(() => cl = 0, 1000);
         };
 
-        function renderEditor() {
-            const cont = document.getElementById('editor-items');
-            cont.innerHTML = "";
-            currentData.menu.filter(i => i.dia === currentData.config.dia_actual).forEach(it => {
-                const div = document.createElement('div');
-                div.innerHTML = `<input type="text" value="${it.nombre}" oninput="upd('${it.id}','nombre',this.value)">
-                                 <button onclick="tog('${it.id}')" style="background:${it.agotado?'red':'green'}; color:white; border:none; padding:5px; cursor:pointer;">${it.agotado?'AGOTADO':'OK'}</button>`;
-                cont.appendChild(div);
-            });
-        }
-        function upd(id, f, v) { const it = currentData.menu.find(i => i.id == id); if(it) it[f] = v; }
-        function tog(id) { const it = currentData.menu.find(i => i.id == id); if(it) it.agotado = !it.agotado; renderEditor(); }
-        async function saveToCloud() {
-            try {
-                await fetch(URL_GAS, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:'saveAll', config:currentData.config, menu:currentData.menu}) });
-                alert("Menú actualizado en la nube"); location.reload();
-            } catch(e) { alert("Error al guardar"); }
-        }
+        function openGal(items) { galleryItems = items.filter(i => i.img && i.img.length > 10); if(galleryItems.length === 0) return; slideIdx = 0; showSlide(); document.getElementById('gallery-overlay').style.display = 'flex'; }
+        function showSlide() { document.getElementById('slide-img').src = galleryItems[slideIdx].img; document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre; }
+        function changeSlide(n) { slideIdx = (slideIdx + n + galleryItems.length) % galleryItems.length; showSlide(); }
+        function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
 
         loadMenu();
     </script>
