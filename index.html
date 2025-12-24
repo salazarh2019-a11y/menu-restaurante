@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Buen Sazón - Experiencia de Fuego</title>
+    <title>El Buen Sazón - Menú Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,16 +16,16 @@
             margin: 0; font-family: 'Poppins', sans-serif;
             background: #000 url('https://www.transparenttextures.com/patterns/dark-wood.png');
             color: #fff; overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- CABECERA CON LUZ DE FUEGO --- */
-        .header-visual { text-align: center; margin-bottom: 70px; position: relative; padding-top: 20px; }
+        /* --- CABECERA --- */
+        .header-visual { text-align: center; margin-bottom: 70px; position: relative; padding: 20px; width: 100%; box-sizing: border-box; }
         .header-large { 
-            font-size: 3.8rem; color: var(--gold); font-family: 'Playfair Display', serif; 
+            font-size: clamp(2rem, 8vw, 3.8rem); color: var(--gold); font-family: 'Playfair Display', serif; 
             cursor: pointer; letter-spacing: 3px; position: relative; z-index: 5;
-            transition: text-shadow 0.3s;
         }
-        .header-subtitle { color: #aaa; font-style: italic; font-size: 1.3rem; margin-bottom: 15px; }
+        .header-subtitle { color: #aaa; font-style: italic; font-size: 1.1rem; margin-bottom: 15px; }
 
         .glow-line {
             width: 100%; max-width: 450px; height: 3px; background: var(--gold);
@@ -33,24 +33,29 @@
             box-shadow: 0 0 15px var(--gold);
         }
 
-        /* Luz que ilumina el título hacia arriba */
         .glow-line::after {
             content: ''; position: absolute; bottom: 3px; left: 0; right: 0;
-            height: 100px; background: linear-gradient(to top, rgba(197, 160, 89, 0.4), transparent);
-            filter: blur(15px); animation: fireLight 3s infinite alternate;
+            height: 120px; background: linear-gradient(to top, rgba(197, 160, 89, 0.5), transparent);
+            filter: blur(20px); animation: fireLight 3s infinite alternate;
             pointer-events: none;
         }
 
         @keyframes fireLight {
-            0% { opacity: 0.3; height: 80px; transform: scaleX(0.9); }
-            50% { opacity: 0.8; height: 110px; transform: scaleX(1.1); }
-            100% { opacity: 0.5; height: 90px; transform: scaleX(1); }
+            0% { opacity: 0.3; height: 80px; }
+            50% { opacity: 0.9; height: 130px; }
+            100% { opacity: 0.4; height: 90px; }
         }
 
-        /* --- TARJETAS CON EFECTO HUMO --- */
+        /* --- TARJETAS CENTRADAS --- */
         .cards-container {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px; width: 100%; max-width: 1200px; padding-bottom: 100px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
+            justify-content: center; /* ESTO CENTRA EN MOBILE Y PC */
+            gap: 30px; 
+            width: 100%; 
+            max-width: 1200px; 
+            padding: 0 20px 100px 20px;
+            box-sizing: border-box;
         }
 
         .card {
@@ -59,74 +64,69 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.9);
             animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
             transition: all 0.4s ease;
+            cursor: default;
         }
+
+        @keyframes floatUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
 
         .card:hover {
             border-color: #ff4d00;
-            background: linear-gradient(145deg, #1a1a1a, #2a1500);
+            background: linear-gradient(145deg, #161616, #2a1100);
             transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 77, 0, 0.15);
         }
 
-        /* Contenedor de Humo */
+        /* --- HUMO MEJORADO (MÁS VISIBLE) --- */
         .smoke-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; opacity: 0; transition: opacity 0.5s;
+            z-index: 1;
         }
         .card:hover .smoke-container { opacity: 1; }
 
         .smoke {
-            position: absolute; bottom: -20px; width: 50px; height: 50px;
-            background: rgba(255,255,255,0.05); filter: blur(15px); border-radius: 50%;
-            animation: riseSmoke 3s infinite;
+            position: absolute; bottom: -30px; width: 80px; height: 80px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            filter: blur(12px); border-radius: 50%;
+            animation: riseSmoke 2.5s infinite ease-out;
         }
 
         @keyframes riseSmoke {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            50% { opacity: 0.2; }
-            100% { transform: translateY(-200px) scale(3); opacity: 0; }
+            0% { transform: translateY(0) scale(1) translateX(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(-250px) scale(4) translateX(30px); opacity: 0; }
         }
 
-        /* --- PUBLICIDAD "CALIENTE" --- */
+        /* --- PUBLICIDAD CALIENTE --- */
         #ad-banner {
-            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) scale(0);
-            background: var(--fire); padding: 15px 35px; border-radius: 10px;
-            color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;
-            box-shadow: 0 0 30px rgba(255, 77, 0, 0.6); z-index: 1000;
-            display: flex; align-items: center; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) scale(0);
+            background: var(--fire); padding: 15px 30px; border-radius: 12px;
+            color: white; font-weight: bold; font-size: 1.1rem; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5); z-index: 1000;
+            white-space: nowrap; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
         #ad-banner.show { transform: translateX(-50%) scale(1); }
-        #ad-banner.vibrate { animation: hotVibration 0.3s 3; }
+        #ad-banner.vibrate { animation: hotVibration 0.3s 4; }
 
         @keyframes hotVibration {
-            0% { transform: translateX(-50%) rotate(0deg); }
+            0%, 100% { transform: translateX(-50%); }
             25% { transform: translateX(-52%) rotate(-1deg); }
             75% { transform: translateX(-48%) rotate(1deg); }
-            100% { transform: translateX(-50%) rotate(0deg); }
         }
 
-        /* Partículas de brasa en publicidad */
-        .ember {
-            position: absolute; width: 4px; height: 4px; background: #ffca28;
-            border-radius: 50%; pointer-events: none; animation: flyEmber 2s infinite;
-        }
-
-        @keyframes flyEmber {
-            0% { transform: translateY(0) rotate(0); opacity: 1; }
-            100% { transform: translateY(-50px) rotate(360deg); opacity: 0; }
-        }
-
-        /* --- OTROS ESTILOS --- */
-        .card-title { color: var(--gold); font-size: 1.6rem; text-align: center; margin-bottom: 20px; border-bottom: 1px solid #333; }
+        /* --- CONTENIDO DE TARJETA --- */
+        .card-content { position: relative; z-index: 2; }
+        .card-title { color: var(--gold); font-size: 1.6rem; text-align: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; }
         .stamp-agotado { border: 1.5px solid #ff4444; color: #ff4444; font-size: 0.6rem; padding: 2px 6px; transform: rotate(-12deg); background: rgba(0,0,0,0.9); font-weight: bold; border-radius: 4px; }
-        .item-row.agotado span { color: #444; text-decoration: line-through; }
-        .footer-contact { padding: 40px; text-align: center; color: var(--gold); font-size: 0.9rem; }
-        
-        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; background: #000; }
+        .item-row.agotado span { color: #555; text-decoration: line-through; }
+        .footer-contact { padding: 40px; text-align: center; color: var(--gold); font-size: 0.9rem; width: 100%; }
+
+        /* --- PANEL EDICION --- */
+        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; width: 100%; box-sizing: border-box; }
         .edit-panel { background: #111; width: 100%; max-width: 500px; padding: 25px; border-radius: 25px; border: 1px solid var(--gold); }
-        input, select { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 10px; }
-        .btn-save { background: var(--gold); color: #000; padding: 20px 60px; border-radius: 40px; border: none; font-weight: bold; margin: 40px 0; cursor: pointer; }
+        input, select { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; }
+        .btn-save { background: var(--gold); color: #000; padding: 18px 50px; border-radius: 40px; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; width: 100%; }
     </style>
 </head>
 <body>
@@ -140,10 +140,7 @@
         
         <div class="cards-container" id="v-grid"></div>
         <div class="footer-contact" id="v-contact"></div>
-        
-        <div id="ad-banner" onclick="this.classList.remove('show')">
-            <span id="ad-text">¡Promoción Caliente!</span>
-        </div>
+        <div id="ad-banner" onclick="this.classList.remove('show')"></div>
     </div>
 
     <div id="edition-view">
@@ -156,35 +153,35 @@
             <label>Contacto</label><input id="ed-contact" type="text">
             <label>Clave</label><input id="ed-pass" type="text">
             <div id="ed-items"></div>
+            <button class="btn-save" onclick="saveAll()">GUARDAR TODO Y SALIR</button>
         </div>
-        <button class="btn-save" onclick="saveAll()">GUARDAR CAMBIOS</button>
     </div>
 
     <script>
-        const URL = "https://script.google.com/macros/s/AKfycbzPaGMh14gyyQXNWaYw71-DKmv6bhwlP3KAAl1c-qIwGlH1LiI79nQYL-jco9ftrfpA2Q/exec"; // REEMPLAZA ESTO
+        const URL = "https://script.google.com/macros/s/AKfycbzPaGMh14gyyQXNWaYw71-DKmv6bhwlP3KAAl1c-qIwGlH1LiI79nQYL-jco9ftrfpA2Q/exec";
         let currentData = { config: {}, menu: [] };
 
         async function init() {
             try {
                 const r = await fetch(URL);
                 currentData = await r.json();
-                renderVisual();
-                setupAds();
                 
-                // Selector de días
                 const sel = document.getElementById('ed-day-select');
                 ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].forEach(d => {
                     sel.innerHTML += `<option value="${d}">${d}</option>`;
                 });
                 sel.value = currentData.config.dia_actual;
-            } catch (e) { console.log("Error de conexión"); }
+                
+                renderVisual();
+                setupAds();
+            } catch (e) { console.log("Error inicializando"); }
         }
 
         function renderVisual() {
             const hoy = currentData.config.dia_actual;
             document.getElementById('v-day').innerText = "Menú del " + hoy;
             document.getElementById('v-contact').innerText = currentData.config.info_contacto || "";
-            document.getElementById('ad-text').innerText = currentData.config.publicidad || "¡Bienvenidos!";
+            document.getElementById('ad-banner').innerText = currentData.config.publicidad || "";
             
             const grid = document.getElementById('v-grid');
             const cats = [
@@ -202,54 +199,42 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 
-                // Añadir Humo
+                // Humo denso
                 const smokeCont = document.createElement('div');
                 smokeCont.className = 'smoke-container';
-                for(let i=0; i<3; i++) {
+                for(let i=0; i<6; i++) {
                     const s = document.createElement('div');
                     s.className = 'smoke';
                     s.style.left = (Math.random() * 80) + '%';
-                    s.style.animationDelay = (Math.random() * 2) + 's';
+                    s.style.animationDelay = (Math.random() * 3) + 's';
                     smokeCont.appendChild(s);
                 }
                 card.appendChild(smokeCont);
 
-                let content = `<div class="card-title">${c.t} ${c.p ? `<br><small>$${c.p}</small>` : ''}</div>`;
+                let inner = `<div class="card-content">
+                    <div class="card-title">${c.t} ${c.p ? `<br><small style="font-size:0.7rem">$${c.p}</small>` : ''}</div>`;
                 items.forEach(it => {
-                    content += `<div class="item-row ${it.agotado?'agotado':''}">
+                    inner += `<div class="item-row ${it.agotado?'agotado':''}">
                         <span>${it.nombre}</span>
                         ${it.agotado ? '<div class="stamp-agotado">AGOTADO</div>' : ''}
                     </div>`;
                 });
-                card.innerHTML += content;
+                inner += `</div>`;
+                card.innerHTML += inner;
                 grid.appendChild(card);
             });
         }
 
         function setupAds() {
             if(!currentData.config.publicidad) return;
-            
             setTimeout(() => {
                 const ad = document.getElementById('ad-banner');
                 ad.classList.add('show');
-                
-                // Crear brasas
-                for(let i=0; i<5; i++) {
-                    const ember = document.createElement('div');
-                    ember.className = 'ember';
-                    ember.style.left = (Math.random() * 90) + '%';
-                    ember.style.animationDelay = (Math.random() * 2) + 's';
-                    ad.appendChild(ember);
-                }
-
-                // Vibrar después de 3 segundos de aparecer
                 setTimeout(() => { ad.classList.add('vibrate'); }, 3000);
             }, 5000);
         }
 
-        // --- FUNCIONES DE GUARDADO ---
         async function saveAll() {
-            // Recoger datos
             currentData.config.dia_actual = document.getElementById('ed-day-select').value;
             currentData.config.precio_proteina = document.getElementById('ed-price-p').value;
             currentData.config.precio_especial = document.getElementById('ed-price-e').value;
@@ -257,15 +242,10 @@
             currentData.config.info_contacto = document.getElementById('ed-contact').value;
             currentData.config.password = document.getElementById('ed-pass').value;
 
-            await fetch(URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu })
-            });
-            setTimeout(() => location.reload(), 1000);
+            await fetch(URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'saveAll', config: currentData.config, menu: currentData.menu }) });
+            setTimeout(() => location.reload(), 800);
         }
 
-        // --- EDITOR Y OTROS (TRIPLE CLICK) ---
         function renderEditor() {
             const dia = document.getElementById('ed-day-select').value;
             document.getElementById('ed-price-p').value = currentData.config.precio_proteina;
@@ -277,20 +257,20 @@
             cont.innerHTML = '';
             ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(cat => {
                 const items = currentData.menu.filter(i => i.dia === dia && i.cat === cat);
-                let h = `<div style="margin-top:15px; color:var(--gold)">${cat.toUpperCase()} <button onclick="addItem('${cat}')">+</button></div>`;
+                let h = `<div style="margin-top:15px; color:var(--gold); border-bottom:1px solid #333">${cat.toUpperCase()} <button onclick="addItem('${cat}')">+</button></div>`;
                 items.forEach(it => {
-                    h += `<div style="display:flex; gap:5px; margin-bottom:5px;">
-                        <input type="text" value="${it.nombre}" oninput="updateText('${it.id}', this.value)" style="flex:1">
-                        <button onclick="toggleAgotado('${it.id}')" style="background:${it.agotado?'red':'#333'}">A</button>
-                        <button onclick="delItem('${it.id}')">✕</button>
+                    h += `<div style="display:flex; gap:5px; margin-top:5px;">
+                        <input type="text" value="${it.nombre}" oninput="uText('${it.id}', this.value)" style="flex:1">
+                        <button onclick="tAg('${it.id}')" style="background:${it.agotado?'red':'#444'}; color:white; border:none; border-radius:5px; width:30px;">A</button>
+                        <button onclick="dIt('${it.id}')" style="background:none; border:none; color:red;">✕</button>
                     </div>`;
                 });
                 cont.innerHTML += h;
             });
         }
-        function updateText(id, v) { const it = currentData.menu.find(i => i.id == id); if(it) it.nombre = v; }
-        function toggleAgotado(id) { const it = currentData.menu.find(i => i.id == id); if(it) it.agotado = !it.agotado; renderEditor(); }
-        function delItem(id) { currentData.menu = currentData.menu.filter(i => i.id != id); renderEditor(); }
+        function uText(id, v) { const it = currentData.menu.find(i => i.id == id); if(it) it.nombre = v; }
+        function tAg(id) { const it = currentData.menu.find(i => i.id == id); if(it) it.agotado = !it.agotado; renderEditor(); }
+        function dIt(id) { currentData.menu = currentData.menu.filter(i => i.id != id); renderEditor(); }
         function addItem(cat) { currentData.menu.push({dia: document.getElementById('ed-day-select').value, cat, nombre:"", agotado:false, id: Date.now().toString()}); renderEditor(); }
 
         let cl = 0;
