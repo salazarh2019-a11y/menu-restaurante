@@ -3,105 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Menú Gourmet</title>
+    <title>El Buen Sazón - Experiencia Brasa</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
             --gold: #c5a059;
-            --fire-line: #d35400;
-            --fire-glow: linear-gradient(to top, rgba(255, 69, 0, 0.4), rgba(255, 140, 0, 0.1), transparent);
+            --fire: #e67e22;
+            --dark-bg: #050505;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #000 url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            background: #000;
             color: #fff; width: 100vw; overflow-x: hidden;
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- CABECERA --- */
-        .header-visual { text-align: center; margin: 40px 0; width: 100%; position: relative; }
-        .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: var(--gold); font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
-        .glow-line { width: 70%; max-width: 500px; height: 2px; background: var(--fire-line); margin: 15px auto; position: relative; box-shadow: 0 0 15px var(--fire-line); }
-        .glow-line::after { content: ''; position: absolute; bottom: 2px; left: -10%; right: -10%; height: 100px; background: var(--fire-glow); filter: blur(25px); animation: firePulse 3s infinite alternate; pointer-events: none; }
-        @keyframes firePulse { 0% { opacity: 0.3; } 100% { opacity: 0.7; } }
+        /* --- PARTÍCULAS DE BRASAS --- */
+        #embers-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
 
-        /* --- TARJETAS Y HUMO --- */
-        .cards-container { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; max-width: 1100px; padding: 0 20px 100px 20px; }
+        /* --- CABECERA --- */
+        .header-visual { text-align: center; margin: 40px 0; width: 100%; position: relative; z-index: 10; }
+        .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: var(--gold); font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
+        .glow-line { 
+            width: 70%; max-width: 500px; height: 2px; background: var(--fire); 
+            margin: 15px auto; position: relative; box-shadow: 0 0 15px var(--fire); 
+        }
+        .glow-line::after { 
+            content: ''; position: absolute; bottom: 2px; left: -10%; right: -10%; 
+            height: 80px; background: linear-gradient(to top, rgba(230, 126, 34, 0.3), transparent); 
+            filter: blur(20px); pointer-events: none; 
+        }
+
+        /* --- CONTENEDOR Y TARJETAS --- */
+        .cards-container { 
+            display: flex; flex-direction: column; align-items: center; gap: 25px; 
+            width: 100%; max-width: 1100px; padding: 0 20px 100px 20px; position: relative; z-index: 10;
+        }
         @media (min-width: 768px) { .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); } }
         
-        .card { background: #161616; border: 1px solid #2a2a2a; border-radius: 20px; padding: 30px; width: 100%; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8); transition: 0.4s; cursor: pointer; opacity: 0; transform: translateY(20px); }
-        .card.visible { opacity: 1; transform: translateY(0); }
-        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-
-        .smoke-wrap { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: 0.5s; }
-        .card:hover .smoke-wrap { opacity: 0.3; }
-        .smoke { position: absolute; bottom: -20px; background: radial-gradient(circle, #fff 0%, transparent 70%); filter: blur(12px); border-radius: 50%; animation: rise 3s infinite ease-out; }
-        @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-120px) scale(2.5); opacity: 0; } }
+        .card { 
+            background: rgba(22, 22, 22, 0.9); border: 1px solid #2a2a2a; border-radius: 20px; 
+            padding: 30px; width: 100%; transition: 0.4s; cursor: pointer; backdrop-filter: blur(5px);
+        }
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
         .card-title { color: var(--gold); font-size: 1.6rem; text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-family: 'Playfair Display', serif; }
-        .item-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; position: relative; z-index: 5; }
+        .item-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
         .item-row.agotado span { color: #444; text-decoration: line-through; }
-        .cam-icon { font-size: 1.1rem; margin-left: 8px; filter: drop-shadow(0 0 3px var(--gold)); }
 
-        /* --- GALERÍA / RULETA --- */
-        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); backdrop-filter: blur(15px); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        .slider-box { width: 90%; max-width: 450px; text-align: center; position: relative; }
+        /* TARJETA PUBLICIDAD */
+        .ad-card {
+            grid-column: 1 / -1; background: linear-gradient(135deg, #1a1a1a, #000);
+            border: 1px solid var(--fire); color: #fff; padding: 25px; border-radius: 20px;
+            text-align: center; font-weight: 600; box-shadow: 0 0 20px rgba(230, 126, 34, 0.2);
+            animation: pulseAd 3s infinite;
+        }
+        @keyframes pulseAd { 0%, 100% { border-color: var(--fire); } 50% { border-color: var(--gold); } }
+
+        /* --- GALERÍA --- */
+        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+        .slider-box { width: 90%; max-width: 450px; text-align: center; }
         .slide-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; border: 2px solid var(--gold); }
-        .slide-txt { font-size: 1.6rem; color: var(--gold); margin: 15px 0; font-family: 'Playfair Display', serif; }
-
-        /* BOTÓN CERRAR X (MEJORADO) */
         .close-btn { 
             position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            width: 65px; height: 65px; background: #000; border: 2px solid var(--gold);
+            width: 60px; height: 60px; background: #000; border: 2px solid var(--gold);
             border-radius: 50%; color: var(--gold); display: flex; align-items: center; 
-            justify-content: center; font-size: 28px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); z-index: 10001;
+            justify-content: center; font-size: 24px; cursor: pointer; z-index: 10001;
         }
 
         /* --- EDITOR --- */
-        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; background: #000; min-height: 100vh; width: 100%; }
+        #edition-view { display: none; flex-direction: column; align-items: center; padding: 20px; background: #000; min-height: 100vh; width: 100%; z-index: 100; }
         .edit-panel { width: 100%; max-width: 600px; background: #111; border: 1px solid var(--gold); border-radius: 15px; padding: 20px; }
-        input, select { width: 100%; padding: 12px; background: #222; color: #fff; border: 1px solid #444; border-radius: 8px; margin-top: 5px; }
-        .btn-add { background: none; color: var(--gold); border: 1px dashed var(--gold); padding: 10px; width: 100%; margin: 10px 0; cursor: pointer; }
+        .admin-section { margin-bottom: 20px; padding: 15px; border: 1px solid #333; border-radius: 10px; background: #0a0a0a; }
+        input, select { width: 100%; padding: 12px; background: #222; color: #fff; border: 1px solid #444; border-radius: 8px; margin: 5px 0 15px 0; }
         .btn-save-cloud { background: var(--gold); color: #000; font-weight: bold; padding: 18px; width: 100%; max-width: 400px; border-radius: 50px; border: none; cursor: pointer; margin-top: 30px; position: sticky; bottom: 20px; }
     </style>
 </head>
 <body>
 
+    <canvas id="embers-canvas"></canvas>
+
     <div id="visual-view" style="width:100%;">
         <div class="header-visual">
             <h1 class="header-large" id="admin-trigger">EL BUEN SAZÓN</h1>
-            <div id="v-day" style="color:#888; margin-top:5px;">Cargando menú...</div>
+            <div id="v-day" style="color:#888;">Cargando experiencia...</div>
             <div class="glow-line"></div>
         </div>
         <div class="cards-container" id="v-grid"></div>
-        <div id="v-contact" style="padding:40px; text-align:center; color:var(--gold);"></div>
+        <div id="v-contact" style="padding:40px; text-align:center; color:var(--gold); z-index:10; position:relative;"></div>
     </div>
 
     <div id="gallery-overlay" onclick="closeGal()">
         <div class="slider-box" onclick="event.stopPropagation()">
             <img id="slide-img" class="slide-img" src="">
-            <div id="slide-title" class="slide-txt"></div>
-            <div style="display:flex; justify-content:space-between;">
-                <button onclick="prevS()" style="background:none; border:none; color:white; font-size:2.5rem; cursor:pointer;">❮</button>
-                <button onclick="nextS()" style="background:none; border:none; color:white; font-size:2.5rem; cursor:pointer;">❯</button>
+            <div id="slide-title" style="color:var(--gold); font-size:1.5rem; margin-top:15px; font-family:'Playfair Display';"></div>
+            <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                <button onclick="prevS()" style="background:none; border:none; color:white; font-size:2rem;">❮</button>
+                <button onclick="nextS()" style="background:none; border:none; color:white; font-size:2rem;">❯</button>
             </div>
         </div>
         <div class="close-btn" onclick="closeGal()">✕</div>
     </div>
 
     <div id="edition-view">
-        <h2 style="color:var(--gold); margin-bottom:20px;">Administración</h2>
+        <h2 style="color:var(--gold); margin-bottom:20px;">Panel Maestro</h2>
         <div class="edit-panel">
-            <label>Día del Menú:</label>
-            <select id="ed-day" onchange="currentData.config.dia_actual=this.value; renderEditor();">
-                <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
-            </select>
-            <div id="editor-items" style="margin-top:20px;"></div>
+            
+            <div class="admin-section">
+                <h3 style="color:var(--gold); font-size:0.9rem; margin-bottom:10px;">AJUSTES GENERALES</h3>
+                <label>Día del Menú:</label>
+                <select id="ed-day" onchange="currentData.config.dia_actual=this.value; renderEditor();">
+                    <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
+                </select>
+                <label>Precio Proteína ($):</label>
+                <input type="text" id="ed-p-prot" oninput="currentData.config.precio_proteina=this.value">
+                <label>Precio Especial ($):</label>
+                <input type="text" id="ed-p-esp" oninput="currentData.config.precio_especial=this.value">
+                <label>Nueva Clave de Acceso:</label>
+                <input type="text" id="ed-pass" oninput="currentData.config.password=this.value">
+                <label>Texto Publicidad:</label>
+                <input type="text" id="ed-ad" oninput="currentData.config.publicidad=this.value">
+            </div>
+
+            <div id="editor-items"></div>
         </div>
-        <button class="btn-save-cloud" onclick="saveToCloud()">GUARDAR CAMBIOS</button>
+        <button class="btn-save-cloud" onclick="saveToCloud()">ACTUALIZAR TODO EL SISTEMA</button>
     </div>
 
     <script>
@@ -110,37 +141,59 @@
         let galleryItems = [];
         let slideIdx = 0;
 
-        // CARGA INICIAL
-        window.onload = () => {
-            fetchData();
-            setInterval(fetchData, 8000); // Revisa cambios cada 8s
-        };
+        // --- EFECTO BRASAS ---
+        const canvas = document.getElementById('embers-canvas');
+        const ctx = canvas.getContext('2d');
+        let embers = [];
+
+        function initEmbers() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            embers = [];
+            for(let i=0; i<30; i++) {
+                embers.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height + Math.random() * 100,
+                    size: Math.random() * 3 + 1,
+                    speed: Math.random() * 2 + 0.5,
+                    osc: Math.random() * 2,
+                    alpha: Math.random()
+                });
+            }
+        }
+
+        function drawEmbers() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            embers.forEach(e => {
+                e.y -= e.speed;
+                e.x += Math.sin(e.y / 30) * 0.5;
+                if(e.y < -10) e.y = canvas.height + 10;
+                ctx.fillStyle = `rgba(230, 126, 34, ${e.alpha})`;
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.size, 0, Math.PI*2);
+                ctx.fill();
+            });
+            requestAnimationFrame(drawEmbers);
+        }
+        initEmbers(); drawEmbers();
+
+        // --- LÓGICA DE DATOS ---
+        window.onload = fetchData;
+        setInterval(fetchData, 10000);
 
         async function fetchData() {
-            // Evitar refrescar si el editor está abierto
             if(document.getElementById('edition-view').style.display === 'flex') return;
-            
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seg tiempo límite
-                
-                const r = await fetch(URL_GAS, { signal: controller.signal });
-                const d = await r.json();
-                
-                if(JSON.stringify(d) !== JSON.stringify(currentData)) {
-                    currentData = d;
-                    renderVisual();
-                }
-            } catch(e) {
-                console.log("Error de red, reintentando...");
-                document.getElementById('v-day').innerText = "Menú no disponible temporalmente";
-            }
+                const r = await fetch(URL_GAS);
+                currentData = await r.json();
+                renderVisual();
+            } catch(e) { console.log("Reconectando..."); }
         }
 
         function renderVisual() {
             const hoy = currentData.config.dia_actual;
-            document.getElementById('v-day').innerText = "Menú del " + (hoy || "Día");
-            document.getElementById('v-contact').innerText = currentData.config.info_contacto || "";
+            document.getElementById('v-day').innerText = "Menú " + hoy;
+            document.getElementById('v-contact').innerText = currentData.config.info_contacto;
             
             const grid = document.getElementById('v-grid');
             grid.innerHTML = "";
@@ -152,40 +205,37 @@
                 {id:'acompanamiento', n:'Acompañamientos'}
             ];
 
-            cats.forEach((cat) => {
+            cats.forEach(cat => {
                 const items = currentData.menu.filter(i => i.dia === hoy && i.cat === cat.id);
                 if(items.length === 0) return;
-
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.onclick = () => openGal(items);
-
-                let smoke = '<div class="smoke-wrap">';
-                for(let i=0; i<3; i++) smoke += `<div class="smoke" style="left:${Math.random()*80}%; animation-delay:${Math.random()*2}s"></div>`;
-                smoke += '</div>';
-
-                let html = `<div class="card-title">${cat.n} ${cat.p ? `<br><small style="color:#ff9f43">$${cat.p}</small>` : ''}</div>`;
+                let html = `<div class="card-title">${cat.n} ${cat.p ? `<br><small style="color:var(--fire)">$${cat.p}</small>` : ''}</div>`;
                 items.forEach(it => {
-                    const hasImg = it.img && it.img.length > 10;
                     html += `<div class="item-row ${it.agotado ? 'agotado' : ''}">
-                        <span>${it.nombre} ${hasImg ? '<span class="cam-icon">📷</span>' : ''}</span>
-                        ${it.agotado ? '<b style="color:#ff4444">X</b>' : ''}
+                        <span>${it.nombre}</span>
+                        ${it.agotado ? '<b style="color:red">AGOTADO</b>' : ''}
                     </div>`;
                 });
-
-                card.innerHTML = smoke + html;
+                card.innerHTML = html;
                 grid.appendChild(card);
-                // Animación de entrada
-                setTimeout(() => card.classList.add('visible'), 100);
             });
+
+            // TARJETA PUBLICIDAD AL FINAL
+            if(currentData.config.publicidad) {
+                const ad = document.createElement('div');
+                ad.className = 'ad-card';
+                ad.innerText = currentData.config.publicidad;
+                grid.appendChild(ad);
+            }
         }
 
-        // GALERÍA
+        // --- GALERÍA ---
         function openGal(items) {
-            galleryItems = items.filter(i => i.img && i.img.trim().length > 10);
+            galleryItems = items.filter(i => i.img && i.img.length > 10);
             if(galleryItems.length === 0) return;
-            slideIdx = 0;
-            updateS();
+            slideIdx = 0; updateS();
             document.getElementById('gallery-overlay').style.display = 'flex';
         }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
@@ -196,12 +246,11 @@
         function nextS() { slideIdx = (slideIdx + 1) % galleryItems.length; updateS(); }
         function prevS() { slideIdx = (slideIdx - 1 + galleryItems.length) % galleryItems.length; updateS(); }
 
-        // ACCESO ADMIN
+        // --- EDITOR ---
         let cl = 0;
         document.getElementById('admin-trigger').onclick = () => {
             cl++; if(cl === 3) {
-                const p = prompt("Clave:");
-                if(p === currentData.config.password) {
+                if(prompt("Clave:") === currentData.config.password) {
                     document.getElementById('visual-view').style.display = 'none';
                     document.getElementById('edition-view').style.display = 'flex';
                     renderEditor();
@@ -210,31 +259,37 @@
         };
 
         function renderEditor() {
-            const dia = currentData.config.dia_actual;
+            document.getElementById('ed-day').value = currentData.config.dia_actual;
+            document.getElementById('ed-p-prot').value = currentData.config.precio_proteina;
+            document.getElementById('ed-p-esp').value = currentData.config.precio_especial;
+            document.getElementById('ed-pass').value = currentData.config.password;
+            document.getElementById('ed-ad').value = currentData.config.publicidad;
+
             const container = document.getElementById('editor-items');
             container.innerHTML = "";
             ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(catId => {
                 const group = document.createElement('div');
-                group.style = "margin-bottom:25px; border-bottom:1px solid #333; padding-bottom:10px;";
-                group.innerHTML = `<h3 style="color:var(--gold); font-size:0.8rem;">${catId.toUpperCase()}</h3>`;
-                const items = currentData.menu.filter(i => i.dia === dia && i.cat === catId);
+                group.className = "admin-section";
+                group.innerHTML = `<h3 style="color:var(--gold); font-size:0.8rem;">PLATOS: ${catId.toUpperCase()}</h3>`;
+                const items = currentData.menu.filter(i => i.dia === currentData.config.dia_actual && i.cat === catId);
                 items.forEach(it => {
                     const row = document.createElement('div');
-                    row.style = "margin-bottom:15px; background:#1a1a1a; padding:10px; border-radius:10px;";
+                    row.style = "margin-bottom:10px; background:#1a1a1a; padding:10px; border-radius:10px;";
                     row.innerHTML = `
-                        <input type="text" placeholder="Plato" value="${it.nombre}" oninput="u('${it.id}','nombre',this.value)">
-                        <input type="text" placeholder="URL Imagen" value="${it.img||''}" oninput="u('${it.id}','img',this.value)">
-                        <div style="display:flex; gap:10px; margin-top:5px;">
-                            <button onclick="t('${it.id}')" style="flex:1; padding:8px; border:none; background:${it.agotado?'#d35400':'#444'}; color:#fff; border-radius:5px;">${it.agotado?'AGOTADO':'DISPONIBLE'}</button>
-                            <button onclick="d('${it.id}')" style="color:red; background:none; border:1px solid red; padding:8px 15px; border-radius:5px;">✕</button>
+                        <input type="text" value="${it.nombre}" oninput="u('${it.id}','nombre',this.value)" placeholder="Nombre">
+                        <input type="text" value="${it.img||''}" oninput="u('${it.id}','img',this.value)" placeholder="URL Foto">
+                        <div style="display:flex; gap:10px;">
+                            <button onclick="t('${it.id}')" style="flex:1; padding:10px; background:${it.agotado?'#d35400':'#444'}; color:#fff; border:none; border-radius:5px;">${it.agotado?'AGOTADO':'DISPONIBLE'}</button>
+                            <button onclick="d('${it.id}')" style="color:red; border:1px solid red; background:none; padding:10px; border-radius:5px;">✕</button>
                         </div>
                     `;
                     group.appendChild(row);
                 });
                 const add = document.createElement('button');
-                add.className = 'btn-add'; add.innerText = "+ AÑADIR PLATO";
+                add.style = "width:100%; padding:10px; background:none; border:1px dashed var(--gold); color:var(--gold); margin-top:10px;";
+                add.innerText = "+ AÑADIR PLATO";
                 add.onclick = () => {
-                    currentData.menu.push({id:Date.now().toString(), dia:dia, cat:catId, nombre:"", img:"", agotado:false});
+                    currentData.menu.push({id:Date.now().toString(), dia:currentData.config.dia_actual, cat:catId, nombre:"", img:"", agotado:false});
                     renderEditor();
                 };
                 group.appendChild(add);
@@ -248,12 +303,12 @@
 
         async function saveToCloud() {
             const b = document.querySelector('.btn-save-cloud');
-            b.innerText = "GUARDANDO..."; b.disabled = true;
+            b.innerText = "SINCRONIZANDO..."; b.disabled = true;
             try {
                 await fetch(URL_GAS, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:'saveAll', config:currentData.config, menu:currentData.menu}) });
-                alert("Guardado correctamente");
+                alert("Sincronización Exitosa");
                 location.reload();
-            } catch(e) { alert("Error al conectar con la nube"); b.innerText = "REINTENTAR"; b.disabled = false; }
+            } catch(e) { alert("Error de red"); b.innerText = "REINTENTAR"; b.disabled = false; }
         }
     </script>
 </body>
