@@ -2,75 +2,218 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Menú Premium - El Buen Sazón</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Oswald:wght@500;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Buen Sazón</title>
+    <style>
+        /* ESTILOS */
+        :root {
+            --wood-texture: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            --paper-color: #fdfbf7;
+            --edicion-bg: #1a1a1a;
+            --edicion-text: #e0e0e0;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body { margin: 0; font-family: var(--font-main); overflow-x: hidden; }
+        
+        /* VISUAL */
+        #visual-view {
+            min-height: 100vh;
+            background-color: #8B5A2B;
+            background-image: var(--wood-texture);
+            display: flex; flex-direction: column; align-items: center;
+            padding-bottom: 80px; transition: background-color 0.5s;
+        }
+        .header-visual { text-align: center; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin-top: 20px; z-index: 10; }
+        .header-small { font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; }
+        .header-large { font-size: 3rem; font-weight: bold; margin: 5px 0; font-family: 'Georgia', serif; cursor: pointer; user-select: none; }
+        .header-subtitle { font-size: 1.2rem; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 15px; display: inline-block;}
+        
+        .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; width: 100%; max-width: 1200px; }
+        
+        .card {
+            background: var(--paper-color); width: 300px; min-height: 250px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3); display: flex; position: relative;
+            transform: translateY(100px); opacity: 0; animation: slideUp 0.8s forwards;
+        }
+        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+
+        .card-holes {
+            width: 40px; border-right: 2px solid #ff9999; display: flex; flex-direction: column;
+            align-items: center; padding-top: 20px; gap: 25px;
+            background: linear-gradient(to right, #e0e0e0, #fff 10%);
+        }
+        .hole { width: 15px; height: 15px; background: #5c3a1e; border-radius: 50%; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.5); }
+        
+        .card-content { flex: 1; padding: 20px; background-image: repeating-linear-gradient(var(--paper-color) 0px, var(--paper-color) 24px, #00b0d7 25px); line-height: 25px; }
+        .card-title { text-align: center; font-weight: bold; font-size: 1.5rem; color: #333; border-bottom: 3px solid #333; margin-bottom: 15px; text-transform: uppercase; }
+        .card-item { font-size: 1.1rem; color: #000; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* AGOTADO */
+        .stamp-agotado {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg) scale(2);
+            border: 5px solid red; color: red; font-weight: 900; padding: 10px 20px; text-transform: uppercase;
+            font-size: 2rem; opacity: 0; pointer-events: none; transition: all 0.2s; z-index: 5; background: rgba(255, 255, 255, 0.8);
+        }
+        .card-item.agotado .stamp-agotado { opacity: 1; transform: translate(-50%, -50%) rotate(-15deg) scale(1); }
+        .card-item.agotado span { text-decoration: line-through; opacity: 0.5; }
+
+        /* PUBLICIDAD */
+        #ad-banner {
+            position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px;
+            background: #fff; padding: 15px; text-align: center; border: 2px dashed #d32f2f;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.5); font-weight: bold; font-size: 1.2rem; cursor: pointer; z-index: 100; display: none;
+        }
+        .footer-visual { position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); color: white; text-align: center; padding: 10px; font-size: 0.9rem; }
+
+        /* EDICION */
+        #edition-view { display: none; background: var(--edicion-bg); color: var(--edicion-text); min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; }
+        .btn-modern { background: linear-gradient(45deg, #2196F3, #21CBF3); border: none; padding: 10px 20px; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin: 5px; }
+        .input-dark { background: #333; border: 1px solid #555; color: white; padding: 8px; border-radius: 4px; }
+        
+        .phone-frame { width: 100%; max-width: 400px; background: #000; border-radius: 30px; padding: 10px; box-shadow: 0 0 20px rgba(0,255,255,0.1); margin-bottom: 60px; }
+        .phone-screen { background: #222; border-radius: 20px; padding: 20px; height: 600px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        
+        .edit-section { background: #2a2a2a; padding: 10px; border-radius: 10px; }
+        .edit-section h3 { margin-top: 0; border-bottom: 1px solid #444; display: flex; justify-content: space-between; align-items: center; }
+        .edit-item-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; background: #333; padding: 5px; border-radius: 5px; }
+        
+        .btn-agotado { width: 25px; height: 25px; border-radius: 50%; border: 2px solid #555; background: transparent; cursor: pointer; }
+        .btn-agotado.active { background: red; box-shadow: 0 0 5px red; border-color: red; }
+        .btn-delete { color: #ff4444; cursor: pointer; font-weight: bold; padding: 0 5px; }
+        
+        .status-light { width: 15px; height: 15px; border-radius: 50%; background: #444; display: inline-block; margin-left: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .status-light.green { background: #00e676; box-shadow: 0 0 10px #00e676; }
+        .status-light.red { background: #ff1744; }
+        .status-light.yellow { background: #ffea00; }
+        
+        .edition-footer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 20; }
+        .btn-save-exit { background: #ff1744; color: white; padding: 15px 40px; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5); cursor: pointer; }
+        
+        #modal-pass { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 200; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; text-align: center; }
+    </style>
 </head>
-<body id="main-body">
-
-    <div id="promo-vertical" onclick="this.style.transform='translateX(110%)'">
-        <span>🎁 PROMO: 10 ALMUERZOS = 1 GRATIS • TOCA PARA CERRAR</span>
+<body>
+    <div id="visual-view">
+        <div class="header-visual">
+            <div class="header-small">RESTAURANTE</div>
+            <div class="header-large" id="title-trigger">EL BUEN SAZON</div>
+            <div class="header-subtitle">Menú del día: <span id="visual-day">Cargando...</span></div>
+        </div>
+        <div class="cards-container">
+            <div class="card" id="card-principio"></div>
+            <div class="card" id="card-proteina"></div>
+            <div class="card" id="card-especial"></div>
+            <div class="card" id="card-acompanamiento"></div>
+        </div>
+        <div id="ad-banner" onclick="this.style.display='none'"></div>
+        <div class="footer-visual" id="visual-footer">Cargando información...</div>
     </div>
 
-    <div id="view-client">
-        <header class="header-app">
-            <div class="logo-box" id="admin-trigger">
-                <h1>EL BUEN SAZÓN</h1>
+    <div id="edition-view">
+        <div class="edition-header">
+            <h2>MODO EDICIÓN <span class="status-light green" id="status-indicator"></span></h2>
+            <h4>Editando menú del día: <span id="edit-day-display">...</span></h4>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <input type="text" id="new-day-input" placeholder="Ej: Martes" class="input-dark">
+                <button class="btn-modern" onclick="updateConfig('dia_actual', document.getElementById('new-day-input').value)">Cambiar Día</button>
+                <input type="text" id="new-pass-input" placeholder="Nueva Clave" class="input-dark" style="margin-top:5px; width: 100px;">
+                <button class="btn-modern" style="background: #444; font-size: 0.8rem;" onclick="updateConfig('password', document.getElementById('new-pass-input').value)">Cambiar Clave</button>
             </div>
-            <div class="subtitle-box">
-                <span class="line"></span>
-                <span class="subtitle-text">MENÚ DEL DÍA</span>
-                <span class="line"></span>
-            </div>
-            <div class="day-banner" id="current-day-label">...</div>
-        </header>
+        </div>
+        <div class="phone-frame"><div class="phone-screen" id="editor-container"></div></div>
+        <div class="edition-footer"><button class="btn-save-exit" onclick="saveAndExit()">SALIR Y GUARDAR</button></div>
+    </div>
 
-        <div class="menu-list">
-            <div class="card-restaurante" style="--delay: 0.2s">
-                <div class="card-inner">
-                    <div class="card-title-box"><h2>Principios</h2></div>
-                    <ul class="food-items" id="list-principio"></ul>
-                </div>
-            </div>
-            
-            <div class="card-restaurante" style="--delay: 0.4s">
-                <div class="card-inner">
-                    <div class="card-title-box">
-                        <h2>Proteína</h2>
-                        <span class="price-label" id="price-p1">$0</span>
-                    </div>
-                    <ul class="food-items" id="list-proteina"></ul>
-                </div>
-            </div>
-
-            <div class="card-restaurante" style="--delay: 0.6s">
-                <div class="card-inner">
-                    <div class="card-title-box">
-                        <h2>Especial</h2>
-                        <span class="price-label" id="price-p2">$0</span>
-                    </div>
-                    <ul class="food-items" id="list-especial"></ul>
-                </div>
-            </div>
-
-            <div class="card-restaurante" style="--delay: 0.8s">
-                <div class="card-inner">
-                    <div class="card-title-box"><h2>Acompañamientos</h2></div>
-                    <ul class="food-items" id="list-acompanamiento"></ul>
-                </div>
-            </div>
+    <div id="modal-pass">
+        <div class="modal-content">
+            <h3>Seguridad</h3>
+            <input type="password" id="pass-input" placeholder="Contraseña">
+            <button onclick="checkPass()">Entrar</button>
+            <button onclick="document.getElementById('modal-pass').style.display='none'">Cancelar</button>
         </div>
     </div>
 
-    <div id="view-admin">
-        <div class="editor-container">
-            <h2>Panel de Edición</h2>
-            <button onclick="exitAdmin()" class="btn-save">Cerrar y Guardar</button>
-            <div id="editor-sections"></div>
-        </div>
-    </div>
+    <script>
+        // --- PEGA TU URL AQUI ABAJO ---
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZl3oLQ9zV8zFFDWUfBJkaMAA4ykbrwpJs7i-3-_CgGyXdavUX5EoOgK8lOxln6AtqtA/exec"; 
+        
+        let appData = { config: { dia_actual: "Cargando", password: "1234", precio_proteina: 0, precio_especial: 0, publicidad: "", info_contacto: "" }, menu: [] };
+        let isEditing = false, unsavedChanges = false, updateInterval;
 
-    <script src="script.js"></script>
+        window.onload = function() { fetchData(); updateInterval = setInterval(() => { if(!isEditing) fetchData(); }, 10000); updateBackground(); };
+
+        async function fetchData() {
+            if(GOOGLE_SCRIPT_URL.includes("AQUI_TU_URL")) { console.warn("Falta URL"); return; }
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                const data = await response.json();
+                if(!isEditing) { appData = data; renderVisual(); }
+            } catch (error) { console.error("Error cargando", error); }
+        }
+
+        async function saveData() {
+            const statusLight = document.getElementById('status-indicator');
+            statusLight.className = "status-light yellow";
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'saveAll', config: appData.config, menu: appData.menu })
+                });
+                statusLight.className = "status-light green"; unsavedChanges = false;
+            } catch (error) { statusLight.className = "status-light red"; }
+        }
+
+        function renderVisual() {
+            updateBackground();
+            document.getElementById('visual-day').innerText = appData.config.dia_actual;
+            document.getElementById('visual-footer').innerText = appData.config.info_contacto;
+            const categories = [ { id: 'card-principio', key: 'principio', title: 'Principio' }, { id: 'card-proteina', key: 'proteina', title: 'Proteína', price: appData.config.precio_proteina }, { id: 'card-especial', key: 'especial', title: 'Especial', price: appData.config.precio_especial }, { id: 'card-acompanamiento', key: 'acompanamiento', title: 'Acompañamiento' } ];
+            categories.forEach(cat => {
+                const container = document.getElementById(cat.id);
+                const items = appData.menu.filter(m => m.categoria === cat.key);
+                let html = `<div class="card-holes"><div class="hole"></div><div class="hole"></div><div class="hole"></div><div class="hole"></div></div><div class="card-content"><div class="card-title">${cat.title} ${cat.price ? `<span style="font-size:0.8rem; display:block; color:#666">$${cat.price}</span>` : ''}</div>`;
+                items.forEach(item => { html += `<div class="card-item ${item.agotado ? 'agotado' : ''}"><span>${item.nombre}</span>${item.agotado ? '<div class="stamp-agotado">AGOTADO</div>' : ''}</div>`; });
+                html += `</div>`; container.innerHTML = html;
+            });
+            const ad = document.getElementById('ad-banner');
+            if (appData.config.publicidad && appData.config.publicidad.length > 0) { ad.style.display = 'block'; ad.innerText = appData.config.publicidad; } else { ad.style.display = 'none'; }
+        }
+
+        function updateBackground() {
+            const day = appData.config.dia_actual ? appData.config.dia_actual.toLowerCase() : "";
+            const visual = document.getElementById('visual-view');
+            if(day.includes('lunes')) visual.style.backgroundColor = '#8B4513';
+            else if(day.includes('martes')) visual.style.backgroundColor = '#A0522D';
+            else if(day.includes('miercoles')) visual.style.backgroundColor = '#6d4c41';
+            else if(day.includes('jueves')) visual.style.backgroundColor = '#5D4037';
+            else if(day.includes('viernes')) visual.style.backgroundColor = '#795548';
+            else visual.style.backgroundColor = '#8B4513';
+        }
+
+        let clicks = 0;
+        document.getElementById('title-trigger').addEventListener('click', () => { clicks++; if (clicks === 3) { document.getElementById('modal-pass').style.display = 'flex'; clicks = 0; } setTimeout(() => clicks = 0, 1000); });
+        function checkPass() { if (document.getElementById('pass-input').value === appData.config.password) { document.getElementById('modal-pass').style.display = 'none'; enterEditMode(); } else { alert("Clave incorrecta"); } }
+
+        function enterEditMode() { isEditing = true; document.getElementById('visual-view').style.display = 'none'; document.getElementById('edition-view').style.display = 'flex'; renderEditor(); }
+        function renderEditor() {
+            document.getElementById('edit-day-display').innerText = appData.config.dia_actual;
+            const container = document.getElementById('editor-container'); container.innerHTML = '';
+            container.innerHTML += `<div class="edit-section"><h3>Configuración General</h3><input class="input-dark" style="width:100%; margin-bottom:5px" placeholder="Precio Proteína" value="${appData.config.precio_proteina}" onchange="updateConfig('precio_proteina', this.value)"><input class="input-dark" style="width:100%; margin-bottom:5px" placeholder="Precio Especial" value="${appData.config.precio_especial}" onchange="updateConfig('precio_especial', this.value)"><input class="input-dark" style="width:100%; margin-bottom:5px" placeholder="Publicidad" value="${appData.config.publicidad}" onchange="updateConfig('publicidad', this.value)"><input class="input-dark" style="width:100%" placeholder="Contacto" value="${appData.config.info_contacto}" onchange="updateConfig('info_contacto', this.value)"></div>`;
+            ['principio', 'proteina', 'especial', 'acompanamiento'].forEach(cat => {
+                const items = appData.menu.filter(m => m.categoria === cat);
+                let html = `<div class="edit-section"><h3>${cat.toUpperCase()} <button style="background:#2196F3; border:none; color:white; border-radius:50%; width:25px; cursor:pointer" onclick="addItem('${cat}')">+</button></h3>`;
+                items.forEach(item => { html += `<div class="edit-item-row"><button class="btn-agotado ${item.agotado ? 'active' : ''}" onclick="toggleAgotado('${item.id}')"></button><input class="input-dark" style="flex:1" value="${item.nombre}" onchange="updateItemName('${item.id}', this.value)"><span class="btn-delete" onclick="deleteItem('${item.id}')">X</span></div>`; });
+                html += `</div>`; container.innerHTML += html;
+            });
+        }
+
+        function updateConfig(key, value) { appData.config[key] = value; unsavedChanges = true; document.getElementById('status-indicator').className = "status-light red"; if(key === 'dia_actual') renderEditor(); }
+        function addItem(cat) { appData.menu.push({ id: Date.now().toString(), categoria: cat, nombre: "Nuevo Plato", agotado: false }); renderEditor(); unsavedChanges = true; document.getElementById('status-indicator').className = "status-light red"; }
+        function deleteItem(id) { if(confirm("¿Borrar plato?")) { appData.menu = appData.menu.filter(m => m.id !== id); renderEditor(); unsavedChanges = true; document.getElementById('status-indicator').className = "status-light red"; } }
+        function toggleAgotado(id) { const item = appData.menu.find(m => m.id === id); if(item) { item.agotado = !item.agotado; renderEditor(); saveData(); } }
+        function updateItemName(id, val) { const item = appData.menu.find(m => m.id === id); if(item) { item.nombre = val; unsavedChanges = true; document.getElementById('status-indicator').className = "status-light red"; } }
+        function saveAndExit() { saveData().then(() => { isEditing = false; document.getElementById('edition-view').style.display = 'none'; document.getElementById('visual-view').style.display = 'flex'; renderVisual(); }); }
+    </script>
 </body>
 </html>
