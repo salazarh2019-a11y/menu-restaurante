@@ -1,129 +1,95 @@
 :root {
-    --rojo-pasion: #b71c1c;
-    --naranja-hambre: #e65100;
-    --amarillo-dorado: #ffb300;
-    --madera-oscura: #26140a;
+    --rojo: #8b0000;
+    --naranja: #d35400;
+    --amarillo: #f1c40f;
+    --negro: #1a1a1a;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-body { 
-    margin: 0; 
-    color: #1a1a1a;
+body {
+    margin: 0;
     min-height: 100vh;
-    background-color: var(--madera-oscura);
+    background-color: #2c1a10;
     background-size: cover;
-    background-position: center;
     background-attachment: fixed;
-    overflow-x: hidden;
     font-family: 'Lora', serif;
-    transition: background-image 1.2s ease-in-out;
+    overflow-x: hidden;
+    perspective: 1000px; /* Necesario para el efecto 3D */
 }
 
-/* Texturas de Madera Rústica */
-.bg-lunes { background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://www.transparenttextures.com/patterns/dark-wood.png'), url('https://images.unsplash.com/photo-1541123356219-284ebe98ae3b?q=80&w=1470&auto=format&fit=crop'); }
-.bg-martes { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1517089152318-42ec560349c0?q=80&w=1374&auto=format&fit=crop'); }
-/* ... (Se aplican dinámicamente en JS para cada día) */
+/* --- TEXTURAS DE MADERA POR DÍA --- */
+.bg-lunes { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://img.freepik.com/foto-gratis/textura-madera-marron-oscuro-fondo-tablero-madera-viejo_1253-1563.jpg'); }
+.bg-martes { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://img.freepik.com/foto-gratis/fondo-madera-negra-carbonizada_23-2148814041.jpg'); }
+.bg-miercoles { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://img.freepik.com/foto-gratis/textura-madera-marron_1253-12.jpg'); }
+.bg-jueves { background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://img.freepik.com/foto-gratis/superficie-madera-vieja-textura-marron_23-2148152914.jpg'); }
+.bg-viernes { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://img.freepik.com/foto-gratis/fondo-textura-madera-tablas-horizontales_1253-30.jpg'); }
 
-.header-app { text-align: center; padding: 40px 20px; perspective: 1000px; }
-
-.logo-box {
-    display: inline-block;
-    border: 4px double var(--amarillo-dorado);
-    padding: 10px 30px;
-    background: rgba(0,0,0,0.4);
+/* --- PUBLICIDAD VERTICAL LATERAL --- */
+#promo-vertical {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--amarillo);
+    padding: 20px 8px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-weight: 800;
+    border-radius: 15px 0 0 15px;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+    z-index: 1000;
+    font-size: 0.8rem;
+    border-left: 4px solid var(--rojo);
     cursor: pointer;
-    user-select: none;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-h1 { 
-    font-family: 'Oswald', sans-serif; 
-    font-size: 3rem; 
-    color: white; 
-    margin: 0; 
-    letter-spacing: 4px;
-    text-shadow: 3px 3px 0px var(--rojo-pasion);
+/* --- LOGO Y TÍTULOS --- */
+.header-app { text-align: center; padding: 40px 0; }
+.logo-box { 
+    display: inline-block; 
+    border: 3px solid var(--amarillo); 
+    padding: 10px 25px; 
+    margin-bottom: 10px;
 }
+h1 { font-family: 'Oswald'; color: white; margin: 0; font-size: 2.5rem; letter-spacing: 3px; text-shadow: 2px 2px 0 var(--rojo); }
 
-.subtitle-menu {
-    font-family: 'Permanent Marker', cursive;
-    color: var(--amarillo-dorado);
-    font-size: 1.5rem;
-    margin-top: 10px;
-    letter-spacing: 5px;
-    animation: pulse 2s infinite;
-}
+.subtitle-box { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.line { width: 40px; height: 2px; background: var(--amarillo); }
+.subtitle-text { font-family: 'Permanent Marker'; color: var(--amarillo); font-size: 1.2rem; }
 
-@keyframes pulse {
-    0% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
-    100% { opacity: 0.7; transform: scale(1); }
-}
-
-.day-banner {
-    display: inline-block;
-    background: var(--rojo-pasion);
-    color: white;
-    padding: 5px 25px;
-    font-weight: bold;
-    margin-top: 15px;
-    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
-}
-
-/* Lista y Tarjetas */
-.menu-list { 
-    width: 95%; 
-    max-width: 450px; 
-    margin: 20px auto 100px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 50px; 
-}
+/* --- TARJETAS 3D --- */
+.menu-list { width: 90%; max-width: 480px; margin: 0 auto 50px; display: flex; flex-direction: column; gap: 35px; }
 
 .card-restaurante {
-    background: #f4ece4;
-    background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png');
-    padding: 40px 25px 25px;
-    box-shadow: 15px 15px 40px rgba(0,0,0,0.7);
-    position: sticky;
-    top: 20px; /* Efecto de apilamiento */
-    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
-    animation: entrySlide 0.8s var(--delay) both;
+    background: #fdf5e6 url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+    padding: 30px 20px 20px;
+    position: relative;
+    box-shadow: 10px 10px 25px rgba(0,0,0,0.6);
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease-out; /* Suavidad al mover */
+    animation: entrance 1s var(--delay) both cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes entrySlide {
-    from { opacity: 0; transform: translateX(100px) rotate(10deg); }
-    to { opacity: 1; transform: translateX(0) rotate(-1deg); }
+@keyframes entrance {
+    from { opacity: 0; transform: translateY(50px) rotateX(-20deg); }
+    to { opacity: 1; transform: translateY(0) rotateX(0deg); }
 }
 
-/* Efecto chincheta realista */
-.card-restaurante::after {
-    content: '';
-    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-    width: 25px; height: 25px;
-    background: radial-gradient(circle at 30% 30%, #ff4444, #800);
-    border-radius: 50%;
-    box-shadow: 2px 4px 6px rgba(0,0,0,0.5);
+/* Chincheta */
+.card-restaurante::before {
+    content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    width: 24px; height: 24px; background: radial-gradient(circle at 30% 30%, #ff5e5e, #700);
+    border-radius: 50%; box-shadow: 2px 4px 6px rgba(0,0,0,0.5); z-index: 10;
 }
 
-.card-title-box { border-bottom: 2px solid #d4c4b5; padding-bottom: 10px; }
-.card-title-box h2 { font-family: 'Oswald'; text-transform: uppercase; margin: 0; color: #4e342e; }
+.card-title-box { border-bottom: 1px solid #d4c4b5; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.card-title-box h2 { font-family: 'Oswald'; margin: 0; color: #3e2723; text-transform: uppercase; }
 
-.food-items li {
-    font-size: 1.2rem;
-    padding: 12px 0;
-    border-bottom: 1px dashed rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: space-between;
-    animation: fadeInProduct 0.5s ease forwards;
-}
+.food-items { list-style: none; padding: 0; margin: 15px 0 0; }
+.food-items li { font-size: 1.3rem; padding: 10px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); display: flex; justify-content: space-between; }
 
-@keyframes fadeInProduct {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+/* --- ESTADOS --- */
+.strike { text-decoration: line-through; opacity: 0.5; }
+.stamp-agotado { color: var(--rojo); font-weight: bold; border: 2px solid var(--rojo); padding: 2px 5px; font-size: 0.7rem; transform: rotate(-10deg); }
 
-.price-label { color: var(--rojo-pasion); font-weight: bold; font-size: 1.5rem; }
-
-/* Admin View */
-#view-admin { display: none; background: #1a1a1a; color: white; padding: 20px; min-height: 100vh; }
+#view-admin { display: none; padding: 20px; background: #1a1a1a; color: white; min-height: 100vh; }
