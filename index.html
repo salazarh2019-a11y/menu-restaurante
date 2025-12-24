@@ -12,23 +12,23 @@
     <div id="view-client">
         <header class="restaurant-header">
             <h1>EL BUEN SAZÓN</h1>
-            <div class="day-badge" id="display-day">...</div>
+            <div class="day-badge" id="display-day">CARGANDO...</div>
         </header>
 
-        <div class="menu-container" id="menu-cards-list">
-            <div class="card-rustica" style="animation-delay: 0.1s">
+        <div class="menu-container">
+            <div class="card-rustica">
                 <div class="card-label">Principios</div>
-                <div class="pergamino"><ul id="list-principio"></ul></div>
+                <div class="pergamino"><ul id="list-principio"><li>Cargando...</li></ul></div>
             </div>
-            <div class="card-rustica" style="animation-delay: 0.3s">
+            <div class="card-rustica">
                 <div class="card-label"><span>Proteína</span> <span class="price-tag" id="price-v1"></span></div>
                 <div class="pergamino"><ul id="list-proteina"></ul></div>
             </div>
-            <div class="card-rustica" style="animation-delay: 0.5s">
+            <div class="card-rustica">
                 <div class="card-label"><span>Especial</span> <span class="price-tag" id="price-v2"></span></div>
                 <div class="pergamino"><ul id="list-especial"></ul></div>
             </div>
-            <div class="card-rustica" style="animation-delay: 0.7s">
+            <div class="card-rustica">
                 <div class="card-label">Extras</div>
                 <div class="pergamino"><ul id="list-extras"></ul></div>
             </div>
@@ -36,37 +36,22 @@
 
         <div id="promo-box">🎁 POR CADA 10 ALMUERZOS EL SIGUIENTE ES GRATIS</div>
         <div id="recomienda-box" onclick="exploder(this)"></div>
-
         <button class="btn-admin-floating" onclick="accessAdmin()">⚙️</button>
     </div>
 
-    <div id="view-admin">
+    <div id="view-admin" style="display: none;">
         <div class="admin-panel">
             <div id="edit-title">PANEL DE CONTROL</div>
-            
             <div class="editor-row">
-                <div class="input-group">
-                    <label>Clave Maestra:</label>
-                    <input type="text" id="admin-pass" onchange="db.pass=this.value; autoSave()">
-                </div>
-                <div class="input-group">
-                    <label>Precio Proteína ($):</label>
-                    <input type="text" id="p1" oninput="db.price1=this.value; autoSave()">
-                </div>
-                <div class="input-group">
-                    <label>Precio Especial ($):</label>
-                    <input type="text" id="p2" oninput="db.price2=this.value; autoSave()">
-                </div>
-                <div class="input-group">
-                    <label>🔥 Recomendación de la casa:</label>
-                    <input type="text" id="recom-input" placeholder="Ej: Lengua de vaca" oninput="db.recom=this.value; autoSave()">
-                </div>
+                <div class="input-group"><label>Clave:</label><input type="text" id="admin-pass"></div>
+                <div class="input-group"><label>Precio Proteína:</label><input type="text" id="p1"></div>
+                <div class="input-group"><label>Precio Especial:</label><input type="text" id="p2"></div>
+                <div class="input-group"><label>🔥 Recomendación:</label><input type="text" id="recom-input"></div>
             </div>
-            
-            <button onclick="nextDay()" class="btn-day">📅 CAMBIAR DÍA A EDITAR</button>
+            <button onclick="nextDay()" class="btn-day">📅 CAMBIAR DÍA</button>
             <div id="sections-editor"></div>
             <div id="trash-can" class="delete-zone">🗑️ ARRASTRA AQUÍ PARA ELIMINAR</div>
-            <button onclick="exitAdmin()" class="btn-exit">GUARDAR Y SALIR</button>
+            <button onclick="exitAdmin()" class="btn-exit">VOLVER AL MENÚ</button>
         </div>
     </div>
 
