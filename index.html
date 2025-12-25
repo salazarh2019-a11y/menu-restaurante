@@ -9,7 +9,13 @@
         /* --- ESTILOS VISUALES (MANTENIDOS) --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Poppins', sans-serif; background: #000; color: #fff; width: 100vw; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
-        #embers-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        
+        /* CANVAS DE CHISPAS (Fuego bajo) */
+        #embers-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+        
+        /* NUEVO: CANVAS DE POLVO DORADO (Fondo completo) */
+        #dust-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
         body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 100%, rgba(255, 60, 0, 0.15), transparent 75%); z-index: 0; }
         .header-visual { text-align: center; margin: 40px 0; z-index: 10; width: 100%; position: relative; }
         .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: #c5a059; font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
@@ -24,7 +30,7 @@
         .paper-sheet { background: #f4e4bc url('https://www.transparenttextures.com/patterns/parchment.png'); color: #332211; padding: 20px; box-shadow: 2px 4px 10px rgba(0,0,0,0.3); clip-path: polygon(0% 1%, 100% 0%, 99% 99%, 1% 100%); cursor: pointer; }
         .item-row { display: flex; justify-content: space-between; font-family: 'Special Elite', cursive; border-bottom: 1px dashed rgba(0,0,0,0.1); padding: 10px 0; font-size: 1.1rem; }
         .ad-card { grid-column: 1 / -1; width: 100%; max-width: 900px; background: rgba(255, 100, 0, 0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255, 150, 0, 0.3); border-radius: 20px; padding: 25px; text-align: center; color: #ffcc00; margin: 20px auto; z-index: 10; }
-        .contact-footer { margin: 40px 0 80px 0; text-align: center; color: #ff3300; font-family: 'Special Elite', cursive; font-size: 1.0rem; text-shadow: 0 0 15px rgba(255, 50, 0, 0.7); z-index: 10; }
+        .contact-footer { margin: 40px 0 80px 0; text-align: center; color: #ff3300; font-family: 'Special Elite', cursive; font-size: 1.1rem; text-shadow: 0 0 15px rgba(255, 50, 0, 0.7); z-index: 10; }
 
         /* --- PANEL EDICIÓN RESPONSIVE --- */
         #edition-view { display: none; position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh; background: #1a1a1a; z-index: 5000; padding: 20px; flex-direction: column; align-items: center; }
@@ -45,6 +51,8 @@
 <body>
 
     <canvas id="embers-canvas"></canvas>
+    
+    <canvas id="dust-canvas"></canvas>
 
     <div id="visual-view" style="width:100%;">
         <div class="header-visual">
@@ -90,7 +98,7 @@
         let currentData = null;
         let isEditing = false;
 
-        // --- CHISPAS ---
+        // --- CHISPAS ORIGINALES (Fuego Abajo) ---
         const canvas = document.getElementById('embers-canvas');
         const ctx = canvas.getContext('2d');
         let sparks = [];
@@ -98,6 +106,54 @@
         function createSpark() { return { x: Math.random() * canvas.width, y: canvas.height + 20, size: Math.random() * 2 + 1, vx: (Math.random() - 0.5) * 2, vy: -Math.random() * 2 - 1, alpha: Math.random() }; }
         function drawSparks() { ctx.clearRect(0,0,canvas.width,canvas.height); sparks.forEach((s,i) => { s.y += s.vy; s.x += s.vx + Math.sin(s.y/20); s.alpha -= 0.005; if(s.alpha<=0 || s.y<-10) sparks[i]=createSpark(); ctx.fillStyle=`rgba(255, ${150+Math.random()*105}, 0, ${s.alpha})`; ctx.beginPath(); ctx.arc(s.x,s.y,s.size,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(drawSparks); }
         initSparks(); drawSparks();
+
+        // --- NUEVO: POLVO DORADO PREMIUM (Fondo Completo) ---
+        // Estas partículas cubren TODA la pantalla, incluyendo el título
+        const dCanvas = document.getElementById('dust-canvas');
+        const dCtx = dCanvas.getContext('2d');
+        let dustParticles = [];
+        
+        function initDust() {
+            dCanvas.width = window.innerWidth; dCanvas.height = window.innerHeight;
+            dustParticles = Array.from({length: 60}, () => createDustParticle()); // 60 partículas
+        }
+        
+        function createDustParticle() {
+            return {
+                x: Math.random() * dCanvas.width,
+                y: Math.random() * dCanvas.height, // Aparecen en cualquier altura
+                size: Math.random() * 1.5, // Son más pequeñas y delicadas
+                speedY: -(Math.random() * 0.3 + 0.1), // Flotan muy lento hacia arriba
+                speedX: (Math.random() - 0.5) * 0.5,
+                alpha: Math.random() * 0.5 + 0.2, // Transparencia inicial
+                fading: Math.random() > 0.5 // Algunas aparecen, otras desaparecen
+            };
+        }
+
+        function drawDust() {
+            dCtx.clearRect(0, 0, dCanvas.width, dCanvas.height);
+            dustParticles.forEach((p, i) => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                
+                // Efecto de parpadeo suave
+                if(p.fading) { p.alpha -= 0.003; if(p.alpha <= 0) p.fading = false; }
+                else { p.alpha += 0.003; if(p.alpha >= 0.8) p.fading = true; }
+
+                // Si sale de la pantalla, reciclar abajo
+                if (p.y < -10) { 
+                    dustParticles[i] = createDustParticle();
+                    dustParticles[i].y = dCanvas.height + 10;
+                }
+
+                dCtx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`; // Color Dorado Premium
+                dCtx.beginPath();
+                dCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                dCtx.fill();
+            });
+            requestAnimationFrame(drawDust);
+        }
+        initDust(); drawDust(); // Iniciar efecto
 
         // --- LÓGICA DE DÍA REAL (EL CEREBRO) ---
         function getDiaReal() {
