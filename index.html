@@ -3,41 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>El Buen Sazón - Sistema Profesional Final</title>
+    <title>El Buen Sazón - Versión Inteligente</title>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Playfair+Display:wght@700;800&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        /* --- ESTILOS VISUALES --- */
+        /* --- ESTILOS VISUALES (MANTENIDOS) --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Poppins', sans-serif; background: #000; color: #fff; width: 100vw; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
         #embers-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 100%, rgba(255, 60, 0, 0.15), transparent 75%); z-index: 0; }
-        
         .header-visual { text-align: center; margin: 40px 0; z-index: 10; width: 100%; position: relative; }
         .header-large { font-size: clamp(2.2rem, 10vw, 3.8rem); color: #c5a059; font-family: 'Playfair Display', serif; cursor: pointer; letter-spacing: 2px; }
         .day-label { font-size: 1.1rem; color: #888; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
         .day-main { font-size: 2.5rem; color: #c5a059; font-family: 'Playfair Display', serif; margin-top: -5px; }
-        
         .cards-container { display: flex; flex-direction: column; align-items: center; gap: 35px; width: 100%; max-width: 1100px; padding: 0 20px 50px 20px; z-index: 10; }
         @media (min-width: 768px) { .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; } }
-
-        .card { 
-            background: #7d4e2d url('https://www.transparenttextures.com/patterns/wood-pattern.png'); 
-            border-radius: 12px; padding: 25px 15px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9); border: 3px solid #5d3a21; width: 100%; 
-            opacity: 0; transform: translateY(50px);
-            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+        .card { background: #7d4e2d url('https://www.transparenttextures.com/patterns/wood-pattern.png'); border-radius: 12px; padding: 25px 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.9); border: 3px solid #5d3a21; width: 100%; opacity: 0; transform: translateY(50px); animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes bounceIn { to { opacity: 1; transform: translateY(0); } }
-
         .card-title { font-family: 'Playfair Display', serif; color: #1a0f08; text-align: center; font-size: 1.7rem; margin-bottom: 15px; font-weight: 800; }
         .price-tag { color: #ffcc00; font-size: 1.2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); display: block; margin-top: 5px; }
         .paper-sheet { background: #f4e4bc url('https://www.transparenttextures.com/patterns/parchment.png'); color: #332211; padding: 20px; box-shadow: 2px 4px 10px rgba(0,0,0,0.3); clip-path: polygon(0% 1%, 100% 0%, 99% 99%, 1% 100%); cursor: pointer; }
         .item-row { display: flex; justify-content: space-between; font-family: 'Special Elite', cursive; border-bottom: 1px dashed rgba(0,0,0,0.1); padding: 10px 0; font-size: 1.1rem; }
-        
         .ad-card { grid-column: 1 / -1; width: 100%; max-width: 900px; background: rgba(255, 100, 0, 0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255, 150, 0, 0.3); border-radius: 20px; padding: 25px; text-align: center; color: #ffcc00; margin: 20px auto; z-index: 10; }
-        
-        /* FOOTER DE CONTACTO COOL */
-        .contact-footer { margin: 40px 0 80px 0; text-align: center; color: #ff3300; font-family: 'Special Elite', cursive; font-size: 1.3rem; text-shadow: 0 0 15px rgba(255, 50, 0, 0.7); z-index: 10; letter-spacing: 1px; }
+        .contact-footer { margin: 40px 0 80px 0; text-align: center; color: #ff3300; font-family: 'Special Elite', cursive; font-size: 1.1rem; text-shadow: 0 0 15px rgba(255, 50, 0, 0.7); z-index: 10; }
 
         /* --- PANEL EDICIÓN RESPONSIVE --- */
         #edition-view { display: none; position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh; background: #1a1a1a; z-index: 5000; padding: 20px; flex-direction: column; align-items: center; }
@@ -51,7 +38,6 @@
         @media (min-width: 650px) { .edit-row { grid-template-columns: 2fr 1.5fr auto auto; } }
         input, select { background: #111; color: white; border: 1px solid #444; padding: 10px; border-radius: 5px; font-size: 1rem; width: 100%; }
         .btn-add { background: #c5a059; color: #000; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; width: 100%; }
-        @media (min-width: 650px) { .btn-add { width: auto; } }
         .btn-save-float { position: fixed; bottom: 20px; right: 20px; background: #c5a059; color: black; padding: 20px 40px; border-radius: 50px; font-weight: 800; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer; z-index: 6000; font-size: 1.1rem; }
         @media (max-width: 600px) { .btn-save-float { left: 20px; right: 20px; bottom: 10px; border-radius: 15px; } }
     </style>
@@ -68,15 +54,17 @@
         </div>
         <div class="cards-container" id="v-grid"></div>
         <div id="v-ad" class="ad-card" style="display:none;"></div>
-        <div id="v-contact" class="contact-footer"></div> </div>
+        <div id="v-contact" class="contact-footer"></div>
+    </div>
 
     <div id="edition-view">
-        <h1 style="color:#c5a059; margin-bottom: 25px; font-family: 'Playfair Display';">Administración</h1>
+        <h1 style="color:#c5a059; margin-bottom: 25px; font-family: 'Playfair Display'; text-align: center;">Administración</h1>
         <div class="edit-container">
             <div class="edit-section">
-                <div class="section-title">Modo Automático</div>
+                <div class="section-title">Automatización de Día</div>
                 <button id="auto-toggle" class="auto-btn" onclick="toggleAuto()">Cargando...</button>
-                <label>Día de Edición/Manual:</label>
+                <p id="auto-status-msg" style="font-size: 0.8rem; color: #888; margin-bottom: 10px; text-align: center;"></p>
+                <label>Día para Editar / Mostrar Manual:</label>
                 <select id="ed-day-manual" onchange="updateConfig('dia_actual', this.value); renderEditor();">
                     <option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
                 </select>
@@ -88,13 +76,13 @@
                     <div><label>Especial $</label><input type="text" id="ed-p-esp" oninput="updateConfig('precio_especial', this.value)"></div>
                 </div>
                 <label>Banner:</label><input type="text" id="ed-ad" oninput="updateConfig('publicidad', this.value)" style="margin-bottom: 10px;">
-                <label>Contacto (Pie de página):</label><input type="text" id="ed-contact" oninput="updateConfig('info_contacto', this.value)" style="margin-bottom: 10px;">
+                <label>Contacto:</label><input type="text" id="ed-contact" oninput="updateConfig('info_contacto', this.value)" style="margin-bottom: 10px;">
                 <label>Clave (Visible):</label><input type="text" id="ed-pass" oninput="updateConfig('password', this.value)" style="border: 1px solid #c5a059;">
             </div>
             <div id="editor-categories"></div>
         </div>
-        <button class="btn-save-float" onclick="saveToCloud()">GUARDAR Y ACTUALIZAR</button>
-        <button onclick="location.reload()" style="margin-bottom: 150px; background:none; border:none; color:grey; cursor:pointer;">Regresar al Menú</button>
+        <button class="btn-save-float" onclick="saveToCloud()">GUARDAR CAMBIOS</button>
+        <button onclick="location.reload()" style="margin-bottom: 150px; background:none; border:none; color:grey; cursor:pointer;">Cerrar Editor</button>
     </div>
 
     <script>
@@ -102,7 +90,7 @@
         let currentData = null;
         let isEditing = false;
 
-        // CHISPAS
+        // --- CHISPAS ---
         const canvas = document.getElementById('embers-canvas');
         const ctx = canvas.getContext('2d');
         let sparks = [];
@@ -111,31 +99,44 @@
         function drawSparks() { ctx.clearRect(0,0,canvas.width,canvas.height); sparks.forEach((s,i) => { s.y += s.vy; s.x += s.vx + Math.sin(s.y/20); s.alpha -= 0.005; if(s.alpha<=0 || s.y<-10) sparks[i]=createSpark(); ctx.fillStyle=`rgba(255, ${150+Math.random()*105}, 0, ${s.alpha})`; ctx.beginPath(); ctx.arc(s.x,s.y,s.size,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(drawSparks); }
         initSparks(); drawSparks();
 
+        // --- LÓGICA DE DÍA REAL (EL CEREBRO) ---
+        function getDiaReal() {
+            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const hoy = new Date().getDay();
+            return dias[hoy];
+        }
+
         async function loadMenu() {
             if (isEditing) return;
             try {
                 const response = await fetch(URL_GAS);
                 const newData = await response.json();
                 if(JSON.stringify(currentData) !== JSON.stringify(newData)) {
-                    currentData = newData; renderMenu();
+                    currentData = newData; 
+                    renderMenu();
                     if(document.getElementById('edition-view').style.display === 'flex') renderEditor();
                 }
-            } catch (e) { console.log("Reintentando..."); }
+            } catch (e) { console.log("Error de conexión"); }
         }
         setInterval(loadMenu, 5000);
 
         function renderMenu() {
             let hoy;
+            // SI ESTÁ EN AUTOMÁTICO, IGNORA EL DÍA DE LA BASE DE DATOS Y USA EL DEL DISPOSITIVO
             if(currentData.config.automatico) {
-                const dias = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-                hoy = dias[new Date().getDay()];
-            } else { hoy = currentData.config.dia_actual; }
+                hoy = getDiaReal();
+            } else { 
+                hoy = currentData.config.dia_actual; 
+            }
+            
             document.getElementById('v-day-display').innerText = hoy;
             document.getElementById('v-contact').innerText = currentData.config.info_contacto;
             const ad = document.getElementById('v-ad');
             if(currentData.config.publicidad) { ad.innerText = currentData.config.publicidad; ad.style.display = 'block'; } else { ad.style.display = 'none'; }
+            
             const grid = document.getElementById('v-grid'); grid.innerHTML = "";
             const cats = [{id:'principio', n:'Principios'}, {id:'proteina', n:'Proteínas', p:currentData.config.precio_proteina}, {id:'especial', n:'Especiales', p:currentData.config.precio_especial}, {id:'acompanamiento', n:'Acompañamientos'}];
+            
             cats.forEach((cat, index) => {
                 const items = currentData.menu.filter(i => i.dia === hoy && i.cat === cat.id);
                 if(items.length === 0) return;
@@ -148,20 +149,36 @@
             });
         }
 
+        // --- EDITOR ---
         function toggleAuto() { currentData.config.automatico = !currentData.config.automatico; renderEditor(); }
         function updateConfig(k, v) { currentData.config[k] = v; }
+        
         function renderEditor() {
             const btn = document.getElementById('auto-toggle');
-            if(currentData.config.automatico) { btn.innerText = "AUTOMÁTICO: ENCENDIDO"; btn.className = "auto-btn auto-on"; document.getElementById('ed-day-manual').disabled = true; } 
-            else { btn.innerText = "AUTOMÁTICO: APAGADO"; btn.className = "auto-btn auto-off"; document.getElementById('ed-day-manual').disabled = false; }
+            const msg = document.getElementById('auto-status-msg');
+            
+            if(currentData.config.automatico) { 
+                btn.innerText = "AUTOMÁTICO: ENCENDIDO"; btn.className = "auto-btn auto-on"; 
+                msg.innerText = "Mostrando menú según el calendario del teléfono (" + getDiaReal() + ")";
+                document.getElementById('ed-day-manual').disabled = true; 
+                // En automático, el editor debe mostrar los platos del día real para poder agotarlos
+                currentData.config.dia_actual = getDiaReal();
+            } else { 
+                btn.innerText = "AUTOMÁTICO: APAGADO"; btn.className = "auto-btn auto-off"; 
+                msg.innerText = "Tú eliges qué día mostrar a los clientes.";
+                document.getElementById('ed-day-manual').disabled = false; 
+            }
+            
             document.getElementById('ed-day-manual').value = currentData.config.dia_actual;
             document.getElementById('ed-p-prot').value = currentData.config.precio_proteina;
             document.getElementById('ed-p-esp').value = currentData.config.precio_especial;
             document.getElementById('ed-ad').value = currentData.config.publicidad;
             document.getElementById('ed-contact').value = currentData.config.info_contacto;
             document.getElementById('ed-pass').value = currentData.config.password;
+            
             const cats = [{id:'principio', n:'Principios'}, {id:'proteina', n:'Proteínas'}, {id:'especial', n:'Especiales'}, {id:'acompanamiento', n:'Acompañamientos'}];
             const cont = document.getElementById('editor-categories'); cont.innerHTML = "";
+            
             cats.forEach(cat => {
                 const section = document.createElement('div'); section.className = 'edit-section';
                 section.innerHTML = `<div class="section-title">${cat.n}</div>`;
@@ -178,6 +195,7 @@
                 section.appendChild(addBtn); cont.appendChild(section);
             });
         }
+
         function updItem(id, f, v) { const i = currentData.menu.find(x => x.id == id); if(i) i[f] = v; }
         function togAgotado(id) { const i = currentData.menu.find(x => x.id == id); if(i) i.agotado = !i.agotado; renderEditor(); }
         function delItem(id) { currentData.menu = currentData.menu.filter(x => x.id != id); renderEditor(); }
@@ -185,20 +203,24 @@
             const btn = document.querySelector('.btn-save-float'); btn.innerText = "GUARDANDO...";
             try {
                 await fetch(URL_GAS, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:'saveAll', config:currentData.config, menu:currentData.menu}) });
-                alert("Guardado con éxito."); isEditing = false; location.reload();
+                alert("Guardado correctamente."); isEditing = false; location.reload();
             } catch(e) { alert("Error"); btn.innerText = "REINTENTAR"; }
         }
+
         document.getElementById('admin-trigger').onclick = () => {
             if(prompt("Clave:") === currentData.config.password) {
                 isEditing = true; document.getElementById('visual-view').style.display = 'none';
                 document.getElementById('edition-view').style.display = 'flex'; renderEditor();
             }
         };
+
+        // GALERÍA
         let galleryItems = []; let slideIdx = 0;
         function openGal(items) { galleryItems = items.filter(i => i.img && i.img.length > 10); if(galleryItems.length === 0) return; slideIdx = 0; showSlide(); document.getElementById('gallery-overlay').style.display = 'flex'; }
         function showSlide() { document.getElementById('slide-img').src = galleryItems[slideIdx].img; document.getElementById('slide-title').innerText = galleryItems[slideIdx].nombre; }
         function changeSlide(n) { slideIdx = (slideIdx + n + galleryItems.length) % galleryItems.length; showSlide(); }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
+
         loadMenu();
     </script>
 
